@@ -9,7 +9,7 @@ app.use(express.static(__dirname));
 
 // Route for the main page
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'ampcalibration.html'));
+  res.sendFile(path.join(__dirname, 'index.html'));
 });
 
 // Route for contact page
