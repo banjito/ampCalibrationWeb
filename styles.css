@@ -1,0 +1,366 @@
+@font-face {
+  font-family: 'Benzin';
+  src: url('fonts/Benzin/Benzin-Regular.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'ARP';
+  src: url('fonts/ARP/ARP Light.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'ARP';
+  src: url('fonts/ARP/ARP Bold.otf') format('opentype');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'CM Geom';
+  src: url('fonts/CM Geom/cmgeom-regular.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Horizon';
+  src: url('fonts/Horizon/horizon.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --green: #339c5e;
+}
+
+.bg-green {
+  background-color: var(--green);
+}
+
+.text-green {
+  color: var(--green);
+}
+
+.text-green:hover {
+  color: var(--green);
+  opacity: 0.2;
+}
+
+.header-logo {
+  width: 400px;
+  height: auto;
+  transition: opacity 0.3s;
+}
+
+.header-logo-link:hover .header-logo {
+  opacity: 0.5;
+}
+
+header nav a.header-nav-link {
+  transition: opacity 0.3s;
+  opacity: 1;
+}
+
+header nav a.header-nav-home {
+  opacity: 0.6;
+}
+
+header nav a.header-nav-link:hover {
+  opacity: 0.5;
+}
+
+header nav a.header-nav-button {
+  transition: background-color 0.3s, color 0.3s;
+  text-align: center;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+header nav a.header-nav-button:hover {
+  background-color: white;
+  color: var(--green);
+}
+
+body {
+  font-family: 'Benzin', sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Benzin', sans-serif;
+}
+
+.font-arp {
+  font-family: 'ARP', sans-serif;
+  font-weight: bold;
+}
+
+.font-arp-light {
+  font-family: 'ARP', sans-serif;
+  font-weight: 300;
+}
+
+.font-arp-bold {
+  font-family: 'ARP', sans-serif;
+  font-weight: bold;
+}
+
+.font-horizon {
+  font-family: 'Horizon', sans-serif;
+  line-height: 0.2em;
+}
+
+.font-cm-geom {
+  font-family: 'CM Geom', sans-serif;
+}
+
+.font-benzin {
+  font-family: 'Benzin', sans-serif;
+}
+
+.travel-heading {
+  font-family: 'CM Geom', sans-serif;
+  font-size: 60px;
+  line-height: 0.7em;
+  letter-spacing: 0em;
+}
+
+.cm-geom-paragraph {
+  font-family: 'CM Geom', sans-serif;
+  font-size: 26px;
+  line-height: 1.3em;
+  letter-spacing: 0em;
+}
+
+.hero-bg {
+  background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('img/img/background_01.png');
+  background-size: cover;
+  background-position: center;
+  filter: grayscale(100%);
+  min-height: calc(100vh - 80px);
+  margin-top: 0;
+}
+
+.hero-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+}
+
+.lab-bg {
+  background-image: url('img/img/snow.png');
+  background-size: cover;
+  background-position: center;
+  filter: grayscale(100%);
+}
+
+.turnaround-bg {
+  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('img/img/background_03.png');
+  background-size: cover;
+  background-position: center;
+  filter: grayscale(100%);
+}
+
+.who-we-are-bg {
+  background-image: url('img/img/truckwork.png');
+  background-size: cover;
+  background-position: center;
+  filter: grayscale(100%);
+}
+
+.travel-bg {
+  position: relative;
+}
+
+.travel-bg::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('img/img/background_02.jpg');
+  background-size: cover;
+  background-position: center;
+  filter: grayscale(100%);
+  z-index: 0;
+}
+
+.travel-bg > * {
+  position: relative;
+  z-index: 1;
+}
+
+.map-container {
+  position: relative;
+  display: inline-block;
+}
+
+.map-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none;
+}
+
+.map-container:hover .map-overlay {
+  opacity: 1;
+}
+
+.cyber-logo {
+  filter: brightness(0) invert(1);
+}
+
+.service-icon {
+  filter: brightness(0) invert(1);
+  width: auto;
+  height: 3rem;
+}
+
+.service-icon-large {
+  height: 5rem;
+}
+
+.social-icon {
+  display: block;
+  width: 1.5rem;
+  height: 1.5rem;
+  object-fit: contain;
+  transition: filter 0.3s;
+  margin: 0 auto;
+}
+
+.social-icon-link {
+  transition: filter 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.social-icon-link .social-icon {
+  filter: brightness(0) invert(1);
+}
+
+.social-icon-link:hover .social-icon {
+  filter: brightness(0) saturate(100%) invert(48%) sepia(79%) saturate(1946%) hue-rotate(113deg) brightness(96%) contrast(88%);
+}
+
+.turnaround-logo {
+  max-width: 600px;
+  width: 100%;
+  height: auto;
+  filter: brightness(0) invert(1);
+  display: block;
+  margin: 0 auto;
+}
+
+/* Matte finish for green boxes */
+.bg-green {
+  background-color: var(--green);
+  filter: saturate(0.95) contrast(0.98);
+}
+
+/* Contact form styles */
+.contact-form input,
+.contact-form textarea {
+  font-family: 'CM Geom', sans-serif;
+}
+
+.contact-form button {
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.contact-form button:hover {
+  transform: translateY(-1px);
+}
+
+/* Services page additions */
+.services-hero {
+  background-image: url('img/img/services/ourServices.png');
+  background-size: cover;
+  background-position: top center;
+  min-height: 420px;
+}
+
+.services-banner {
+  filter: saturate(0.95) contrast(0.98);
+}
+
+.service-card {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  background-color: rgba(255,255,255,0.08);
+  border-radius: 6px;
+  padding: 18px;
+}
+
+.service-card-media {
+  background: rgba(0,0,0,0.12);
+  border-radius: 4px;
+  overflow: hidden;
+  filter: grayscale(100%);
+}
+
+.service-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.service-card-body {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 12px 16px;
+  color: #ffffff;
+}
+
+.service-card-title {
+  font-family: 'Benzin', sans-serif;
+  font-size: 26px;
+  line-height: 1.05em;
+  letter-spacing: 0.02em;
+  margin-bottom: 14px;
+}
+
+.service-more {
+  display: inline-block;
+  background: #ffffff;
+  color: var(--green);
+  border-radius: 999px;
+  padding: 8px 18px;
+  font-family: 'CM Geom', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  transition: opacity 0.2s, transform 0.2s;
+}
+
+.service-more:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+@media (max-width: 640px) {
+  .service-card { grid-template-columns: 1fr; }
+  .service-card-body { align-items: center; text-align: center; }
+}
+
