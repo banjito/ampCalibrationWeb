@@ -4,7 +4,7 @@
 // Configuration for external links (to be updated with actual URLs)
 const EXTERNAL_LINKS = {
   technician: {
-    ampcalOS: 'https://ampcalos.example.com' // Update with actual URL
+    ampcalOS: 'https://ampcalosio' // Update with actual URL
   },
   customer: {
     vault: 'https://thevault.example.com' // Update with actual URL
@@ -52,16 +52,8 @@ let currentRole = null;
  * Initialize dashboard
  */
 async function initDashboard() {
-  // Hide loading spinner after a short delay
-  setTimeout(() => {
-    const spinner = document.getElementById('loadingSpinner');
-    if (spinner) {
-      spinner.style.display = 'none';
-    }
-  }, 500);
-
-  // Check authentication
-  const authResult = await requireAuth((userData) => {
+  // Check authentication first (with retry for session propagation)
+  let authResult = await requireAuth((userData) => {
     currentUser = userData.user;
     currentRole = userData.role || localStorage.getItem('userRole');
     
@@ -75,9 +67,28 @@ async function initDashboard() {
     setupQuickLinks(currentRole);
   });
 
+  // If auth check failed, wait a moment and retry once (session might still be propagating)
+  if (!authResult || authResult.error) {
+    await new Promise(resolve => setTimeout(resolve, 500));
+    authResult = await requireAuth((userData) => {
+      currentUser = userData.user;
+      currentRole = userData.role || localStorage.getItem('userRole');
+      
+      updateUserInfo(userData);
+      setupMenu(currentRole);
+      setupQuickLinks(currentRole);
+    });
+  }
+
   if (!authResult || authResult.error) {
     // Will be redirected to login by requireAuth
     return;
+  }
+
+  // Hide loading spinner once authenticated
+  const spinner = document.getElementById('loadingSpinner');
+  if (spinner) {
+    spinner.style.display = 'none';
   }
 
   // Setup event listeners

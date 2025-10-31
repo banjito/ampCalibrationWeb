@@ -114,8 +114,25 @@ async function getCurrentUser() {
   }
 
   try {
-    // Get current session
-    const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+    // Get current session - try multiple times if needed (for session propagation)
+    let session = null;
+    let sessionError = null;
+    
+    // Try getting session up to 3 times with small delays
+    for (let attempt = 0; attempt < 3; attempt++) {
+      const result = await supabase.auth.getSession();
+      sessionError = result.error;
+      session = result.data?.session;
+      
+      if (session) {
+        break; // Got session, exit loop
+      }
+      
+      // If no session and not last attempt, wait a bit
+      if (attempt < 2) {
+        await new Promise(resolve => setTimeout(resolve, 200));
+      }
+    }
     
     if (sessionError || !session) {
       return { error: 'Not authenticated' };
@@ -130,9 +147,11 @@ async function getCurrentUser() {
 
     if (profileError) {
       console.error('Profile error:', profileError);
-      // User exists but profile might not be created yet
+      // User exists but profile might not be created yet - still return user
       return {
         user: session.user,
+        profile: null,
+        role: null,
         error: 'Profile not found'
       };
     }
@@ -183,10 +202,14 @@ async function logout() {
 async function requireAuth(callback) {
   const result = await getCurrentUser();
   
-  if (result.error || !result.user) {
-    // Not authenticated, redirect to login
-    window.location.href = '/login';
-    return;
+  // Check if we have a user (even if profile is missing, that's okay)
+  if (!result.user || (result.error && result.error !== 'Profile not found')) {
+    // Only redirect if we're actually not authenticated
+    // Don't redirect if we have a user but profile is missing
+    if (!result.user) {
+      window.location.href = '/login';
+      return null;
+    }
   }
 
   // Authenticated, store role in localStorage for quick access

@@ -144,9 +144,12 @@
         }
       });
 
-      // Setup auth state listener
+      // Setup auth state listener (but don't auto-redirect - let OTP flow handle it)
       setupAuthStateListener((session) => {
-        if (session) {
+        // Only redirect if we're not in the middle of OTP verification
+        const pinStepVisible = !pinStep.classList.contains('hidden');
+        if (session && !pinStepVisible) {
+          // Already logged in, redirect to dashboard
           window.location.href = '/dashboard';
         }
       });
@@ -233,9 +236,18 @@
 
           if (result.success) {
             showMessage('PIN verified! Redirecting...', 'success');
-            // Redirect to dashboard after a short delay
-            setTimeout(() => {
-              window.location.href = '/dashboard';
+            // Wait a moment for session to be established, then redirect
+            setTimeout(async () => {
+              // Verify session is actually set before redirecting
+              const userCheck = await getCurrentUser();
+              if (userCheck.user && !userCheck.error) {
+                window.location.href = '/dashboard';
+              } else {
+                // If session not ready yet, wait a bit more
+                setTimeout(() => {
+                  window.location.href = '/dashboard';
+                }, 500);
+              }
             }, 500);
           } else {
             showMessage(result.error || 'Invalid PIN code. Please try again.', 'error');
