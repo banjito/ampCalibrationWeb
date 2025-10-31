@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Verifying Email | AMP Calibration</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm" type="module"></script>
+  <script src="config.js"></script>
+  <script src="auth.js" defer></script>
+</head>
+<body class="bg-gray-100">
+  
+  <div class="min-h-screen flex items-center justify-center py-20">
+    <div class="container mx-auto px-4">
+      <div class="max-w-md mx-auto text-center">
+        <div class="bg-green border-2 border-white rounded-lg shadow-lg p-8 sm:p-12">
+          <div id="verifyingState" class="block">
+            <div class="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-white mb-4"></div>
+            <h1 class="text-3xl font-bold text-white mb-4 font-horizon">VERIFYING EMAIL</h1>
+            <p class="text-white/80 font-arp-light">
+              Please wait while we verify your email...
+            </p>
+          </div>
+
+          <div id="successState" class="hidden">
+            <div class="text-6xl mb-4">✅</div>
+            <h1 class="text-3xl font-bold text-white mb-4 font-horizon">EMAIL VERIFIED</h1>
+            <p class="text-white/80 font-arp-light mb-6">
+              Your email has been verified successfully. Redirecting to dashboard...
+            </p>
+          </div>
+
+          <div id="errorState" class="hidden">
+            <div class="text-6xl mb-4">❌</div>
+            <h1 class="text-3xl font-bold text-white mb-4 font-horizon">VERIFICATION FAILED</h1>
+            <p id="errorMessage" class="text-white/80 font-arp-light mb-6">
+              There was an error verifying your email.
+            </p>
+            <a
+              href="/login"
+              class="inline-block border-2 border-white text-white px-6 py-2 rounded-full hover:bg-white hover:text-green transition-colors font-medium font-benzin"
+            >
+              BACK TO LOGIN
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const verifyingState = document.getElementById('verifyingState');
+      const successState = document.getElementById('successState');
+      const errorState = document.getElementById('errorState');
+      const errorMessage = document.getElementById('errorMessage');
+
+      // Setup auth state listener
+      setupAuthStateListener((session) => {
+        if (session) {
+          showSuccess();
+        }
+      });
+
+      // Try to verify immediately
+      const result = await handleEmailVerification();
+
+      if (result.success && result.user) {
+        showSuccess();
+      } else {
+        showError(result.error || 'Failed to verify email. Please try logging in again.');
+      }
+
+      function showSuccess() {
+        verifyingState.classList.add('hidden');
+        errorState.classList.add('hidden');
+        successState.classList.remove('hidden');
+        
+        // Redirect to dashboard after 2 seconds
+        setTimeout(() => {
+          window.location.href = '/dashboard';
+        }, 2000);
+      }
+
+      function showError(message) {
+        verifyingState.classList.add('hidden');
+        successState.classList.add('hidden');
+        errorState.classList.remove('hidden');
+        
+        if (errorMessage) {
+          errorMessage.textContent = message;
+        }
+      }
+    });
+  </script>
+
+</body>
+</html>
+
