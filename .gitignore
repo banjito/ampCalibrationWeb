@@ -71,7 +71,6 @@ web_modules/
 !.env.example
 
 # Project-specific secrets
-config.js
 config.local.js
 *service_role*
 *secret*
