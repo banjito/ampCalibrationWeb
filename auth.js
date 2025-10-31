@@ -13,36 +13,64 @@ function getSupabaseClient() {
 }
 
 /**
- * Send magic link to user's email
+ * Send OTP (PIN code) to user's email
  * @param {string} email - User's email address
  * @returns {Promise<{success: boolean, error?: string}>}
  */
-async function handleMagicLinkLogin(email) {
+async function sendOTP(email) {
   const supabase = getSupabaseClient();
   if (!supabase) {
     return { success: false, error: 'Supabase client not initialized' };
   }
 
   try {
-    // Get the current URL for redirect
-    const redirectUrl = `${window.location.origin}/verify`;
-    
     const { error } = await supabase.auth.signInWithOtp({
       email: email,
       options: {
-        emailRedirectTo: redirectUrl
+        shouldCreateUser: true
       }
     });
 
     if (error) {
-      console.error('Magic link error:', error);
+      console.error('OTP error:', error);
       return { success: false, error: error.message };
     }
 
     return { success: true };
   } catch (error) {
-    console.error('Magic link error:', error);
-    return { success: false, error: error.message || 'Failed to send magic link' };
+    console.error('OTP error:', error);
+    return { success: false, error: error.message || 'Failed to send PIN code' };
+  }
+}
+
+/**
+ * Verify OTP (PIN code) entered by user
+ * @param {string} email - User's email address
+ * @param {string} token - The 6-digit PIN code
+ * @returns {Promise<{success: boolean, error?: string}>}
+ */
+async function verifyOTP(email, token) {
+  const supabase = getSupabaseClient();
+  if (!supabase) {
+    return { success: false, error: 'Supabase client not initialized' };
+  }
+
+  try {
+    const { data, error } = await supabase.auth.verifyOtp({
+      email: email,
+      token: token,
+      type: 'email'
+    });
+
+    if (error) {
+      console.error('OTP verification error:', error);
+      return { success: false, error: error.message };
+    }
+
+    return { success: true, data: data };
+  } catch (error) {
+    console.error('OTP verification error:', error);
+    return { success: false, error: error.message || 'Failed to verify PIN code' };
   }
 }
 

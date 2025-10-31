@@ -42,12 +42,13 @@
         <div class="bg-green border-2 border-white rounded-lg shadow-lg p-8 sm:p-12">
           <div class="text-center mb-8">
             <h1 class="text-4xl font-bold text-white mb-2 font-horizon">LOGIN</h1>
-            <p class="text-white/80 font-arp-light">Enter your email to receive a magic link</p>
+            <p class="text-white/80 font-arp-light" id="subtitleText">Enter your email to receive a PIN code</p>
           </div>
 
           <!-- Login Form -->
           <form id="loginForm" class="space-y-6">
-            <div>
+            <!-- Email Input (shown initially) -->
+            <div id="emailStep">
               <label for="email" class="block text-white text-sm font-semibold mb-2 font-benzin">
                 EMAIL ADDRESS
               </label>
@@ -61,6 +62,24 @@
               />
             </div>
 
+            <!-- PIN Input (shown after email is sent) -->
+            <div id="pinStep" class="hidden">
+              <label for="pin" class="block text-white text-sm font-semibold mb-2 font-benzin">
+                ENTER PIN CODE
+              </label>
+              <input
+                type="text"
+                id="pin"
+                name="pin"
+                maxlength="6"
+                pattern="[0-9]{6}"
+                placeholder="000000"
+                class="w-full bg-white/10 border-2 border-white/50 rounded-lg px-4 py-3 text-white placeholder-white/60 focus:outline-none focus:border-white focus:bg-white/20 transition-colors font-cm-geom text-center text-2xl tracking-widest font-bold"
+                autocomplete="one-time-code"
+              />
+              <p class="text-white/60 text-xs mt-2 font-arp-light">Enter the 6-digit code sent to your email</p>
+            </div>
+
             <!-- Error/Success Messages -->
             <div id="message" class="hidden text-sm font-arp-light"></div>
 
@@ -70,14 +89,23 @@
               id="submitBtn"
               class="w-full border-2 border-white text-white px-8 py-3 rounded-full hover:bg-white hover:text-green transition-colors font-medium tracking-wide font-benzin disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              SEND MAGIC LINK
+              SEND PIN CODE
+            </button>
+
+            <!-- Back button (shown on PIN step) -->
+            <button
+              type="button"
+              id="backBtn"
+              class="hidden w-full text-white/80 hover:text-white transition-colors text-sm font-arp-light"
+            >
+              ← Use a different email
             </button>
           </form>
 
           <!-- Info Message -->
           <div class="mt-6 text-center">
-            <p class="text-white/70 text-sm font-arp-light">
-              Check your email for a login link. No password needed.
+            <p class="text-white/70 text-sm font-arp-light" id="infoText">
+              Check your email for a 6-digit PIN code. No password needed.
             </p>
           </div>
         </div>
@@ -99,6 +127,14 @@
       const messageDiv = document.getElementById('message');
       const submitBtn = document.getElementById('submitBtn');
       const emailInput = document.getElementById('email');
+      const pinInput = document.getElementById('pin');
+      const emailStep = document.getElementById('emailStep');
+      const pinStep = document.getElementById('pinStep');
+      const backBtn = document.getElementById('backBtn');
+      const subtitleText = document.getElementById('subtitleText');
+      const infoText = document.getElementById('infoText');
+      
+      let currentEmail = '';
 
       // Check if already logged in
       getCurrentUser().then(result => {
@@ -108,37 +144,106 @@
         }
       });
 
-      // Setup auth state listener for when user clicks magic link in email
+      // Setup auth state listener
       setupAuthStateListener((session) => {
         if (session) {
           window.location.href = '/dashboard';
         }
       });
 
+      // Back button handler
+      backBtn.addEventListener('click', () => {
+        showEmailStep();
+      });
+
+      // PIN input - only allow numbers and auto-focus
+      pinInput.addEventListener('input', (e) => {
+        e.target.value = e.target.value.replace(/\D/g, '').slice(0, 6);
+        // Auto-submit when 6 digits are entered
+        if (e.target.value.length === 6) {
+          form.dispatchEvent(new Event('submit'));
+        }
+      });
+
+      function showEmailStep() {
+        emailStep.classList.remove('hidden');
+        pinStep.classList.add('hidden');
+        backBtn.classList.add('hidden');
+        emailInput.disabled = false;
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'SEND PIN CODE';
+        subtitleText.textContent = 'Enter your email to receive a PIN code';
+        infoText.textContent = 'Check your email for a 6-digit PIN code. No password needed.';
+        currentEmail = '';
+        pinInput.value = '';
+      }
+
+      function showPinStep() {
+        emailStep.classList.add('hidden');
+        pinStep.classList.remove('hidden');
+        backBtn.classList.remove('hidden');
+        emailInput.disabled = true;
+        submitBtn.textContent = 'VERIFY PIN CODE';
+        subtitleText.textContent = 'Enter PIN code';
+        infoText.textContent = `Enter the 6-digit code sent to ${currentEmail}`;
+        pinInput.focus();
+      }
+
       form.addEventListener('submit', async (e) => {
         e.preventDefault();
         
-        const email = emailInput.value.trim();
-        
-        if (!email) {
-          showMessage('Please enter your email address', 'error');
-          return;
-        }
+        // Step 1: Send PIN code (when PIN step is hidden)
+        if (pinStep.classList.contains('hidden')) {
+          const email = emailInput.value.trim();
+          
+          if (!email) {
+            showMessage('Please enter your email address', 'error');
+            return;
+          }
 
-        // Disable button
-        submitBtn.disabled = true;
-        submitBtn.textContent = 'SENDING...';
+          submitBtn.disabled = true;
+          submitBtn.textContent = 'SENDING...';
 
-        // Send magic link
-        const result = await handleMagicLinkLogin(email);
+          const result = await sendOTP(email);
 
-        if (result.success) {
-          showMessage('Magic link sent! Check your email and click the link to login.', 'success');
-          emailInput.value = '';
-        } else {
-          showMessage(result.error || 'Failed to send magic link. Please try again.', 'error');
-          submitBtn.disabled = false;
-          submitBtn.textContent = 'SEND MAGIC LINK';
+          if (result.success) {
+            currentEmail = email;
+            showMessage('PIN code sent! Check your email.', 'success');
+            showPinStep();
+            submitBtn.disabled = false;
+          } else {
+            showMessage(result.error || 'Failed to send PIN code. Please try again.', 'error');
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'SEND PIN CODE';
+          }
+        } 
+        // Step 2: Verify PIN code
+        else {
+          const pin = pinInput.value.trim();
+          
+          if (!pin || pin.length !== 6) {
+            showMessage('Please enter the 6-digit PIN code', 'error');
+            return;
+          }
+
+          submitBtn.disabled = true;
+          submitBtn.textContent = 'VERIFYING...';
+
+          const result = await verifyOTP(currentEmail, pin);
+
+          if (result.success) {
+            showMessage('PIN verified! Redirecting...', 'success');
+            // Redirect to dashboard after a short delay
+            setTimeout(() => {
+              window.location.href = '/dashboard';
+            }, 500);
+          } else {
+            showMessage(result.error || 'Invalid PIN code. Please try again.', 'error');
+            pinInput.value = '';
+            pinInput.focus();
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'VERIFY PIN CODE';
+          }
         }
       });
 
@@ -147,11 +252,11 @@
         messageDiv.className = `text-sm font-arp-light ${type === 'error' ? 'text-red-200' : 'text-green-200'}`;
         messageDiv.classList.remove('hidden');
         
-        // Auto hide success messages after 10 seconds
+        // Auto hide success messages after 5 seconds
         if (type === 'success') {
           setTimeout(() => {
             messageDiv.classList.add('hidden');
-          }, 10000);
+          }, 5000);
         }
       }
     });
