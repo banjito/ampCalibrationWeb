@@ -20,9 +20,24 @@
 
 1. In Supabase Dashboard, go to **Authentication > Providers**
 2. Enable **Email** provider
-3. Configure email templates:
-   - Go to **Authentication > Email Templates**
-   - Customize the "Magic Link" template if desired
+
+### 2a. Configure OTP Email Template (IMPORTANT - Required for PIN codes)
+
+**To send PIN codes instead of magic links, you MUST configure the email template:**
+
+1. Go to **Authentication > Email Templates**
+2. Select the **"Magic Link"** template (or "Email OTP" if available)
+3. Replace the template content with:
+   ```html
+   <h2>Your AMP Calibration PIN Code</h2>
+   <p>Enter this code to log in:</p>
+   <h1 style="font-size: 32px; letter-spacing: 8px; text-align: center;">{{ .Token }}</h1>
+   <p>This code expires in 5 minutes.</p>
+   ```
+4. **Critical:** Use `{{ .Token }}` (displays the 6-digit PIN) - NOT `{{ .ConfirmationURL }}` (magic link)
+5. Save the template
+
+See `SUPABASE_OTP_SETUP.md` for detailed instructions.
 
 ### 3. Supabase Redirect URLs
 
