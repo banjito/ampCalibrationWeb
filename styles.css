@@ -50,9 +50,17 @@
   color: var(--green);
 }
 
-.text-green:hover {
+/* Footer links - apply opacity on hover */
+footer nav a.text-green:hover {
   color: var(--green);
   opacity: 0.2;
+}
+
+/* Ensure CTA buttons with hover states maintain full opacity and green text */
+a.rounded-full.border-white:hover,
+button.rounded-full.border-white:hover {
+  opacity: 1 !important;
+  color: var(--green) !important;
 }
 
 .header-logo {
@@ -362,5 +370,84 @@ h1, h2, h3, h4, h5, h6 {
 @media (max-width: 640px) {
   .service-card { grid-template-columns: 1fr; }
   .service-card-body { align-items: center; text-align: center; }
+}
+
+/* About page styles */
+.about-hero {
+  background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('img/img/background_01.png');
+  background-size: cover;
+  background-position: center;
+  filter: grayscale(100%);
+  min-height: 420px;
+  margin-top: 0;
+}
+
+.park-logo-white {
+  max-width: 400px;
+  width: 100%;
+  height: auto;
+  filter: brightness(0) invert(1);
+  display: block;
+  margin: 0 auto;
+}
+
+.about-visual {
+  background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('img/img/background_02.jpg');
+  background-size: cover;
+  background-position: center;
+  filter: grayscale(100%);
+}
+
+.about-features-bg {
+  position: relative;
+}
+
+.about-features-bg::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('img/img/background_03.png');
+  background-size: cover;
+  background-position: center;
+  filter: grayscale(100%);
+  z-index: 0;
+}
+
+.about-features-bg > * {
+  position: relative;
+  z-index: 1;
+}
+
+.about-expertise-bg {
+  background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('img/img/truckwork.png');
+  background-size: cover;
+  background-position: center;
+  filter: grayscale(100%);
+}
+
+.about-mission-bg {
+  position: relative;
+}
+
+.about-mission-bg::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('img/img/background_04.png');
+  background-size: cover;
+  background-position: center;
+  filter: grayscale(100%);
+  z-index: 0;
+}
+
+.about-mission-bg > * {
+  position: relative;
+  z-index: 1;
 }
 
