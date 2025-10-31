@@ -22,10 +22,6 @@ app.get('/login', (req, res) => {
   res.sendFile(path.join(__dirname, 'login.html'));
 });
 
-app.get('/dashboard', (req, res) => {
-  res.sendFile(path.join(__dirname, 'dashboard.html'));
-});
-
 app.get('/verify', (req, res) => {
   // Email verification page - handles magic link verification
   res.sendFile(path.join(__dirname, 'verify.html'));
@@ -43,6 +39,5 @@ app.listen(PORT, () => {
   console.log(`Main page: http://localhost:${PORT}/`);
   console.log(`Contact page: http://localhost:${PORT}/contact`);
   console.log(`Login page: http://localhost:${PORT}/login`);
-  console.log(`Dashboard: http://localhost:${PORT}/dashboard`);
 });
 

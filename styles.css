@@ -451,29 +451,13 @@ h1, h2, h3, h4, h5, h6 {
   z-index: 1;
 }
 
-/* Dashboard and Sidebar Styles */
-.dashboard-container {
-  min-height: 100vh;
-}
-
-/* Sidebar */
-.sidebar {
-  width: 280px;
-  min-width: 280px;
-  max-width: 280px;
+/* Global Sidebar Styles */
+#globalSidebar {
   box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
 }
 
-/* Mobile sidebar - hidden by default, slides in */
-@media (max-width: 768px) {
-  .sidebar {
-    position: fixed;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    z-index: 50;
-    transition: transform 0.3s ease-in-out;
-  }
+#sidebarOverlay {
+  transition: opacity 0.3s ease-in-out;
 }
 
 /* Sidebar header */
@@ -517,6 +501,7 @@ h1, h2, h3, h4, h5, h6 {
   cursor: pointer;
   text-decoration: none;
   color: white;
+  transition: all 0.2s ease;
 }
 
 .sidebar-menu-item:hover {
@@ -527,12 +512,22 @@ h1, h2, h3, h4, h5, h6 {
   background-color: rgba(255, 255, 255, 0.2);
 }
 
-/* Main content area */
-.main-content {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
+/* Profile Modal Styles */
+#profileModal {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+#modalOverlay {
+  animation: fadeIn 0.3s ease-in-out;
 }
 
 /* Loading spinner animation */

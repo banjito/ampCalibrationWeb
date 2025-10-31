@@ -1,0 +1,153 @@
+<!-- Global Sidebar - Include this in all pages -->
+<!-- Sidebar Overlay -->
+<div id="sidebarOverlay" class="hidden fixed inset-0 bg-black/50 z-40"></div>
+
+<!-- Sidebar -->
+<aside id="globalSidebar" class="fixed top-0 left-0 h-screen w-80 bg-green text-white z-50 transform -translate-x-full transition-transform duration-300 ease-in-out flex flex-col shadow-2xl">
+  <!-- Sidebar Header -->
+  <div class="p-6 border-b border-white/20">
+    <div class="flex items-center justify-between mb-4">
+      <a href="index.html" class="flex items-center gap-3">
+        <img src="img/logo/header.svg" alt="AMP Calibration" class="h-8 w-auto">
+        <span class="font-bold text-lg font-benzin">AMP Calibration</span>
+      </a>
+      <button
+        id="sidebarCloseBtn"
+        class="text-white/80 hover:text-white transition-colors"
+        aria-label="Close sidebar"
+      >
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Sidebar Content -->
+  <div class="flex-1 overflow-y-auto p-4">
+    <nav class="space-y-2">
+      <!-- User Profile -->
+      <div class="mb-6 pb-6 border-b border-white/20">
+        <button
+          id="profileImage"
+          class="w-full flex items-center gap-4 p-3 rounded-lg hover:bg-white/10 transition-colors cursor-pointer"
+        >
+          <div class="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center text-lg font-bold font-benzin">
+            <!-- User initials will be populated here -->
+          </div>
+          <div class="flex-1 text-left">
+            <div id="sidebarUserEmail" class="text-sm font-semibold font-benzin">Loading...</div>
+            <div id="sidebarUserRole" class="text-xs text-white/70 font-arp-light"></div>
+          </div>
+          <svg class="w-5 h-5 text-white/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Navigation Links -->
+      <div class="space-y-1">
+        <!-- ampcalOS -->
+        <a
+          href="https://ampcalos.example.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="sidebar-menu-item group flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/10 transition-colors"
+        >
+          <span class="text-xl">⚡</span>
+          <span class="font-medium font-benzin">ampcalOS</span>
+          <span class="ml-auto text-xs opacity-60">↗</span>
+        </a>
+
+        <!-- The Vault -->
+        <a
+          href="https://thevault.example.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="sidebar-menu-item group flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/10 transition-colors"
+        >
+          <span class="text-xl">📦</span>
+          <span class="font-medium font-benzin">The Vault</span>
+          <span class="ml-auto text-xs opacity-60">↗</span>
+        </a>
+
+        <!-- Settings -->
+        <button
+          id="settingsBtn"
+          class="sidebar-menu-item w-full flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/10 transition-colors text-left"
+        >
+          <span class="text-xl">⚙️</span>
+          <span class="font-medium font-benzin">Settings</span>
+        </button>
+      </div>
+    </nav>
+  </div>
+
+  <!-- Sidebar Footer -->
+  <div class="p-4 border-t border-white/20">
+    <button
+      id="sidebarLogoutBtn"
+      class="w-full border-2 border-white/50 text-white px-4 py-2 rounded-lg hover:bg-white hover:text-green transition-colors font-medium text-sm font-benzin"
+    >
+      LOGOUT
+    </button>
+  </div>
+</aside>
+
+<!-- Profile Modal/Lightbox -->
+<div id="profileModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
+  <!-- Modal Overlay -->
+  <div id="modalOverlay" class="absolute inset-0 bg-black/60"></div>
+  
+  <!-- Modal Content -->
+  <div class="relative bg-white rounded-lg shadow-2xl max-w-md w-full p-8 z-10">
+    <button
+      id="profileCloseBtn"
+      class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors"
+      aria-label="Close"
+    >
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+      </svg>
+    </button>
+
+    <h2 class="text-3xl font-bold text-gray-900 mb-6 font-horizon">PROFILE</h2>
+    
+    <div class="space-y-6">
+      <!-- Profile Image -->
+      <div class="flex items-center gap-4">
+        <div class="w-20 h-20 rounded-full bg-green flex items-center justify-center text-2xl font-bold text-white font-benzin">
+          <span id="modalUserInitials">JD</span>
+        </div>
+        <div>
+          <button class="text-green hover:opacity-80 transition-opacity text-sm font-semibold font-benzin">
+            CHANGE PHOTO
+          </button>
+        </div>
+      </div>
+
+      <!-- User Info -->
+      <div class="space-y-4">
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-2 font-benzin">EMAIL</label>
+          <div id="modalUserEmail" class="text-gray-900 font-cm-geom">user@example.com</div>
+        </div>
+        
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-2 font-benzin">ROLE</label>
+          <div id="modalUserRole" class="text-gray-900 font-cm-geom">Customer</div>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="pt-4 border-t border-gray-200">
+        <button
+          class="w-full border-2 border-green text-green px-6 py-2 rounded-full hover:bg-green hover:text-white transition-colors font-medium font-benzin"
+        >
+          SAVE CHANGES
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
