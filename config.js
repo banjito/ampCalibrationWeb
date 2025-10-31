@@ -23,26 +23,10 @@ const SUPABASE_CONFIG = {
 // Make config available globally
 window.SUPABASE_CONFIG = SUPABASE_CONFIG;
 
-// Initialize Supabase client (wait for SDK to load)
-let initAttempts = 0;
-const MAX_INIT_ATTEMPTS = 50; // 5 seconds max wait time
-
+// Initialize Supabase client
+// Supabase UMD build exposes supabase.createClient globally
 function initSupabase() {
-  initAttempts++;
-  
-  // Check if Supabase SDK is loaded
-  if (typeof supabase === 'undefined') {
-    if (initAttempts >= MAX_INIT_ATTEMPTS) {
-      console.error('❌ Failed to initialize Supabase: SDK not loaded after', MAX_INIT_ATTEMPTS, 'attempts');
-      console.error('Make sure the Supabase JS SDK script is loaded before config.js');
-      return;
-    }
-    // If not loaded yet, wait a bit and try again
-    setTimeout(initSupabase, 100);
-    return;
-  }
-  
-  // SDK is loaded, validate config and initialize client
+  // Validate config first
   if (!window.SUPABASE_CONFIG) {
     console.error('❌ Supabase config not found.');
     return;
@@ -58,8 +42,17 @@ function initSupabase() {
     return;
   }
   
+  // Check if supabase is available (UMD build exposes it globally)
+  // The UMD build from jsdelivr exposes it as window.supabase or just supabase
+  const supabaseLib = window.supabase || (typeof supabase !== 'undefined' ? supabase : null);
+  
+  if (!supabaseLib || typeof supabaseLib.createClient !== 'function') {
+    console.error('❌ Supabase SDK not loaded. Make sure the Supabase JS SDK script is loaded before config.js');
+    return;
+  }
+  
   try {
-    window.supabaseClient = supabase.createClient(
+    window.supabaseClient = supabaseLib.createClient(
       window.SUPABASE_CONFIG.url,
       window.SUPABASE_CONFIG.anonKey
     );
@@ -69,9 +62,11 @@ function initSupabase() {
   }
 }
 
-// Start initialization when DOM is ready or immediately
+// Initialize after scripts have loaded
+// Since config.js loads after Supabase script, it should be available
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', initSupabase);
 } else {
-  initSupabase();
+  // Small delay to ensure Supabase script has executed
+  setTimeout(initSupabase, 50);
 }
