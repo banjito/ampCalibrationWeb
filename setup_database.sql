@@ -1,9 +1,12 @@
 -- Supabase Database Setup for AMP Calibration Dashboard
 -- Run this in your Supabase SQL Editor
 
+-- Set schema to public
+SET search_path TO public;
+
 -- Create user_profiles table
 CREATE TABLE IF NOT EXISTS public.user_profiles (
-  id UUID REFERENCES auth.users(id) ON DELETE CASCADE PRIMARY KEY,
+  id UUID REFERENCES auth.users(id) PRIMARY KEY,
   email TEXT NOT NULL,
   role TEXT NOT NULL CHECK (role IN ('technician', 'customer', 'admin')),
   created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL,
@@ -12,6 +15,10 @@ CREATE TABLE IF NOT EXISTS public.user_profiles (
 
 -- Enable Row Level Security
 ALTER TABLE public.user_profiles ENABLE ROW LEVEL SECURITY;
+
+-- Drop existing policies if they exist (to allow re-running script)
+DROP POLICY IF EXISTS "Users can view own profile" ON public.user_profiles;
+DROP POLICY IF EXISTS "Users can update own profile" ON public.user_profiles;
 
 -- RLS Policy: Users can read their own profile
 CREATE POLICY "Users can view own profile"
@@ -39,6 +46,9 @@ BEGIN
   RETURN NEW;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- Drop existing trigger if it exists
+DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
 
 -- Trigger to call the function when a new user signs up
 CREATE TRIGGER on_auth_user_created
