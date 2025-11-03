@@ -150,7 +150,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .hero-bg {
-  background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('img/img/background_01.png');
+  background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('img/img/background_01.webp');
   background-size: cover;
   background-position: center;
   filter: grayscale(100%);
@@ -167,21 +167,21 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .lab-bg {
-  background-image: url('img/img/snow.png');
+  background-image: url('img/img/snow.webp');
   background-size: cover;
   background-position: center;
   filter: grayscale(100%);
 }
 
 .turnaround-bg {
-  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('img/img/background_03.png');
+  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('img/img/background_03.webp');
   background-size: cover;
   background-position: center;
   filter: grayscale(100%);
 }
 
 .who-we-are-bg {
-  background-image: url('img/img/truckwork.png');
+  background-image: url('img/img/truckwork.webp');
   background-size: cover;
   background-position: center;
   filter: grayscale(100%);
@@ -198,7 +198,7 @@ h1, h2, h3, h4, h5, h6 {
   left: 0;
   right: 0;
   bottom: 0;
-  background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('img/img/background_02.jpg');
+  background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('img/img/background_02.webp');
   background-size: cover;
   background-position: center;
   filter: grayscale(100%);
@@ -300,7 +300,7 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Services page additions */
 .services-hero {
-  background-image: url('img/img/services/ourServices.png');
+  background-image: url('img/img/services/ourServices.webp');
   background-size: cover;
   background-position: top center;
   min-height: 420px;
@@ -374,7 +374,7 @@ h1, h2, h3, h4, h5, h6 {
 
 /* About page styles */
 .about-hero {
-  background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('img/img/background_01.png');
+  background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('img/img/background_01.webp');
   background-size: cover;
   background-position: center;
   filter: grayscale(100%);
@@ -392,7 +392,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .about-visual {
-  background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('img/img/background_02.jpg');
+  background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('img/img/background_02.webp');
   background-size: cover;
   background-position: center;
   filter: grayscale(100%);
@@ -409,7 +409,7 @@ h1, h2, h3, h4, h5, h6 {
   left: 0;
   right: 0;
   bottom: 0;
-  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('img/img/background_03.png');
+  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('img/img/background_03.webp');
   background-size: cover;
   background-position: center;
   filter: grayscale(100%);
@@ -422,7 +422,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .about-expertise-bg {
-  background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('img/img/truckwork.png');
+  background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('img/img/truckwork.webp');
   background-size: cover;
   background-position: center;
   filter: grayscale(100%);
@@ -439,7 +439,7 @@ h1, h2, h3, h4, h5, h6 {
   left: 0;
   right: 0;
   bottom: 0;
-  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('img/img/background_04.png');
+  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('img/img/background_04.webp');
   background-size: cover;
   background-position: center;
   filter: grayscale(100%);
