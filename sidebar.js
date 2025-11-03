@@ -247,7 +247,13 @@ async function loadUserData() {
           .toUpperCase()
           .slice(0, 2);
         
-        profileImageEl.textContent = initials;
+        // Check for existing profile photo
+        const photoUrl = await getProfilePhotoUrl(result.user.id);
+        if (photoUrl) {
+          profileImageEl.innerHTML = `<img src="${photoUrl}" alt="Profile" class="w-full h-full object-cover rounded-full">`;
+        } else {
+          profileImageEl.textContent = initials;
+        }
         
         // Also update modal initials
         const modalInitials = document.getElementById('modalUserInitials');
@@ -294,9 +300,12 @@ async function loadProfileData() {
         modalRoleEl.textContent = result.role.charAt(0).toUpperCase() + result.role.slice(1);
       }
       
-      // Update modal initials
+      // Update modal initials and photo
       const modalInitials = document.getElementById('modalUserInitials');
-      if (modalInitials && result.user.email) {
+      const modalPhoto = document.getElementById('modalProfilePhoto');
+      const removeBtn = document.getElementById('removePhotoBtn');
+      
+      if (result.user.email) {
         const initials = result.user.email
           .split('@')[0]
           .split('.')
@@ -304,7 +313,26 @@ async function loadProfileData() {
           .join('')
           .toUpperCase()
           .slice(0, 2);
-        modalInitials.textContent = initials;
+        
+        if (modalInitials) {
+          modalInitials.textContent = initials;
+        }
+        
+        // Check for existing profile photo
+        const photoUrl = await getProfilePhotoUrl(result.user.id);
+        if (photoUrl && modalPhoto) {
+          modalPhoto.innerHTML = `<img src="${photoUrl}" alt="Profile" class="w-full h-full object-cover">`;
+          // Show remove button if photo exists
+          if (removeBtn) {
+            removeBtn.classList.remove('hidden');
+          }
+        } else if (modalPhoto && modalInitials) {
+          modalPhoto.innerHTML = `<span id="modalUserInitials">${initials}</span>`;
+          // Hide remove button if no photo
+          if (removeBtn) {
+            removeBtn.classList.add('hidden');
+          }
+        }
       }
     }
   } catch (error) {
@@ -327,6 +355,37 @@ if (document.readyState === 'loading') {
       initSidebar();
     }
   }, 100);
+}
+
+/**
+ * Get profile photo URL if it exists
+ */
+async function getProfilePhotoUrl(userId) {
+  try {
+    // List files for this user
+    const { data: files, error } = await window.supabaseClient.storage
+      .from('profile-photo')
+      .list('', {
+        search: userId
+      });
+
+    if (error) throw error;
+
+    // If file exists, return public URL
+    if (files && files.length > 0) {
+      const fileName = files[0].name;
+      const { data: { publicUrl } } = window.supabaseClient.storage
+        .from('profile-photo')
+        .getPublicUrl(fileName);
+      
+      return `${publicUrl}?t=${Date.now()}`; // Cache busting
+    }
+
+    return null;
+  } catch (error) {
+    console.error('Error getting profile photo:', error);
+    return null;
+  }
 }
 
 /**
