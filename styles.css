@@ -119,6 +119,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .font-cm-geom {
   font-family: 'CM Geom', sans-serif;
+  letter-spacing: 0.05em; /* Add space between letters - adjust this value to increase/decrease */
 }
 
 .font-benzin {
