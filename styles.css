@@ -137,7 +137,7 @@ h1, h2, h3, h4, h5, h6 {
   font-family: 'CM Geom', sans-serif;
   font-size: 26px;
   line-height: 1.3em;
-  letter-spacing: 0em;
+  letter-spacing: 0.05em;
 }
 
 .hero-bg {
