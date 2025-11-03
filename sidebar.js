@@ -81,6 +81,34 @@ function initSidebar() {
     });
   }
 
+  // Photo upload handlers
+  const changePhotoBtn = document.getElementById('changePhotoBtn');
+  const removePhotoBtn = document.getElementById('removePhotoBtn');
+  const photoUploadInput = document.getElementById('photoUploadInput');
+
+  if (changePhotoBtn && photoUploadInput) {
+    changePhotoBtn.addEventListener('click', () => {
+      photoUploadInput.click();
+    });
+  }
+
+  if (photoUploadInput) {
+    photoUploadInput.addEventListener('change', async (e) => {
+      const file = e.target.files?.[0];
+      if (file) {
+        await uploadProfilePhoto(file);
+      }
+    });
+  }
+
+  if (removePhotoBtn) {
+    removePhotoBtn.addEventListener('click', async () => {
+      if (confirm('Are you sure you want to remove your profile photo?')) {
+        await removeProfilePhoto();
+      }
+    });
+  }
+
   // Settings button
   const settingsBtn = document.getElementById('settingsBtn');
   if (settingsBtn) {
@@ -299,4 +327,178 @@ if (document.readyState === 'loading') {
       initSidebar();
     }
   }, 100);
+}
+
+/**
+ * Upload profile photo to Supabase storage
+ */
+async function uploadProfilePhoto(file) {
+  const statusEl = document.getElementById('uploadStatus');
+  const modalPhoto = document.getElementById('modalProfilePhoto');
+  const removeBtn = document.getElementById('removePhotoBtn');
+  
+  try {
+    // Show loading state
+    if (statusEl) {
+      statusEl.textContent = 'Uploading...';
+      statusEl.className = 'text-xs mt-2 text-blue-600';
+      statusEl.classList.remove('hidden');
+    }
+
+    // Validate file size (max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      throw new Error('File size must be less than 5MB');
+    }
+
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      throw new Error('File must be an image');
+    }
+
+    // Get current user
+    const result = await getCurrentUser();
+    if (!result.user) {
+      throw new Error('You must be logged in to upload a photo');
+    }
+
+    const userId = result.user.id;
+    const fileExt = file.name.split('.').pop();
+    const fileName = `${userId}.${fileExt}`;
+    const filePath = `${fileName}`;
+
+    // Upload to Supabase storage
+    const { data, error } = await window.supabaseClient.storage
+      .from('profile-photo')
+      .upload(filePath, file, {
+        cacheControl: '3600',
+        upsert: true // Overwrite existing file
+      });
+
+    if (error) throw error;
+
+    // Get public URL
+    const { data: { publicUrl } } = window.supabaseClient.storage
+      .from('profile-photo')
+      .getPublicUrl(filePath);
+
+    // Update profile photo display
+    if (modalPhoto) {
+      modalPhoto.innerHTML = `<img src="${publicUrl}?t=${Date.now()}" alt="Profile" class="w-full h-full object-cover">`;
+    }
+
+    // Update sidebar avatar
+    const sidebarAvatar = document.querySelector('#profileImage .w-10');
+    if (sidebarAvatar) {
+      sidebarAvatar.innerHTML = `<img src="${publicUrl}?t=${Date.now()}" alt="Profile" class="w-full h-full object-cover rounded-full">`;
+    }
+
+    // Show remove button
+    if (removeBtn) {
+      removeBtn.classList.remove('hidden');
+    }
+
+    // Show success message
+    if (statusEl) {
+      statusEl.textContent = 'Photo updated successfully!';
+      statusEl.className = 'text-xs mt-2 text-green-600';
+      setTimeout(() => {
+        statusEl.classList.add('hidden');
+      }, 3000);
+    }
+
+    console.log('Profile photo uploaded successfully');
+  } catch (error) {
+    console.error('Error uploading photo:', error);
+    if (statusEl) {
+      statusEl.textContent = error.message || 'Failed to upload photo';
+      statusEl.className = 'text-xs mt-2 text-red-600';
+    }
+  }
+}
+
+/**
+ * Remove profile photo from Supabase storage
+ */
+async function removeProfilePhoto() {
+  const statusEl = document.getElementById('uploadStatus');
+  const modalPhoto = document.getElementById('modalProfilePhoto');
+  const modalInitials = document.getElementById('modalUserInitials');
+  const removeBtn = document.getElementById('removePhotoBtn');
+  
+  try {
+    // Show loading state
+    if (statusEl) {
+      statusEl.textContent = 'Removing...';
+      statusEl.className = 'text-xs mt-2 text-blue-600';
+      statusEl.classList.remove('hidden');
+    }
+
+    // Get current user
+    const result = await getCurrentUser();
+    if (!result.user) {
+      throw new Error('You must be logged in to remove a photo');
+    }
+
+    const userId = result.user.id;
+
+    // List all files for this user
+    const { data: files, error: listError } = await window.supabaseClient.storage
+      .from('profile-photo')
+      .list('', {
+        search: userId
+      });
+
+    if (listError) throw listError;
+
+    // Delete all matching files
+    if (files && files.length > 0) {
+      const filePaths = files.map(f => f.name);
+      const { error: deleteError } = await window.supabaseClient.storage
+        .from('profile-photo')
+        .remove(filePaths);
+
+      if (deleteError) throw deleteError;
+    }
+
+    // Restore initials display
+    if (modalPhoto && modalInitials) {
+      const initials = modalInitials.textContent;
+      modalPhoto.innerHTML = `<span id="modalUserInitials">${initials}</span>`;
+    }
+
+    // Restore sidebar avatar
+    const sidebarAvatar = document.querySelector('#profileImage .w-10');
+    if (sidebarAvatar) {
+      const initials = result.user.email
+        .split('@')[0]
+        .split('.')
+        .map(n => n[0])
+        .join('')
+        .toUpperCase()
+        .slice(0, 2);
+      sidebarAvatar.textContent = initials;
+    }
+
+    // Hide remove button
+    if (removeBtn) {
+      removeBtn.classList.add('hidden');
+    }
+
+    // Show success message
+    if (statusEl) {
+      statusEl.textContent = 'Photo removed successfully!';
+      statusEl.className = 'text-xs mt-2 text-green-600';
+      setTimeout(() => {
+        statusEl.classList.add('hidden');
+      }, 3000);
+    }
+
+    console.log('Profile photo removed successfully');
+  } catch (error) {
+    console.error('Error removing photo:', error);
+    if (statusEl) {
+      statusEl.textContent = error.message || 'Failed to remove photo';
+      statusEl.className = 'text-xs mt-2 text-red-600';
+    }
+  }
 }
