@@ -22,6 +22,14 @@ function initSidebar() {
     lucide.createIcons();
   }
 
+  // Setup overlay click to close
+  const overlay = document.getElementById('sidebarOverlay');
+  if (overlay) {
+    overlay.addEventListener('click', () => {
+      closeSidebar();
+    });
+  }
+
   // Listen for Basecoat sidebar toggle events
   document.addEventListener('basecoat:sidebar', (e) => {
     const { id, action } = e.detail || {};
@@ -110,9 +118,21 @@ function initSidebar() {
  */
 function openSidebar() {
   const sidebar = document.getElementById('globalSidebar');
+  const overlay = document.getElementById('sidebarOverlay');
+  
   if (sidebar) {
-    sidebar.setAttribute('aria-hidden', 'false');
+    // Prevent body scroll shift by using padding instead of overflow hidden
+    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
     document.body.style.overflow = 'hidden';
+    document.body.style.paddingRight = `${scrollbarWidth}px`;
+    
+    sidebar.setAttribute('aria-hidden', 'false');
+    
+    // Show overlay
+    if (overlay) {
+      overlay.classList.remove('hidden');
+    }
+    
     console.log('Sidebar opened');
   }
 }
@@ -122,9 +142,20 @@ function openSidebar() {
  */
 function closeSidebar() {
   const sidebar = document.getElementById('globalSidebar');
+  const overlay = document.getElementById('sidebarOverlay');
+  
   if (sidebar) {
     sidebar.setAttribute('aria-hidden', 'true');
+    
+    // Restore body scroll and remove padding
     document.body.style.overflow = '';
+    document.body.style.paddingRight = '';
+    
+    // Hide overlay
+    if (overlay) {
+      overlay.classList.add('hidden');
+    }
+    
     console.log('Sidebar closed');
   }
 }
