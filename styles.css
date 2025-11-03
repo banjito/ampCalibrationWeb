@@ -7,17 +7,9 @@
 }
 
 @font-face {
-  font-family: 'ARP';
-  src: url('fonts/ARP/ARP Light.ttf') format('truetype');
-  font-weight: 300;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'ARP';
-  src: url('fonts/ARP/ARP Bold.otf') format('opentype');
-  font-weight: bold;
+  font-family: 'Raleway';
+  src: url('fonts/Raleway/Raleway-VariableFont_wght.ttf') format('truetype');
+  font-weight: 100 900;
   font-style: normal;
   font-display: swap;
 }
@@ -107,18 +99,34 @@ h1, h2, h3, h4, h5, h6 {
   font-family: 'Benzin', sans-serif;
 }
 
+.font-raleway {
+  font-family: 'Raleway', sans-serif;
+  font-weight: bold;
+}
+
+.font-raleway-light {
+  font-family: 'Raleway', sans-serif;
+  font-weight: 300;
+}
+
+.font-raleway-bold {
+  font-family: 'Raleway', sans-serif;
+  font-weight: bold;
+}
+
+/* Legacy class names for backwards compatibility */
 .font-arp {
-  font-family: 'ARP', sans-serif;
+  font-family: 'Raleway', sans-serif;
   font-weight: bold;
 }
 
 .font-arp-light {
-  font-family: 'ARP', sans-serif;
+  font-family: 'Raleway', sans-serif;
   font-weight: 300;
 }
 
 .font-arp-bold {
-  font-family: 'ARP', sans-serif;
+  font-family: 'Raleway', sans-serif;
   font-weight: bold;
 }
 

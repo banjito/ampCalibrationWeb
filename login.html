@@ -80,7 +80,7 @@
         <div class="bg-green border-2 border-white rounded-lg shadow-lg p-8 sm:p-12">
           <div class="text-center mb-8">
             <h1 class="text-4xl font-bold text-white mb-2 font-horizon">LOGIN</h1>
-            <p class="text-white/80 font-arp-light" id="subtitleText">Enter your email to receive a PIN code</p>
+            <p class="text-white/80 font-raleway-light" id="subtitleText">Enter your email to receive a PIN code</p>
           </div>
 
           <!-- Login Form -->
@@ -115,11 +115,11 @@
                 class="w-full bg-white/10 border-2 border-white/50 rounded-lg px-4 py-3 text-white placeholder-white/60 focus:outline-none focus:border-white focus:bg-white/20 transition-colors font-cm-geom text-center text-2xl tracking-widest font-bold"
                 autocomplete="one-time-code"
               />
-              <p class="text-white/60 text-xs mt-2 font-arp-light">Enter the 6-digit code sent to your email</p>
+              <p class="text-white/60 text-xs mt-2 font-raleway-light">Enter the 6-digit code sent to your email</p>
             </div>
 
             <!-- Error/Success Messages -->
-            <div id="message" class="hidden text-sm font-arp-light"></div>
+            <div id="message" class="hidden text-sm font-raleway-light"></div>
 
             <!-- Submit Button -->
             <button
@@ -134,7 +134,7 @@
             <button
               type="button"
               id="backBtn"
-              class="hidden w-full text-white/80 hover:text-white transition-colors text-sm font-arp-light"
+              class="hidden w-full text-white/80 hover:text-white transition-colors text-sm font-raleway-light"
             >
               ← Use a different email
             </button>
@@ -142,7 +142,7 @@
 
           <!-- Info Message -->
           <div class="mt-6 text-center">
-            <p class="text-white/70 text-sm font-arp-light" id="infoText">
+            <p class="text-white/70 text-sm font-raleway-light" id="infoText">
               Check your email for a 6-digit PIN code. No password needed.
             </p>
           </div>
@@ -299,7 +299,7 @@
 
       function showMessage(text, type) {
         messageDiv.textContent = text;
-        messageDiv.className = `text-sm font-arp-light ${type === 'error' ? 'text-red-200' : 'text-green-200'}`;
+        messageDiv.className = `text-sm font-raleway-light ${type === 'error' ? 'text-red-200' : 'text-green-200'}`;
         messageDiv.classList.remove('hidden');
         
         // Auto hide success messages after 5 seconds
