@@ -145,7 +145,7 @@ h1, h2, h3, h4, h5, h6 {
   background-size: cover;
   background-position: center;
   filter: grayscale(100%);
-  min-height: calc(100vh - 80px);
+  min-height: calc(100vh - 70px);
   margin-top: 0;
 }
 
