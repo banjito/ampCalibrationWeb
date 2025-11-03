@@ -97,19 +97,19 @@ h1, h2, h3, h4, h5, h6 {
 .font-raleway {
   font-family: 'Raleway', sans-serif;
   font-weight: 400;
-  font-size: 1.05em; /* 5% larger than default */
+  font-size: 1.5em; 
 }
 
 .font-raleway-light {
   font-family: 'Raleway', sans-serif;
   font-weight: 300;
-  font-size: 1.05em; /* 5% larger than default */
+  font-size: 1.5em; 
 }
 
 .font-raleway-bold {
   font-family: 'Raleway', sans-serif;
   font-weight: 700;
-  font-size: 1.05em; /* 5% larger than default */
+  font-size: 1.5em; 
 }
 
 .font-horizon {
