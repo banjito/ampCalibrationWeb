@@ -189,7 +189,6 @@ function closeProfileModal() {
 async function loadUserData() {
   const profileSection = document.getElementById('sidebarProfileSection');
   const loginSection = document.getElementById('sidebarLoginSection');
-  const userEmailEl = document.getElementById('sidebarUserEmail');
   const userRoleEl = document.getElementById('sidebarUserRole');
   const profileImageEl = document.querySelector('#profileImage .w-10');
 
@@ -205,9 +204,7 @@ async function loadUserData() {
         loginSection.classList.add('hidden');
       }
 
-      if (userEmailEl) {
-        userEmailEl.textContent = result.user.email || 'User';
-      }
+      // Update role display
       if (userRoleEl && result.role) {
         userRoleEl.textContent = result.role.charAt(0).toUpperCase() + result.role.slice(1);
       }
