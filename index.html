@@ -52,7 +52,7 @@
         <!-- Logo and Sidebar Toggle -->
         <div class="flex items-center gap-4">
           <button
-            id="sidebarToggle"
+            type="button" onclick="document.dispatchEvent(new CustomEvent('basecoat:sidebar'))"
             class="text-white hover:opacity-80 transition-opacity p-2"
             aria-label="Toggle sidebar"
           >

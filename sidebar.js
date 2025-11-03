@@ -1,10 +1,8 @@
-// Global sidebar component - accessible from header on all pages
+// Global sidebar component - Basecoat UI implementation
 // Handles sidebar toggle, profile modal, and navigation
 
-let sidebarOpen = false;
-
 /**
- * Initialize the global sidebar
+ * Initialize Basecoat-style sidebar
  */
 function initSidebar() {
   // Make sure we don't initialize multiple times
@@ -13,79 +11,47 @@ function initSidebar() {
   }
   window.sidebarInitialized = true;
 
-  const sidebarToggle = document.getElementById('sidebarToggle');
   const sidebar = document.getElementById('globalSidebar');
-  const sidebarOverlay = document.getElementById('sidebarOverlay');
-  const profileModal = document.getElementById('profileModal');
-  const profileCloseBtn = document.getElementById('profileCloseBtn');
+  if (!sidebar) {
+    console.warn('Sidebar not found');
+    return;
+  }
 
-  console.log('Initializing sidebar...', { sidebarToggle, sidebar, sidebarOverlay });
-
-  // Toggle sidebar - attach listener directly
-  if (sidebarToggle) {
-    // Remove any existing listeners first by cloning
-    const toggleClone = sidebarToggle.cloneNode(true);
-    if (sidebarToggle.parentNode) {
-      sidebarToggle.parentNode.replaceChild(toggleClone, sidebarToggle);
+  // Listen for Basecoat sidebar toggle events
+  document.addEventListener('basecoat:sidebar', (e) => {
+    const { id, action } = e.detail || {};
+    
+    // If ID specified, only toggle that sidebar
+    if (id && sidebar.id !== id) {
+      return;
     }
-    
-    // Now attach listener to the fresh button
-    toggleClone.addEventListener('click', function(e) {
-      e.preventDefault();
-      e.stopPropagation();
-      console.log('Toggle button clicked');
-      toggleSidebar();
-    });
-    
-    console.log('Toggle button listener attached');
-  } else {
-    console.warn('sidebarToggle button not found - will retry');
-    // Retry after a short delay
-    setTimeout(() => {
-      const retryToggle = document.getElementById('sidebarToggle');
-      if (retryToggle) {
-        retryToggle.addEventListener('click', function(e) {
-          e.preventDefault();
-          e.stopPropagation();
-          console.log('Toggle button clicked (retry)');
-          toggleSidebar();
-        });
-        console.log('Toggle button listener attached (retry)');
-      }
-    }, 200);
-  }
 
-  // Close sidebar when clicking overlay
-  if (sidebarOverlay) {
-    sidebarOverlay.addEventListener('click', () => {
-      closeSidebar();
-    });
-  }
+    const isHidden = sidebar.getAttribute('aria-hidden') === 'true';
 
-  // Close sidebar when pressing ESC
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && sidebarOpen) {
+    if (action === 'open' || (action === undefined && isHidden)) {
+      openSidebar();
+    } else if (action === 'close' || (action === undefined && !isHidden)) {
       closeSidebar();
     }
   });
 
-  // Close sidebar button
-  const sidebarCloseBtn = document.getElementById('sidebarCloseBtn');
-  if (sidebarCloseBtn) {
-    sidebarCloseBtn.addEventListener('click', () => {
+  // Close sidebar when pressing ESC
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && sidebar.getAttribute('aria-hidden') === 'false') {
       closeSidebar();
-    });
-  }
+    }
+  });
 
   // Profile modal handlers
   const profileImage = document.getElementById('profileImage');
   if (profileImage) {
     profileImage.addEventListener('click', () => {
-      closeSidebar(); // Close sidebar first
+      closeSidebar();
       openProfileModal();
     });
   }
 
+  const profileCloseBtn = document.getElementById('profileCloseBtn');
   if (profileCloseBtn) {
     profileCloseBtn.addEventListener('click', () => {
       closeProfileModal();
@@ -106,9 +72,8 @@ function initSidebar() {
   const settingsBtn = document.getElementById('settingsBtn');
   if (settingsBtn) {
     settingsBtn.addEventListener('click', () => {
-      // TODO: Open settings
       console.log('Settings clicked');
-      closeSidebar();
+      // Don't close sidebar - kept open with data-keep-mobile-sidebar-open
     });
   }
 
@@ -129,34 +94,21 @@ function initSidebar() {
 
   // Load user data into sidebar
   loadUserData();
+
+  // Dispatch initialized event
+  sidebar.dispatchEvent(new CustomEvent('basecoat:initialized'));
+  console.log('Sidebar initialized (Basecoat UI)');
 }
 
 /**
- * Toggle sidebar open/closed
+ * Open sidebar
  */
-function toggleSidebar() {
-  sidebarOpen = !sidebarOpen;
+function openSidebar() {
   const sidebar = document.getElementById('globalSidebar');
-  const overlay = document.getElementById('sidebarOverlay');
-  
-  console.log('Toggling sidebar', { sidebarOpen, sidebar: !!sidebar, overlay: !!overlay });
-  
-  if (sidebar && overlay) {
-    if (sidebarOpen) {
-      sidebar.classList.remove('-translate-x-full');
-      sidebar.classList.add('sidebar-open');
-      overlay.classList.remove('hidden');
-      document.body.style.overflow = 'hidden';
-      console.log('Sidebar opened');
-    } else {
-      sidebar.classList.add('-translate-x-full');
-      sidebar.classList.remove('sidebar-open');
-      overlay.classList.add('hidden');
-      document.body.style.overflow = '';
-      console.log('Sidebar closed');
-    }
-  } else {
-    console.warn('Sidebar or overlay not found', { sidebar: !!sidebar, overlay: !!overlay });
+  if (sidebar) {
+    sidebar.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+    console.log('Sidebar opened');
   }
 }
 
@@ -164,15 +116,11 @@ function toggleSidebar() {
  * Close sidebar
  */
 function closeSidebar() {
-  sidebarOpen = false;
   const sidebar = document.getElementById('globalSidebar');
-  const overlay = document.getElementById('sidebarOverlay');
-  
-  if (sidebar && overlay) {
-    sidebar.classList.add('-translate-x-full');
-    sidebar.classList.remove('sidebar-open');
-    overlay.classList.add('hidden');
+  if (sidebar) {
+    sidebar.setAttribute('aria-hidden', 'true');
     document.body.style.overflow = '';
+    console.log('Sidebar closed');
   }
 }
 
@@ -205,7 +153,7 @@ function closeProfileModal() {
 async function loadUserData() {
   const userEmailEl = document.getElementById('sidebarUserEmail');
   const userRoleEl = document.getElementById('sidebarUserRole');
-  const profileImageEl = document.getElementById('profileImage');
+  const profileImageEl = document.querySelector('#profileImage .w-10');
 
   try {
     const result = await getCurrentUser();
@@ -279,13 +227,8 @@ async function loadProfileData() {
 }
 
 // Initialize when DOM is ready
-// Note: Sidebar HTML is loaded via fetch, so initialization happens after fetch
-// This function will be called from the inline script in each HTML page after fetch completes
-
-// Also try to initialize if sidebar is already loaded
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', () => {
-    // Delay to allow fetch to complete
     setTimeout(() => {
       if (document.getElementById('globalSidebar')) {
         initSidebar();
@@ -299,4 +242,3 @@ if (document.readyState === 'loading') {
     }
   }, 100);
 }
-
