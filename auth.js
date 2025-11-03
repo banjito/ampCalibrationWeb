@@ -240,7 +240,7 @@ function setupAuthStateListener(callback) {
       if (callback && typeof callback === 'function') {
         callback(session);
       } else {
-        window.location.href = '/dashboard';
+        window.location.href = '/';
       }
     } else if (event === 'SIGNED_OUT') {
       // User signed out
