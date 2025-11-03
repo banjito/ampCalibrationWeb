@@ -1,15 +1,10 @@
+/* Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;600;700;800&display=swap');
+
 @font-face {
   font-family: 'Benzin';
   src: url('fonts/Benzin/Benzin-Regular.otf') format('opentype');
   font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Raleway';
-  src: url('fonts/Raleway/Raleway-VariableFont_wght.ttf') format('truetype');
-  font-weight: 100 900;
   font-style: normal;
   font-display: swap;
 }
@@ -101,7 +96,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .font-raleway {
   font-family: 'Raleway', sans-serif;
-  font-weight: bold;
+  font-weight: 400;
 }
 
 .font-raleway-light {
@@ -111,23 +106,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .font-raleway-bold {
   font-family: 'Raleway', sans-serif;
-  font-weight: bold;
-}
-
-/* Legacy class names for backwards compatibility */
-.font-arp {
-  font-family: 'Raleway', sans-serif;
-  font-weight: bold;
-}
-
-.font-arp-light {
-  font-family: 'Raleway', sans-serif;
-  font-weight: 300;
-}
-
-.font-arp-bold {
-  font-family: 'Raleway', sans-serif;
-  font-weight: bold;
+  font-weight: 700;
 }
 
 .font-horizon {
