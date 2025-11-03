@@ -17,6 +17,11 @@ function initSidebar() {
     return;
   }
 
+  // Initialize Lucide icons in the sidebar after it's loaded
+  if (typeof lucide !== 'undefined') {
+    lucide.createIcons();
+  }
+
   // Listen for Basecoat sidebar toggle events
   document.addEventListener('basecoat:sidebar', (e) => {
     const { id, action } = e.detail || {};
