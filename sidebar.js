@@ -151,6 +151,8 @@ function closeProfileModal() {
  * Load user data into sidebar
  */
 async function loadUserData() {
+  const profileSection = document.getElementById('sidebarProfileSection');
+  const loginSection = document.getElementById('sidebarLoginSection');
   const userEmailEl = document.getElementById('sidebarUserEmail');
   const userRoleEl = document.getElementById('sidebarUserRole');
   const profileImageEl = document.querySelector('#profileImage .w-10');
@@ -159,6 +161,14 @@ async function loadUserData() {
     const result = await getCurrentUser();
     
     if (result.user && !result.error) {
+      // User is logged in - show profile, hide login
+      if (profileSection) {
+        profileSection.classList.remove('hidden');
+      }
+      if (loginSection) {
+        loginSection.classList.add('hidden');
+      }
+
       if (userEmailEl) {
         userEmailEl.textContent = result.user.email || 'User';
       }
@@ -184,9 +194,24 @@ async function loadUserData() {
           modalInitials.textContent = initials;
         }
       }
+    } else {
+      // User is not logged in - show login, hide profile
+      if (profileSection) {
+        profileSection.classList.add('hidden');
+      }
+      if (loginSection) {
+        loginSection.classList.remove('hidden');
+      }
     }
   } catch (error) {
     console.error('Failed to load user data:', error);
+    // On error, show login button
+    if (profileSection) {
+      profileSection.classList.add('hidden');
+    }
+    if (loginSection) {
+      loginSection.classList.remove('hidden');
+    }
   }
 }
 
