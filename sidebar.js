@@ -144,11 +144,13 @@ function toggleSidebar() {
   if (sidebar && overlay) {
     if (sidebarOpen) {
       sidebar.classList.remove('-translate-x-full');
+      sidebar.classList.add('sidebar-open');
       overlay.classList.remove('hidden');
       document.body.style.overflow = 'hidden';
       console.log('Sidebar opened');
     } else {
       sidebar.classList.add('-translate-x-full');
+      sidebar.classList.remove('sidebar-open');
       overlay.classList.add('hidden');
       document.body.style.overflow = '';
       console.log('Sidebar closed');
@@ -168,6 +170,7 @@ function closeSidebar() {
   
   if (sidebar && overlay) {
     sidebar.classList.add('-translate-x-full');
+    sidebar.classList.remove('sidebar-open');
     overlay.classList.add('hidden');
     document.body.style.overflow = '';
   }

@@ -1,62 +1,61 @@
-<!-- Global Sidebar - Include this in all pages -->
+<!-- Global Sidebar - shadcn/ui inspired design -->
 <!-- Sidebar Overlay -->
-<div id="sidebarOverlay" class="hidden fixed inset-0 bg-black/50 z-40"></div>
+<div id="sidebarOverlay" class="hidden fixed inset-0 bg-black/50 z-40 transition-opacity duration-300"></div>
 
 <!-- Sidebar -->
-<aside id="globalSidebar" class="fixed top-0 left-0 h-screen w-80 bg-green text-white z-50 transform -translate-x-full transition-transform duration-300 ease-in-out flex flex-col shadow-2xl">
+<aside id="globalSidebar" class="sidebar-container fixed top-0 left-0 h-screen w-72 bg-green z-50 transform -translate-x-full transition-transform duration-300 ease-out flex flex-col">
   <!-- Sidebar Header -->
-  <div class="p-6 border-b border-white/20">
-    <div class="flex items-center justify-between mb-4">
-      <a href="index.html" class="flex items-center gap-3">
-        <img src="img/logo/header.svg" alt="AMP Calibration" class="h-8 w-auto">
-        <span class="font-bold text-lg font-benzin">AMP Calibration</span>
-      </a>
-      <button
-        id="sidebarCloseBtn"
-        class="text-white/80 hover:text-white transition-colors"
-        aria-label="Close sidebar"
-      >
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-        </svg>
-      </button>
-    </div>
+  <div class="sidebar-header px-4 py-4 flex items-center justify-between border-b border-white/10">
+    <a href="index.html" class="flex items-center gap-2 group">
+      <img src="img/logo/header.svg" alt="AMP Calibration" class="h-7 w-auto opacity-90 group-hover:opacity-100 transition-opacity">
+    </a>
+    <button
+      id="sidebarCloseBtn"
+      class="sidebar-close-btn p-1.5 rounded-md text-white/60 hover:text-white hover:bg-white/10 transition-all"
+      aria-label="Close sidebar"
+    >
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+      </svg>
+    </button>
   </div>
 
   <!-- Sidebar Content -->
-  <div class="flex-1 overflow-y-auto p-4">
-    <nav class="space-y-2">
-      <!-- User Profile -->
-      <div class="mb-6 pb-6 border-b border-white/20">
-        <button
-          id="profileImage"
-          class="w-full flex items-center gap-4 p-3 rounded-lg hover:bg-white/10 transition-colors cursor-pointer"
-        >
-          <div class="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center text-lg font-bold font-benzin">
-            <!-- User initials will be populated here -->
-          </div>
-          <div class="flex-1 text-left">
-            <div id="sidebarUserEmail" class="text-sm font-semibold font-benzin">Loading...</div>
-            <div id="sidebarUserRole" class="text-xs text-white/70 font-arp-light"></div>
-          </div>
-          <svg class="w-5 h-5 text-white/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-          </svg>
-        </button>
-      </div>
+  <div class="sidebar-content flex-1 overflow-y-auto py-4">
+    <!-- User Profile Section -->
+    <div class="px-3 mb-4">
+      <button
+        id="profileImage"
+        class="sidebar-user-profile w-full flex items-center gap-3 p-2.5 rounded-md hover:bg-white/10 transition-all group"
+      >
+        <div class="w-10 h-10 rounded-full bg-white/15 flex items-center justify-center text-base font-semibold font-benzin text-white shrink-0 group-hover:bg-white/20 transition-colors">
+          JL
+        </div>
+        <div class="flex-1 text-left min-w-0">
+          <div id="sidebarUserEmail" class="text-sm font-medium font-benzin text-white truncate">Loading...</div>
+          <div id="sidebarUserRole" class="text-xs text-white/60 font-arp-light">Customer</div>
+        </div>
+        <svg class="w-4 h-4 text-white/40 shrink-0 group-hover:text-white/60 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+        </svg>
+      </button>
+    </div>
 
-      <!-- Navigation Links -->
-      <div class="space-y-1">
+    <!-- Navigation Menu -->
+    <nav class="sidebar-nav px-3">
+      <div class="space-y-0.5">
         <!-- ampcalOS -->
         <a
           href="https://ampcalos.example.com"
           target="_blank"
           rel="noopener noreferrer"
-          class="sidebar-menu-item group flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/10 transition-colors"
+          class="sidebar-menu-item flex items-center gap-3 px-3 py-2.5 rounded-md text-white/90 hover:bg-white/10 hover:text-white transition-all group"
         >
-          <span class="text-xl">⚡</span>
-          <span class="font-medium font-benzin">ampcalOS</span>
-          <span class="ml-auto text-xs opacity-60">↗</span>
+          <span class="text-lg leading-none">⚡</span>
+          <span class="flex-1 text-sm font-medium font-benzin">ampcalOS</span>
+          <svg class="w-3.5 h-3.5 opacity-40 group-hover:opacity-70 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+          </svg>
         </a>
 
         <!-- The Vault -->
@@ -64,32 +63,43 @@
           href="https://thevault.example.com"
           target="_blank"
           rel="noopener noreferrer"
-          class="sidebar-menu-item group flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/10 transition-colors"
+          class="sidebar-menu-item flex items-center gap-3 px-3 py-2.5 rounded-md text-white/90 hover:bg-white/10 hover:text-white transition-all group"
         >
-          <span class="text-xl">📦</span>
-          <span class="font-medium font-benzin">The Vault</span>
-          <span class="ml-auto text-xs opacity-60">↗</span>
+          <span class="text-lg leading-none">📦</span>
+          <span class="flex-1 text-sm font-medium font-benzin">The Vault</span>
+          <svg class="w-3.5 h-3.5 opacity-40 group-hover:opacity-70 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+          </svg>
         </a>
+
+        <!-- Separator -->
+        <div class="my-2 h-px bg-white/10"></div>
 
         <!-- Settings -->
         <button
           id="settingsBtn"
-          class="sidebar-menu-item w-full flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/10 transition-colors text-left"
+          class="sidebar-menu-item w-full flex items-center gap-3 px-3 py-2.5 rounded-md text-white/90 hover:bg-white/10 hover:text-white transition-all text-left group"
         >
-          <span class="text-xl">⚙️</span>
-          <span class="font-medium font-benzin">Settings</span>
+          <svg class="w-5 h-5 opacity-80 group-hover:opacity-100 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+          </svg>
+          <span class="text-sm font-medium font-benzin">Settings</span>
         </button>
       </div>
     </nav>
   </div>
 
   <!-- Sidebar Footer -->
-  <div class="p-4 border-t border-white/20">
+  <div class="sidebar-footer p-4 border-t border-white/10 mt-auto">
     <button
       id="sidebarLogoutBtn"
-      class="w-full border-2 border-white/50 text-white px-4 py-2 rounded-lg hover:bg-white hover:text-green transition-colors font-medium text-sm font-benzin"
+      class="w-full flex items-center justify-center gap-2 border border-white/30 text-white px-4 py-2 rounded-md hover:bg-white hover:text-green transition-all font-medium text-sm font-benzin"
     >
-      LOGOUT
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+      </svg>
+      <span>Logout</span>
     </button>
   </div>
 </aside>

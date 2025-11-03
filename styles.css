@@ -541,3 +541,99 @@ h1, h2, h3, h4, h5, h6 {
   animation: spin 1s linear infinite;
 }
 
+/* Sidebar enhancements - shadcn/ui inspired */
+.sidebar-container {
+  box-shadow: 2px 0 12px rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(8px);
+}
+
+.sidebar-container.sidebar-open {
+  transform: translateX(0);
+}
+
+.sidebar-header {
+  min-height: 64px;
+}
+
+.sidebar-content {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+}
+
+.sidebar-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.sidebar-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.sidebar-content::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+}
+
+.sidebar-content::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+.sidebar-menu-item {
+  position: relative;
+}
+
+.sidebar-menu-item::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3px;
+  height: 0;
+  background: white;
+  border-radius: 0 2px 2px 0;
+  transition: height 0.2s ease;
+}
+
+.sidebar-menu-item:hover::before,
+.sidebar-menu-item:focus::before {
+  height: 60%;
+}
+
+.sidebar-user-profile:active {
+  transform: scale(0.98);
+}
+
+.sidebar-close-btn:active {
+  transform: scale(0.9);
+}
+
+/* Overlay fade animations */
+#sidebarOverlay {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+#sidebarOverlay:not(.hidden) {
+  opacity: 1;
+}
+
+/* Profile modal improvements */
+#profileModal {
+  animation: fadeIn 0.2s ease-out;
+}
+
+#profileModal .relative {
+  animation: slideInUp 0.3s ease-out;
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
