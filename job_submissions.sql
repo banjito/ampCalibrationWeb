@@ -77,21 +77,27 @@ DROP POLICY IF EXISTS "Allow anonymous upload to job-resumes" ON storage.objects
 DROP POLICY IF EXISTS "Allow authenticated read from job-resumes" ON storage.objects;
 DROP POLICY IF EXISTS "Allow authenticated delete from job-resumes" ON storage.objects;
 
+-- Ensure anon role can target the storage schema
+GRANT USAGE ON SCHEMA storage TO anon;
+GRANT SELECT, INSERT ON ALL TABLES IN SCHEMA storage TO anon;
+
 -- Policy: Allow anonymous users to upload resumes
 CREATE POLICY "Allow anonymous upload to job-resumes"
-ON storage.objects FOR INSERT
-TO anon
-WITH CHECK (bucket_id = 'job-resumes');
+  ON storage.objects
+  FOR INSERT
+  TO anon
+  WITH CHECK (bucket_id = 'job-resumes');
 
 -- Policy: Allow authenticated users to view all resumes (for admin)
 CREATE POLICY "Allow authenticated read from job-resumes"
-ON storage.objects FOR SELECT
-TO authenticated
-USING (bucket_id = 'job-resumes');
+  ON storage.objects
+  FOR SELECT
+  TO authenticated
+  USING (bucket_id = 'job-resumes');
 
 -- Policy: Allow authenticated users to delete resumes (for admin)
 CREATE POLICY "Allow authenticated delete from job-resumes"
-ON storage.objects FOR DELETE
-TO authenticated
-USING (bucket_id = 'job-resumes');
-
+  ON storage.objects
+  FOR DELETE
+  TO authenticated
+  USING (bucket_id = 'job-resumes');
