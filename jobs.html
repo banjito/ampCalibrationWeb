@@ -78,10 +78,10 @@
   </header>
 
   <!-- Hero Section with Job Application Form -->
-  <section class="relative min-h-screen flex items-center justify-center">
+  <section class="relative min-h-screen flex items-center justify-center py-20">
     <div class="absolute inset-0">
       <div class="absolute inset-0 bg-black/40"></div>
-      <div class="absolute inset-0 bg-cover bg-center grayscale" style="background-image: url('img/img/background_04.webp');">
+      <div class="absolute inset-0 bg-cover bg-center grayscale" style="background-image: url('img/img/background_05.webp');">
       </div>
     </div>
     <div class="relative container mx-auto px-4">
@@ -159,6 +159,19 @@
               >
             </div>
 
+            <!-- Resume Upload -->
+            <div class="grid gap-2">
+              <label for="resume" class="text-white text-sm font-benzin font-bold">Add Resume</label>
+              <input 
+                type="file" 
+                id="resume" 
+                name="resume"
+                accept=".pdf,.doc,.docx"
+                class="w-full bg-transparent border-b-2 border-white text-white py-2 focus:outline-none focus:border-white/80 font-cm-geom transition-colors file:mr-4 file:py-1 file:px-3 file:rounded-full file:border-0 file:text-sm file:font-benzin file:bg-white file:text-green hover:file:bg-white/90 cursor-pointer"
+              >
+              <p class="text-white/70 text-xs font-raleway-light">Accepted formats: PDF, DOC, DOCX (Max 10MB)</p>
+            </div>
+
             <!-- Message -->
             <div class="grid gap-2">
               <label for="message" class="text-white text-sm font-benzin font-bold">Tell us about yourself</label>
@@ -184,41 +197,6 @@
               Submit Application
             </button>
           </form>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Green Separator Bar -->
-  <div class="bg-green h-12 w-full mt-20"></div>
-
-  <!-- Location Section -->
-  <section class="relative min-h-[60vh]">
-    <div class="absolute inset-0">
-      <div class="absolute inset-0 bg-black/40"></div>
-      <div class="absolute inset-0 bg-cover bg-center grayscale" style="background-image: url('img/img/background_05.webp');">
-      </div>
-    </div>
-    <div class="relative container mx-auto px-4 py-20 flex items-center justify-end">
-      <div class="bg-green border-2 border-white p-10 text-white max-w-md">
-        <h2 class="text-4xl font-bold mb-6 font-horizon">Come stop by</h2>
-        <div class="mb-6">
-          <p class="text-xl font-semibold font-cm-geom">616 Church St NE</p>
-          <p class="text-xl font-semibold font-cm-geom">Decatur, AL 35601</p>
-        </div>
-        <div class="space-y-2 font-cm-geom">
-          <div class="flex justify-between">
-            <span class="font-bold font-benzin">Mon - Fri</span>
-            <span>7:30 am - 4:00 pm</span>
-          </div>
-          <div class="flex justify-between">
-            <span class="font-bold font-benzin">Saturday</span>
-            <span>Closed</span>
-          </div>
-          <div class="flex justify-between">
-            <span class="font-bold font-benzin">Sunday</span>
-            <span>Closed</span>
-          </div>
         </div>
       </div>
     </div>
