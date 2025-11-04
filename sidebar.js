@@ -218,7 +218,7 @@ async function loadUserData() {
   const profileSection = document.getElementById('sidebarProfileSection');
   const loginSection = document.getElementById('sidebarLoginSection');
   const userRoleEl = document.getElementById('sidebarUserRole');
-  const profileImageEl = document.querySelector('#profileImage .w-10');
+  const profileImageEl = document.getElementById('sidebarAvatar');
 
   try {
     const result = await getCurrentUser();
@@ -446,7 +446,7 @@ async function uploadProfilePhoto(file) {
     }
 
     // Update sidebar avatar
-    const sidebarAvatar = document.querySelector('#profileImage .w-10');
+    const sidebarAvatar = document.getElementById('sidebarAvatar');
     if (sidebarAvatar) {
       sidebarAvatar.innerHTML = `<img src="${publicUrl}?t=${Date.now()}" alt="Profile" class="w-full h-full object-cover rounded-full">`;
     }
@@ -526,7 +526,7 @@ async function removeProfilePhoto() {
     }
 
     // Restore sidebar avatar
-    const sidebarAvatar = document.querySelector('#profileImage .w-10');
+    const sidebarAvatar = document.getElementById('sidebarAvatar');
     if (sidebarAvatar) {
       const initials = result.user.email
         .split('@')[0]
