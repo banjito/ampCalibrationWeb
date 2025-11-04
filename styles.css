@@ -143,7 +143,7 @@ h1, h2, h3, h4, h5, h6 {
 .hero-bg {
   background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('img/img/background_01.webp');
   background-size: cover;
-  background-position: center;
+  background-position: 50% 60%;
   filter: grayscale(100%);
   min-height: calc(100vh - 70px);
   margin-top: 0;
