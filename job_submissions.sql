@@ -36,11 +36,11 @@ GRANT USAGE, SELECT ON SEQUENCE job_submissions_id_seq TO anon;
 DROP POLICY IF EXISTS "Allow anonymous inserts" ON job_submissions;
 DROP POLICY IF EXISTS "Allow authenticated selects" ON job_submissions;
 
--- Create policy to allow anonymous users to INSERT (submit applications)
-CREATE POLICY "Allow anonymous inserts"
+-- Create policy to allow website users (anon or authenticated) to INSERT (submit applications)
+CREATE POLICY "Allow website inserts"
   ON job_submissions
   FOR INSERT
-  TO anon
+  TO anon, authenticated
   WITH CHECK (true);
 
 -- Create policy to allow authenticated users to SELECT (view submissions)
@@ -81,11 +81,11 @@ DROP POLICY IF EXISTS "Allow authenticated delete from job-resumes" ON storage.o
 GRANT USAGE ON SCHEMA storage TO anon;
 GRANT SELECT, INSERT ON ALL TABLES IN SCHEMA storage TO anon;
 
--- Policy: Allow anonymous users to upload resumes
-CREATE POLICY "Allow anonymous upload to job-resumes"
+-- Policy: Allow website users (anon or authenticated) to upload resumes
+CREATE POLICY "Allow website upload to job-resumes"
   ON storage.objects
   FOR INSERT
-  TO anon
+  TO anon, authenticated
   WITH CHECK (bucket_id = 'job-resumes');
 
 -- Policy: Allow authenticated users to view all resumes (for admin)
