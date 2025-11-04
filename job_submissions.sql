@@ -57,3 +57,41 @@ CREATE INDEX IF NOT EXISTS idx_job_submissions_email ON job_submissions(email);
 -- Optional: Add index on created_at for faster date-based queries
 CREATE INDEX IF NOT EXISTS idx_job_submissions_created_at ON job_submissions(created_at DESC);
 
+-- ============================================
+-- STORAGE BUCKET SETUP FOR RESUMES
+-- ============================================
+
+-- Create the storage bucket for resumes (if it doesn't exist)
+INSERT INTO storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
+VALUES (
+  'job-resumes',
+  'job-resumes',
+  false,
+  10485760,
+  ARRAY['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document']
+)
+ON CONFLICT (id) DO NOTHING;
+
+-- Drop existing storage policies if they exist
+DROP POLICY IF EXISTS "Allow anonymous upload to job-resumes" ON storage.objects;
+DROP POLICY IF EXISTS "Allow authenticated read from job-resumes" ON storage.objects;
+DROP POLICY IF EXISTS "Allow authenticated delete from job-resumes" ON storage.objects;
+
+-- Policy: Allow anonymous users to upload resumes
+CREATE POLICY "Allow anonymous upload to job-resumes"
+ON storage.objects FOR INSERT
+TO anon
+WITH CHECK (bucket_id = 'job-resumes');
+
+-- Policy: Allow authenticated users to view all resumes (for admin)
+CREATE POLICY "Allow authenticated read from job-resumes"
+ON storage.objects FOR SELECT
+TO authenticated
+USING (bucket_id = 'job-resumes');
+
+-- Policy: Allow authenticated users to delete resumes (for admin)
+CREATE POLICY "Allow authenticated delete from job-resumes"
+ON storage.objects FOR DELETE
+TO authenticated
+USING (bucket_id = 'job-resumes');
+
