@@ -85,13 +85,11 @@
         <div class="bg-green border-2 border-white rounded-lg shadow-lg p-8 sm:p-12">
           <div class="text-center mb-8">
             <h1 class="text-4xl font-bold text-white mb-2 font-horizon">LOGIN</h1>
-            <p class="text-white/80 font-raleway-light" id="subtitleText">Enter your email to receive a PIN code</p>
+            <p class="text-white/80 font-raleway-light" id="subtitleText">Sign in with your email and 6-digit PIN</p>
           </div>
 
-          <!-- Login Form -->
-          <form id="loginForm" class="space-y-6">
-            <!-- Email Input (shown initially) -->
-            <div id="emailStep">
+          <form id="authForm" class="space-y-6">
+            <div>
               <label for="email" class="block text-white text-sm font-semibold mb-2 font-benzin">
                 EMAIL ADDRESS
               </label>
@@ -102,54 +100,80 @@
                 required
                 placeholder="your@email.com"
                 class="w-full bg-white/10 border-2 border-white/50 rounded-lg px-4 py-3 text-white placeholder-white/60 focus:outline-none focus:border-white focus:bg-white/20 transition-colors font-cm-geom"
+                autocomplete="email"
               />
             </div>
 
-            <!-- PIN Input (shown after email is sent) -->
-            <div id="pinStep" class="hidden">
-              <label for="pin" class="block text-white text-sm font-semibold mb-2 font-benzin">
-                ENTER PIN CODE
+            <div id="confirmEmailGroup" class="hidden">
+              <label for="confirmEmail" class="block text-white text-sm font-semibold mb-2 font-benzin">
+                CONFIRM EMAIL ADDRESS
               </label>
               <input
-                type="text"
+                type="email"
+                id="confirmEmail"
+                name="confirmEmail"
+                placeholder="repeat your@email.com"
+                class="w-full bg-white/10 border-2 border-white/50 rounded-lg px-4 py-3 text-white placeholder-white/60 focus:outline-none focus:border-white focus:bg-white/20 transition-colors font-cm-geom"
+                autocomplete="email"
+              />
+            </div>
+
+            <div>
+              <label for="pin" class="block text-white text-sm font-semibold mb-2 font-benzin">
+                6-DIGIT PIN
+              </label>
+              <input
+                type="password"
                 id="pin"
                 name="pin"
                 maxlength="6"
+                inputmode="numeric"
                 pattern="[0-9]{6}"
-                placeholder="000000"
-                class="w-full bg-white/10 border-2 border-white/50 rounded-lg px-4 py-3 text-white placeholder-white/60 focus:outline-none focus:border-white focus:bg-white/20 transition-colors font-cm-geom text-center text-2xl tracking-widest font-bold"
-                autocomplete="one-time-code"
+                placeholder="••••••"
+                class="w-full bg-white/10 border-2 border-white/50 rounded-lg px-4 py-3 text-white placeholder-white/60 focus:outline-none focus:border-white focus:bg-white/20 transition-colors font-cm-geom tracking-widest text-center"
+                autocomplete="current-password"
               />
-              <p class="text-white/60 text-xs mt-2 font-raleway-light">Enter the 6-digit code sent to your email</p>
             </div>
 
-            <!-- Error/Success Messages -->
+            <div id="confirmPinGroup" class="hidden">
+              <label for="confirmPin" class="block text-white text-sm font-semibold mb-2 font-benzin">
+                CONFIRM PIN
+              </label>
+              <input
+                type="password"
+                id="confirmPin"
+                name="confirmPin"
+                maxlength="6"
+                inputmode="numeric"
+                pattern="[0-9]{6}"
+                placeholder="••••••"
+                class="w-full bg-white/10 border-2 border-white/50 rounded-lg px-4 py-3 text-white placeholder-white/60 focus:outline-none focus:border-white focus:bg-white/20 transition-colors font-cm-geom tracking-widest text-center"
+                autocomplete="new-password"
+              />
+            </div>
+
             <div id="message" class="hidden text-sm font-raleway-light"></div>
 
-            <!-- Submit Button -->
             <button
               type="submit"
               id="submitBtn"
               class="w-full border-2 border-white text-white px-8 py-3 rounded-full hover:bg-white hover:text-green transition-colors font-medium tracking-wide font-benzin disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              SEND PIN CODE
-            </button>
-
-            <!-- Back button (shown on PIN step) -->
-            <button
-              type="button"
-              id="backBtn"
-              class="hidden w-full text-white/80 hover:text-white transition-colors text-sm font-raleway-light"
-            >
-              ← Use a different email
+              SIGN IN
             </button>
           </form>
 
-          <!-- Info Message -->
-          <div class="mt-6 text-center">
+          <div class="mt-6 text-center space-y-2">
             <p class="text-white/70 text-sm font-raleway-light" id="infoText">
-              Check your email for a 6-digit PIN code. No password needed.
+              Don't have an account yet? Create one with a 6-digit PIN.
             </p>
+            <button
+              type="button"
+              id="toggleModeBtn"
+              class="text-white font-semibold underline-offset-4 hover:underline"
+            >
+              Create an account
+            </button>
           </div>
         </div>
 
@@ -164,156 +188,195 @@
   </section>
 
   <script>
-    // Wait for Supabase to be ready
     document.addEventListener('DOMContentLoaded', () => {
-      const form = document.getElementById('loginForm');
+      const form = document.getElementById('authForm');
       const messageDiv = document.getElementById('message');
       const submitBtn = document.getElementById('submitBtn');
       const emailInput = document.getElementById('email');
+      const confirmEmailGroup = document.getElementById('confirmEmailGroup');
+      const confirmEmailInput = document.getElementById('confirmEmail');
       const pinInput = document.getElementById('pin');
-      const emailStep = document.getElementById('emailStep');
-      const pinStep = document.getElementById('pinStep');
-      const backBtn = document.getElementById('backBtn');
+      const confirmPinGroup = document.getElementById('confirmPinGroup');
+      const confirmPinInput = document.getElementById('confirmPin');
       const subtitleText = document.getElementById('subtitleText');
       const infoText = document.getElementById('infoText');
-      
-      let currentEmail = '';
+      const toggleModeBtn = document.getElementById('toggleModeBtn');
 
-      // Check if already logged in
+      let mode = 'login';
+
+      const enforceDigits = (input) => {
+        if (!input) return;
+        input.addEventListener('input', (event) => {
+          const cleaned = event.target.value.replace(/\D/g, '').slice(0, 6);
+          event.target.value = cleaned;
+        });
+      };
+
+      enforceDigits(pinInput);
+      enforceDigits(confirmPinInput);
+
+      const showMessage = (text, type) => {
+        messageDiv.textContent = text;
+        messageDiv.className = `text-sm font-raleway-light ${type === 'error' ? 'text-red-200' : 'text-green-200'}`;
+        messageDiv.classList.remove('hidden');
+      };
+
+      const setSubmitting = (isSubmitting, processingText) => {
+        submitBtn.disabled = isSubmitting;
+        submitBtn.textContent = isSubmitting
+          ? processingText
+          : (mode === 'login' ? 'SIGN IN' : 'CREATE ACCOUNT');
+      };
+
+      const setMode = (nextMode) => {
+        mode = nextMode;
+        const isLogin = mode === 'login';
+
+        subtitleText.textContent = isLogin
+          ? 'Sign in with your email and 6-digit PIN'
+          : 'Create your account and set a 6-digit PIN';
+
+        infoText.textContent = isLogin
+          ? "Don't have an account yet? Create one with a 6-digit PIN."
+          : 'Already have an account? Sign in with your 6-digit PIN.';
+
+        confirmEmailGroup.classList.toggle('hidden', isLogin);
+        confirmPinGroup.classList.toggle('hidden', isLogin);
+
+        submitBtn.textContent = isLogin ? 'SIGN IN' : 'CREATE ACCOUNT';
+        toggleModeBtn.textContent = isLogin ? 'Create an account' : 'Back to sign in';
+
+        messageDiv.classList.add('hidden');
+        messageDiv.textContent = '';
+
+        confirmEmailInput.value = '';
+        confirmPinInput.value = '';
+        pinInput.value = '';
+        submitBtn.disabled = false;
+
+        setTimeout(() => {
+          emailInput.focus();
+        }, 50);
+      };
+
+      toggleModeBtn.addEventListener('click', () => {
+        setMode(mode === 'login' ? 'create' : 'login');
+      });
+
       getCurrentUser().then(result => {
         if (result.user && !result.error) {
-          // Already logged in, redirect to homepage
           window.location.href = '/';
         }
       });
 
-      // Setup auth state listener (but don't auto-redirect - let OTP flow handle it)
       setupAuthStateListener((session) => {
-        // Only redirect if we're not in the middle of OTP verification
-        const pinStepVisible = !pinStep.classList.contains('hidden');
-        if (session && !pinStepVisible) {
-          // Already logged in, redirect to homepage
+        if (session) {
           window.location.href = '/';
         }
       });
 
-      // Back button handler
-      backBtn.addEventListener('click', () => {
-        showEmailStep();
-      });
+      form.addEventListener('submit', async (event) => {
+        event.preventDefault();
 
-      // PIN input - only allow numbers and auto-focus
-      pinInput.addEventListener('input', (e) => {
-        e.target.value = e.target.value.replace(/\D/g, '').slice(0, 6);
-        // Auto-submit when 6 digits are entered
-        if (e.target.value.length === 6) {
-          form.dispatchEvent(new Event('submit'));
+        const email = emailInput.value.trim();
+        const pin = pinInput.value.trim();
+
+        if (!email) {
+          showMessage('Please enter your email address', 'error');
+          return;
         }
-      });
 
-      function showEmailStep() {
-        emailStep.classList.remove('hidden');
-        pinStep.classList.add('hidden');
-        backBtn.classList.add('hidden');
-        emailInput.disabled = false;
-        submitBtn.disabled = false;
-        submitBtn.textContent = 'SEND PIN CODE';
-        subtitleText.textContent = 'Enter your email to receive a PIN code';
-        infoText.textContent = 'Check your email for a 6-digit PIN code. No password needed.';
-        currentEmail = '';
-        pinInput.value = '';
-      }
+        if (!/^[0-9]{6}$/.test(pin)) {
+          showMessage('PIN must be exactly 6 digits', 'error');
+          return;
+        }
 
-      function showPinStep() {
-        emailStep.classList.add('hidden');
-        pinStep.classList.remove('hidden');
-        backBtn.classList.remove('hidden');
-        emailInput.disabled = true;
-        submitBtn.textContent = 'VERIFY PIN CODE';
-        subtitleText.textContent = 'Enter PIN code';
-        infoText.textContent = `Enter the 6-digit code sent to ${currentEmail}`;
-        pinInput.focus();
-      }
+        if (mode === 'create') {
+          const confirmEmail = (confirmEmailInput.value || '').trim();
+          const confirmPin = (confirmPinInput.value || '').trim();
 
-      form.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        
-        // Step 1: Send PIN code (when PIN step is hidden)
-        if (pinStep.classList.contains('hidden')) {
-          const email = emailInput.value.trim();
-          
-          if (!email) {
-            showMessage('Please enter your email address', 'error');
+          if (!confirmEmail) {
+            showMessage('Please confirm your email address', 'error');
             return;
           }
 
-          submitBtn.disabled = true;
-          submitBtn.textContent = 'SENDING...';
-
-          const result = await sendOTP(email);
-
-          if (result.success) {
-            currentEmail = email;
-            showMessage('PIN code sent! Check your email.', 'success');
-            showPinStep();
-            submitBtn.disabled = false;
-          } else {
-            showMessage(result.error || 'Failed to send PIN code. Please try again.', 'error');
-            submitBtn.disabled = false;
-            submitBtn.textContent = 'SEND PIN CODE';
-          }
-        } 
-        // Step 2: Verify PIN code
-        else {
-          const pin = pinInput.value.trim();
-          
-          if (!pin || pin.length !== 6) {
-            showMessage('Please enter the 6-digit PIN code', 'error');
+          if (email.toLowerCase() !== confirmEmail.toLowerCase()) {
+            showMessage('Email addresses do not match', 'error');
             return;
           }
 
-          submitBtn.disabled = true;
-          submitBtn.textContent = 'VERIFYING...';
+          if (!/^[0-9]{6}$/.test(confirmPin)) {
+            showMessage('Confirm PIN must be exactly 6 digits', 'error');
+            return;
+          }
 
-          const result = await verifyOTP(currentEmail, pin);
+          if (pin !== confirmPin) {
+            showMessage('PIN values do not match', 'error');
+            return;
+          }
+        }
+
+        setSubmitting(true, mode === 'login' ? 'SIGNING IN...' : 'CREATING ACCOUNT...');
+
+        if (mode === 'login') {
+          const result = await loginWithPin(email, pin);
 
           if (result.success) {
             showMessage('PIN verified! Redirecting...', 'success');
-            // Wait a moment for session to be established, then redirect
             setTimeout(async () => {
-              // Verify session is actually set before redirecting
               const userCheck = await getCurrentUser();
               if (userCheck.user && !userCheck.error) {
                 window.location.href = '/';
               } else {
-                // If session not ready yet, wait a bit more
                 setTimeout(() => {
                   window.location.href = '/';
                 }, 500);
               }
-            }, 500);
+            }, 300);
           } else {
-            showMessage(result.error || 'Invalid PIN code. Please try again.', 'error');
-            pinInput.value = '';
-            pinInput.focus();
-            submitBtn.disabled = false;
-            submitBtn.textContent = 'VERIFY PIN CODE';
+            showMessage(result.error || 'Failed to sign in. Please try again.', 'error');
+            setSubmitting(false);
+          }
+        } else {
+          const signupResult = await registerWithPin(email, pin);
+
+          if (!signupResult.success) {
+            showMessage(signupResult.error || 'Failed to create account. Please try again.', 'error');
+            setSubmitting(false);
+            return;
+          }
+
+          showMessage('Account created! Signing you in...', 'success');
+
+          const signInResult = await loginWithPin(email, pin);
+
+          if (signInResult.success) {
+            setTimeout(async () => {
+              const userCheck = await getCurrentUser();
+              if (userCheck.user && !userCheck.error) {
+                window.location.href = '/';
+              } else {
+                setTimeout(() => {
+                  window.location.href = '/';
+                }, 500);
+              }
+            }, 300);
+          } else {
+            const errorText = signInResult.error || 'Account created. Please sign in once your email is confirmed.';
+            const lowerError = errorText.toLowerCase();
+            const requiresConfirmation = lowerError.includes('confirm');
+
+            showMessage(errorText, requiresConfirmation ? 'success' : 'error');
+            setSubmitting(false);
+
+            if (requiresConfirmation) {
+              setMode('login');
+            }
           }
         }
       });
 
-      function showMessage(text, type) {
-        messageDiv.textContent = text;
-        messageDiv.className = `text-sm font-raleway-light ${type === 'error' ? 'text-red-200' : 'text-green-200'}`;
-        messageDiv.classList.remove('hidden');
-        
-        // Auto hide success messages after 5 seconds
-        if (type === 'success') {
-          setTimeout(() => {
-            messageDiv.classList.add('hidden');
-          }, 5000);
-        }
-      }
+      setMode('login');
     });
   </script>
 

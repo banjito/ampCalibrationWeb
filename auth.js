@@ -1,5 +1,5 @@
 // Authentication utilities for AMP Calibration Dashboard
-// Uses Supabase Auth for magic link authentication
+// Uses Supabase Auth for email + 6 digit PIN authentication
 
 /**
  * Get the Supabase client instance
@@ -13,64 +13,70 @@ function getSupabaseClient() {
 }
 
 /**
- * Send OTP (PIN code) to user's email
- * @param {string} email - User's email address
- * @returns {Promise<{success: boolean, error?: string}>}
+ * Create a user account with a 6 digit PIN (stored as Supabase password)
+ * @param {string} email
+ * @param {string} pin
+ * @returns {Promise<{success: boolean, data?: object, error?: string}>}
  */
-async function sendOTP(email) {
+async function registerWithPin(email, pin) {
   const supabase = getSupabaseClient();
   if (!supabase) {
     return { success: false, error: 'Supabase client not initialized' };
   }
 
+  if (!/^[0-9]{6}$/.test(pin)) {
+    return { success: false, error: 'PIN must be 6 digits' };
+  }
+
   try {
-    const { error } = await supabase.auth.signInWithOtp({
-      email: email,
-      options: {
-        shouldCreateUser: true
-      }
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password: pin
     });
 
     if (error) {
-      console.error('OTP error:', error);
+      console.error('Sign up error:', error);
       return { success: false, error: error.message };
     }
 
-    return { success: true };
+    return { success: true, data };
   } catch (error) {
-    console.error('OTP error:', error);
-    return { success: false, error: error.message || 'Failed to send PIN code' };
+    console.error('Sign up error:', error);
+    return { success: false, error: error.message || 'Failed to create account' };
   }
 }
 
 /**
- * Verify OTP (PIN code) entered by user
- * @param {string} email - User's email address
- * @param {string} token - The 6-digit PIN code
- * @returns {Promise<{success: boolean, error?: string}>}
+ * Sign in with email + 6 digit PIN
+ * @param {string} email
+ * @param {string} pin
+ * @returns {Promise<{success: boolean, data?: object, error?: string}>}
  */
-async function verifyOTP(email, token) {
+async function loginWithPin(email, pin) {
   const supabase = getSupabaseClient();
   if (!supabase) {
     return { success: false, error: 'Supabase client not initialized' };
   }
 
+  if (!/^[0-9]{6}$/.test(pin)) {
+    return { success: false, error: 'PIN must be 6 digits' };
+  }
+
   try {
-    const { data, error } = await supabase.auth.verifyOtp({
-      email: email,
-      token: token,
-      type: 'email'
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password: pin
     });
 
     if (error) {
-      console.error('OTP verification error:', error);
+      console.error('PIN login error:', error);
       return { success: false, error: error.message };
     }
 
-    return { success: true, data: data };
+    return { success: true, data };
   } catch (error) {
-    console.error('OTP verification error:', error);
-    return { success: false, error: error.message || 'Failed to verify PIN code' };
+    console.error('PIN login error:', error);
+    return { success: false, error: error.message || 'Failed to sign in' };
   }
 }
 
