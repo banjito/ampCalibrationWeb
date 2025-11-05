@@ -31,7 +31,10 @@ async function registerWithPin(email, pin) {
   try {
     const { data, error } = await supabase.auth.signUp({
       email,
-      password: pin
+      password: pin,
+      options: {
+        emailRedirectTo: `${window.location.origin}/verify.html`
+      }
     });
 
     if (error) {

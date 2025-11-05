@@ -155,6 +155,14 @@
             <div id="message" class="hidden text-sm font-raleway-light"></div>
 
             <button
+              type="button"
+              id="resendConfirmationBtn"
+              class="hidden w-full border-2 border-white/60 text-white px-4 py-2 rounded-full text-sm font-benzin tracking-wide hover:bg-white hover:text-green transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Resend confirmation email
+            </button>
+
+            <button
               type="submit"
               id="submitBtn"
               class="w-full border-2 border-white text-white px-8 py-3 rounded-full hover:bg-white hover:text-green transition-colors font-medium tracking-wide font-benzin disabled:opacity-50 disabled:cursor-not-allowed"
@@ -201,6 +209,10 @@
       const subtitleText = document.getElementById('subtitleText');
       const infoText = document.getElementById('infoText');
       const toggleModeBtn = document.getElementById('toggleModeBtn');
+      const resendBtn = document.getElementById('resendConfirmationBtn');
+
+      const resendBtnDefaultText = 'Resend confirmation email';
+      let lastEmailAttempt = '';
 
       let mode = 'login';
 
@@ -214,11 +226,21 @@
 
       enforceDigits(pinInput);
       enforceDigits(confirmPinInput);
+      const toggleResend = (show) => {
+        if (!resendBtn) return;
+        resendBtn.classList.toggle('hidden', !show);
+        if (!show) {
+          resendBtn.disabled = false;
+          resendBtn.textContent = resendBtnDefaultText;
+        }
+      };
 
-      const showMessage = (text, type) => {
+      const showMessage = (text, type, options = {}) => {
+        const { showResend = false } = options;
         messageDiv.textContent = text;
         messageDiv.className = `text-sm font-raleway-light ${type === 'error' ? 'text-red-200' : 'text-green-200'}`;
         messageDiv.classList.remove('hidden');
+        toggleResend(showResend);
       };
 
       const setSubmitting = (isSubmitting, processingText) => {
@@ -226,6 +248,31 @@
         submitBtn.textContent = isSubmitting
           ? processingText
           : (mode === 'login' ? 'SIGN IN' : 'CREATE ACCOUNT');
+      };
+
+      const resendConfirmationEmail = async (email) => {
+        const supabase = getSupabaseClient();
+
+        if (!supabase) {
+          return { success: false, error: 'Supabase client not initialized' };
+        }
+
+        try {
+          const { error } = await supabase.auth.resend({
+            type: 'signup',
+            email
+          });
+
+          if (error) {
+            console.error('Resend confirmation error:', error);
+            return { success: false, error: error.message };
+          }
+
+          return { success: true };
+        } catch (error) {
+          console.error('Resend confirmation error:', error);
+          return { success: false, error: error.message || 'Failed to resend confirmation email' };
+        }
       };
 
       const setMode = (nextMode, options = {}) => {
@@ -251,6 +298,7 @@
         if (!preserveMessage) {
           messageDiv.classList.add('hidden');
           messageDiv.textContent = '';
+          toggleResend(false);
         }
 
         confirmEmailInput.value = '';
@@ -262,6 +310,27 @@
           emailInput.focus();
         }, 50);
       };
+
+      resendBtn?.addEventListener('click', async () => {
+        if (!lastEmailAttempt) {
+          showMessage('Enter your email above before requesting another confirmation email.', 'error');
+          return;
+        }
+
+        resendBtn.disabled = true;
+        resendBtn.textContent = 'Resending...';
+
+        const result = await resendConfirmationEmail(lastEmailAttempt);
+
+        if (result.success) {
+          showMessage(`Confirmation email sent to ${lastEmailAttempt}.`, 'success', { showResend: true });
+        } else {
+          showMessage(result.error || 'Failed to resend confirmation email.', 'error', { showResend: true });
+        }
+
+        resendBtn.disabled = false;
+        resendBtn.textContent = resendBtnDefaultText;
+      });
 
       toggleModeBtn.addEventListener('click', () => {
         setMode(mode === 'login' ? 'create' : 'login');
@@ -284,6 +353,8 @@
 
         const email = emailInput.value.trim();
         const pin = pinInput.value.trim();
+
+        lastEmailAttempt = email;
 
         if (!email) {
           showMessage('Please enter your email address', 'error');
@@ -342,7 +413,7 @@
             const lowerError = errorText.toLowerCase();
 
             if (lowerError.includes('invalid login credentials')) {
-              showMessage('Invalid email or PIN. If you just created an account, make sure you have confirmed your email.', 'error');
+            showMessage('Invalid email or PIN. If you just created an account, make sure you have confirmed your email.', 'error', { showResend: true });
             } else {
               showMessage(errorText, 'error');
             }
@@ -357,7 +428,7 @@
 
             if (lowerError.includes('already registered')) {
               setMode('login', { preserveMessage: true });
-              showMessage('This email already has an account. Please sign in with your PIN.', 'error');
+              showMessage('This email already has an account. Please sign in with your PIN.', 'error', { showResend: true });
             } else {
               showMessage(errorText, 'error');
             }
@@ -371,7 +442,7 @@
 
           if (requiresEmailConfirmation) {
             setMode('login', { preserveMessage: true });
-            showMessage('Account created! Check your email for the confirmation link, then sign in with your PIN.', 'success');
+            showMessage('Account created! Check your email for the confirmation link, then sign in with your PIN.', 'success', { showResend: true });
             setSubmitting(false);
             return;
           }
@@ -396,7 +467,7 @@
             const lowerError = errorText.toLowerCase();
             const requiresConfirmation = lowerError.includes('confirm');
 
-            showMessage(errorText, requiresConfirmation ? 'success' : 'error');
+            showMessage(errorText, requiresConfirmation ? 'success' : 'error', { showResend: requiresConfirmation });
             setSubmitting(false);
 
             if (requiresConfirmation) {
