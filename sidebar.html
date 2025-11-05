@@ -183,6 +183,128 @@
   </div>
 </div>
 
+<!-- Settings Modal -->
+<div id="settingsModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
+  <div id="settingsOverlay" class="absolute inset-0 bg-black/60"></div>
+
+  <div class="relative bg-white rounded-lg shadow-2xl max-w-2xl w-full p-8 z-10">
+    <button
+      id="settingsCloseBtn"
+      type="button"
+      class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors"
+      aria-label="Close"
+    >
+      <i data-lucide="x" class="w-6 h-6"></i>
+    </button>
+
+    <h2 class="text-3xl font-bold text-gray-900 mb-6 font-horizon">SETTINGS</h2>
+
+    <form id="settingsForm" class="space-y-8">
+      <!-- Appearance -->
+      <section>
+        <div class="flex items-center justify-between mb-3">
+          <div>
+            <h3 class="text-lg font-semibold text-gray-900 font-benzin">Appearance</h3>
+            <p class="text-sm text-gray-500 font-raleway-light">Choose how AMP Calibration should look on this device.</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <label class="border rounded-lg p-4 cursor-pointer hover:border-green transition-colors flex items-center gap-3">
+            <input type="radio" name="settingsTheme" value="system" id="settingsThemeSystem" class="text-green" />
+            <span class="text-sm font-medium text-gray-900">System</span>
+          </label>
+          <label class="border rounded-lg p-4 cursor-pointer hover:border-green transition-colors flex items-center gap-3">
+            <input type="radio" name="settingsTheme" value="light" id="settingsThemeLight" class="text-green" />
+            <span class="text-sm font-medium text-gray-900">Light</span>
+          </label>
+          <label class="border rounded-lg p-4 cursor-pointer hover:border-green transition-colors flex items-center gap-3">
+            <input type="radio" name="settingsTheme" value="dark" id="settingsThemeDark" class="text-green" />
+            <span class="text-sm font-medium text-gray-900">Dark</span>
+          </label>
+        </div>
+      </section>
+
+      <!-- Notifications -->
+      <section>
+        <div class="flex items-center justify-between mb-3">
+          <div>
+            <h3 class="text-lg font-semibold text-gray-900 font-benzin">Notifications</h3>
+            <p class="text-sm text-gray-500 font-raleway-light">Control how we reach out when something needs your attention.</p>
+          </div>
+        </div>
+
+        <div class="space-y-3">
+          <label class="flex items-start gap-3">
+            <input type="checkbox" id="settingsEmailAlerts" class="mt-1 text-green" />
+            <span>
+              <span class="block text-sm font-medium text-gray-900">Email alerts</span>
+              <span class="block text-xs text-gray-500 font-raleway-light">Send me calibration updates, appointment reminders, and status changes.</span>
+            </span>
+          </label>
+
+          <label class="flex items-start gap-3">
+            <input type="checkbox" id="settingsSmsAlerts" class="mt-1 text-green" />
+            <span>
+              <span class="block text-sm font-medium text-gray-900">SMS alerts</span>
+              <span class="block text-xs text-gray-500 font-raleway-light">Texts for time-sensitive events only.</span>
+            </span>
+          </label>
+        </div>
+      </section>
+
+      <!-- Preferences -->
+      <section>
+        <div class="flex items-center justify-between mb-3">
+          <div>
+            <h3 class="text-lg font-semibold text-gray-900 font-benzin">Preferences</h3>
+            <p class="text-sm text-gray-500 font-raleway-light">Adjust defaults for measurements and scheduling.</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <label class="flex flex-col gap-2">
+            <span class="text-sm font-medium text-gray-900">Measurement units</span>
+            <select id="settingsMeasurementUnit" class="border rounded-lg px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-green">
+              <option value="imperial">Imperial (inch, ft, lb)</option>
+              <option value="metric">Metric (mm, m, kg)</option>
+            </select>
+          </label>
+
+          <label class="flex flex-col gap-2">
+            <span class="text-sm font-medium text-gray-900">Default reminder window</span>
+            <select id="settingsReminderWindow" class="border rounded-lg px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-green">
+              <option value="24">24 hours</option>
+              <option value="48">48 hours</option>
+              <option value="72">72 hours</option>
+              <option value="168">1 week</option>
+            </select>
+          </label>
+        </div>
+      </section>
+
+      <div class="flex items-center justify-between border-t border-gray-200 pt-4">
+        <div id="settingsStatus" class="text-sm text-gray-500 hidden"></div>
+        <div class="flex items-center gap-3">
+          <button
+            type="button"
+            id="settingsCancelBtn"
+            class="px-4 py-2 rounded-full border border-gray-300 text-gray-700 text-sm font-benzin hover:bg-gray-100 transition-colors"
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            class="px-5 py-2 rounded-full bg-green text-white text-sm font-benzin hover:bg-green/90 transition-colors"
+          >
+            Save settings
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
 <!-- Initialize Lucide icons -->
 <script>
   if (typeof lucide !== 'undefined') {

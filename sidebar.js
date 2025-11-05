@@ -50,8 +50,12 @@ function initSidebar() {
 
   // Close sidebar when pressing ESC
   document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && sidebar.getAttribute('aria-hidden') === 'false') {
-      closeSidebar();
+    if (e.key === 'Escape') {
+      if (sidebar.getAttribute('aria-hidden') === 'false') {
+        closeSidebar();
+      }
+      closeProfileModal();
+      closeSettingsModal();
     }
   });
 
@@ -109,12 +113,43 @@ function initSidebar() {
     });
   }
 
-  // Settings button
+  // Settings modal handlers
   const settingsBtn = document.getElementById('settingsBtn');
+  const settingsCloseBtn = document.getElementById('settingsCloseBtn');
+  const settingsOverlay = document.getElementById('settingsOverlay');
+  const settingsForm = document.getElementById('settingsForm');
+  const settingsCancelBtn = document.getElementById('settingsCancelBtn');
   if (settingsBtn) {
     settingsBtn.addEventListener('click', () => {
-      console.log('Settings clicked');
-      // Don't close sidebar - kept open with data-keep-mobile-sidebar-open
+      closeSidebar();
+      openSettingsModal();
+    });
+  }
+
+  if (settingsCloseBtn) {
+    settingsCloseBtn.addEventListener('click', () => {
+      closeSettingsModal();
+    });
+  }
+
+  if (settingsOverlay) {
+    settingsOverlay.addEventListener('click', (e) => {
+      if (e.target === settingsOverlay) {
+        closeSettingsModal();
+      }
+    });
+  }
+
+  if (settingsCancelBtn) {
+    settingsCancelBtn.addEventListener('click', () => {
+      closeSettingsModal();
+    });
+  }
+
+  if (settingsForm) {
+    settingsForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+      saveSettingsFromForm();
     });
   }
 
@@ -135,6 +170,7 @@ function initSidebar() {
 
   // Load user data into sidebar
   loadUserData();
+  applySettings(getStoredSettings());
 
   // Dispatch initialized event
   sidebar.dispatchEvent(new CustomEvent('basecoat:initialized'));
@@ -209,6 +245,145 @@ function closeProfileModal() {
     modal.classList.add('hidden');
     document.body.style.overflow = '';
   }
+}
+
+const SETTINGS_STORAGE_KEY = 'amp-calibration-settings';
+
+function openSettingsModal() {
+  const modal = document.getElementById('settingsModal');
+  if (modal) {
+    modal.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+    loadSettingsIntoForm();
+  }
+}
+
+function closeSettingsModal() {
+  const modal = document.getElementById('settingsModal');
+  if (modal) {
+    modal.classList.add('hidden');
+    document.body.style.overflow = '';
+  }
+}
+
+function getStoredSettings() {
+  try {
+    const raw = localStorage.getItem(SETTINGS_STORAGE_KEY);
+    if (!raw) {
+      return {
+        theme: 'system',
+        emailAlerts: true,
+        smsAlerts: false,
+        measurementUnit: 'imperial',
+        reminderWindow: '48'
+      };
+    }
+    const parsed = JSON.parse(raw);
+    return {
+      theme: parsed.theme || 'system',
+      emailAlerts: typeof parsed.emailAlerts === 'boolean' ? parsed.emailAlerts : true,
+      smsAlerts: typeof parsed.smsAlerts === 'boolean' ? parsed.smsAlerts : false,
+      measurementUnit: parsed.measurementUnit || 'imperial',
+      reminderWindow: parsed.reminderWindow || '48'
+    };
+  } catch (error) {
+    console.error('Failed to parse settings, resetting to defaults:', error);
+    localStorage.removeItem(SETTINGS_STORAGE_KEY);
+    return getStoredSettings();
+  }
+}
+
+function loadSettingsIntoForm() {
+  const settings = getStoredSettings();
+
+  const themeSystem = document.getElementById('settingsThemeSystem');
+  const themeLight = document.getElementById('settingsThemeLight');
+  const themeDark = document.getElementById('settingsThemeDark');
+  if (themeSystem && themeLight && themeDark) {
+    themeSystem.checked = settings.theme === 'system';
+    themeLight.checked = settings.theme === 'light';
+    themeDark.checked = settings.theme === 'dark';
+  }
+
+  const emailCheckbox = document.getElementById('settingsEmailAlerts');
+  if (emailCheckbox) {
+    emailCheckbox.checked = settings.emailAlerts;
+  }
+
+  const smsCheckbox = document.getElementById('settingsSmsAlerts');
+  if (smsCheckbox) {
+    smsCheckbox.checked = settings.smsAlerts;
+  }
+
+  const unitSelect = document.getElementById('settingsMeasurementUnit');
+  if (unitSelect) {
+    unitSelect.value = settings.measurementUnit;
+  }
+
+  const reminderSelect = document.getElementById('settingsReminderWindow');
+  if (reminderSelect) {
+    reminderSelect.value = settings.reminderWindow;
+  }
+
+  showSettingsStatus('','hidden');
+}
+
+function saveSettingsFromForm() {
+  const themeValue = document.querySelector('input[name="settingsTheme"]:checked')?.value || 'system';
+  const emailAlerts = !!document.getElementById('settingsEmailAlerts')?.checked;
+  const smsAlerts = !!document.getElementById('settingsSmsAlerts')?.checked;
+  const measurementUnit = document.getElementById('settingsMeasurementUnit')?.value || 'imperial';
+  const reminderWindow = document.getElementById('settingsReminderWindow')?.value || '48';
+
+  const settings = {
+    theme: themeValue,
+    emailAlerts,
+    smsAlerts,
+    measurementUnit,
+    reminderWindow
+  };
+
+  try {
+    localStorage.setItem(SETTINGS_STORAGE_KEY, JSON.stringify(settings));
+    applySettings(settings);
+    showSettingsStatus('Settings saved', 'text-green-600');
+    setTimeout(() => {
+      closeSettingsModal();
+    }, 600);
+  } catch (error) {
+    console.error('Failed to save settings:', error);
+    showSettingsStatus('Unable to save settings. Please try again.', 'text-red-600');
+  }
+}
+
+function showSettingsStatus(message, className) {
+  const statusEl = document.getElementById('settingsStatus');
+  if (!statusEl) return;
+
+  if (!message) {
+    statusEl.classList.add('hidden');
+    statusEl.textContent = '';
+    return;
+  }
+
+  statusEl.textContent = message;
+  statusEl.className = `text-sm ${className}`;
+}
+
+function applySettings(settings) {
+  if (!settings) return;
+
+  // Simple theme application hook – replace with actual theme system if needed
+  const body = document.body;
+  body.dataset.theme = settings.theme;
+  body.classList.remove('theme-light', 'theme-dark');
+  if (settings.theme === 'light') {
+    body.classList.add('theme-light');
+  } else if (settings.theme === 'dark') {
+    body.classList.add('theme-dark');
+  }
+
+  // Future hooks: wire email/sms preferences to backend when available
 }
 
 /**

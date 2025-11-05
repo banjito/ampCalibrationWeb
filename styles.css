@@ -66,7 +66,7 @@ header nav a.header-nav-link {
 }
 
 header nav a.header-nav-home {
-  opacity: 0.6;
+  opacity: 1;
 }
 
 header nav a.header-nav-link:hover {
