@@ -7,10 +7,12 @@
   <link rel="icon" type="image/svg+xml" href="img/icon/icon01.svg">
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/basecoat-css@0.3.3/dist/basecoat.cdn.min.css">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
   <script src="config.js"></script>
   <script src="auth.js" defer></script>
   <script src="sidebar.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/basecoat-css@0.3.3/dist/js/all.min.js" defer></script>
 </head>
 <body class="bg-gray-100">
   <!-- Include Global Sidebar -->
@@ -78,30 +80,154 @@
 
   <main class="min-h-screen bg-gray-100 py-16">
     <div class="container mx-auto px-4">
-      <section id="hrContent" class="hidden">
+      <section id="hrContent">
         <div class="bg-white shadow-xl border border-gray-200 p-10 rounded-2xl max-w-4xl mx-auto">
           <h1 class="text-4xl font-bold text-green mb-4 font-horizon">Human Resources</h1>
           <p class="text-gray-600 font-raleway-light mb-8">Manage AMP Calibration team members, onboarding, certifications, and compliance from one secure workspace.</p>
 
-          <div class="grid gap-6 md:grid-cols-2">
-            <div class="border border-gray-200 rounded-xl p-6 bg-gray-50">
-              <h2 class="text-lg font-semibold text-gray-900 font-benzin mb-2">Team Directory</h2>
-              <p class="text-sm text-gray-600 font-raleway-light">Review employee records, roles, and contact information. Export a roster anytime.</p>
+          <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            <div class="card">
+
+              <header>
+
+                <h2>People</h2>
+
+                <p>Manage employee records, profiles, and personal information.</p>
+
+              </header>
+
+              <section>
+
+                <p>Access and manage all employee information in one centralized location.</p>
+
+              </section>
+
+              <footer>
+
+                <p>Updated daily</p>
+
+              </footer>
+
             </div>
 
-            <div class="border border-gray-200 rounded-xl p-6 bg-gray-50">
-              <h2 class="text-lg font-semibold text-gray-900 font-benzin mb-2">Certifications & Training</h2>
-              <p class="text-sm text-gray-600 font-raleway-light">Track OSHA, dielectric safety, and manufacturer certifications with automated reminders.</p>
+            <div class="card">
+
+              <header>
+
+                <h2>Users</h2>
+
+                <p>Handle user accounts, permissions, and system access.</p>
+
+              </header>
+
+              <section>
+
+                <p>Control user roles, permissions, and access levels across all systems.</p>
+
+              </section>
+
+              <footer>
+
+                <p>Role-based access</p>
+
+              </footer>
+
             </div>
 
-            <div class="border border-gray-200 rounded-xl p-6 bg-gray-50">
-              <h2 class="text-lg font-semibold text-gray-900 font-benzin mb-2">Onboarding Workflows</h2>
-              <p class="text-sm text-gray-600 font-raleway-light">Assign checklists for new hires, fleet assignments, and PPE issue logs.</p>
+            <div class="card">
+
+              <header>
+
+                <h2>Badges</h2>
+
+                <p>Assign and track certifications, clearances, and access badges.</p>
+
+              </header>
+
+              <section>
+
+                <p>Monitor certification expiry dates and compliance requirements.</p>
+
+              </section>
+
+              <footer>
+
+                <p>Auto-renewal alerts</p>
+
+              </footer>
+
             </div>
 
-            <div class="border border-gray-200 rounded-xl p-6 bg-gray-50">
-              <h2 class="text-lg font-semibold text-gray-900 font-benzin mb-2">Documents & Policies</h2>
-              <p class="text-sm text-gray-600 font-raleway-light">Store handbooks, field safety bulletins, and acknowledgement forms for quick reference.</p>
+            <div class="card">
+
+              <header>
+
+                <h2>Training</h2>
+
+                <p>Track certifications, safety training, and compliance records.</p>
+
+              </header>
+
+              <section>
+
+                <p>Maintain OSHA, dielectric safety, and manufacturer training records.</p>
+
+              </section>
+
+              <footer>
+
+                <p>Compliance tracking</p>
+
+              </footer>
+
+            </div>
+
+            <div class="card">
+
+              <header>
+
+                <h2>Documents</h2>
+
+                <p>Store policies, handbooks, and company documents.</p>
+
+              </header>
+
+              <section>
+
+                <p>Secure storage for all HR policies, procedures, and documentation.</p>
+
+              </section>
+
+              <footer>
+
+                <p>Version controlled</p>
+
+              </footer>
+
+            </div>
+
+            <div class="card">
+
+              <header>
+
+                <h2>Reports</h2>
+
+                <p>Generate HR reports and analytics for compliance and insights.</p>
+
+              </header>
+
+              <section>
+
+                <p>Create custom reports for headcount, compliance, and performance metrics.</p>
+
+              </section>
+
+              <footer>
+
+                <p>Export to PDF/Excel</p>
+
+              </footer>
+
             </div>
           </div>
         </div>
