@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HR | AMP Calibration</title>
+  <link rel="icon" type="image/svg+xml" href="img/icon/icon01.svg">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="config.js"></script>
+  <script src="auth.js" defer></script>
+  <script src="sidebar.js" defer></script>
+</head>
+<body class="bg-gray-100">
+  <!-- Include Global Sidebar -->
+  <div id="sidebarContainer"></div>
+  <script>
+    (function() {
+      fetch('sidebar.html')
+        .then(response => response.text())
+        .then(html => {
+          const container = document.getElementById('sidebarContainer');
+          if (container) {
+            container.innerHTML = html;
+            requestAnimationFrame(() => {
+              if (typeof initSidebar === 'function') {
+                initSidebar();
+              } else {
+                setTimeout(() => {
+                  if (typeof initSidebar === 'function') {
+                    initSidebar();
+                  }
+                }, 100);
+              }
+            });
+          }
+        })
+        .catch(error => {
+          console.error('Error loading sidebar:', error);
+        });
+    })();
+  </script>
+
+  <!-- Header -->
+  <header class="bg-green py-4">
+    <div class="container mx-auto px-4">
+      <div class="flex items-center justify-between">
+        <!-- Logo and Sidebar Toggle -->
+        <div class="flex items-center gap-4">
+          <button
+            type="button" onclick="document.dispatchEvent(new CustomEvent('basecoat:sidebar'))"
+            class="text-white hover:opacity-80 transition-opacity p-2"
+            aria-label="Toggle sidebar"
+          >
+            <i data-lucide="menu" class="w-6 h-6"></i>
+          </button>
+          <a href="index.html" class="header-logo-link">
+            <img src="img/logo/header.svg" alt="AMP Calibration" class="header-logo">
+          </a>
+        </div>
+        
+        <!-- Navigation -->
+        <nav class="flex items-center gap-4">
+          <a href="index.html" class="text-white text-sm font-semibold header-nav-link">HOME</a>
+          <span class="text-white opacity-40">|</span>
+          <a href="jobs.html" class="text-white text-sm font-semibold header-nav-link">JOBS</a>
+          <span class="text-white opacity-40">|</span>
+          <a href="services.html" class="text-white text-sm font-semibold header-nav-link">SERVICES</a>
+          <span class="text-white opacity-40">|</span>
+          <a href="about.html" class="text-white text-sm font-semibold header-nav-link">ABOUT</a>
+          <span class="text-white opacity-40">|</span>
+          <a href="contact.html" class="text-white text-sm font-semibold border border-white rounded px-4 py-2 header-nav-button header-nav-home">CONTACT US</a>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <main class="min-h-screen bg-gray-100 py-16">
+    <div class="container mx-auto px-4">
+      <section id="hrContent" class="hidden">
+        <div class="bg-white shadow-xl border border-gray-200 p-10 rounded-2xl max-w-4xl mx-auto">
+          <h1 class="text-4xl font-bold text-green mb-4 font-horizon">Human Resources</h1>
+          <p class="text-gray-600 font-raleway-light mb-8">Manage AMP Calibration team members, onboarding, certifications, and compliance from one secure workspace.</p>
+
+          <div class="grid gap-6 md:grid-cols-2">
+            <div class="border border-gray-200 rounded-xl p-6 bg-gray-50">
+              <h2 class="text-lg font-semibold text-gray-900 font-benzin mb-2">Team Directory</h2>
+              <p class="text-sm text-gray-600 font-raleway-light">Review employee records, roles, and contact information. Export a roster anytime.</p>
+            </div>
+
+            <div class="border border-gray-200 rounded-xl p-6 bg-gray-50">
+              <h2 class="text-lg font-semibold text-gray-900 font-benzin mb-2">Certifications & Training</h2>
+              <p class="text-sm text-gray-600 font-raleway-light">Track OSHA, dielectric safety, and manufacturer certifications with automated reminders.</p>
+            </div>
+
+            <div class="border border-gray-200 rounded-xl p-6 bg-gray-50">
+              <h2 class="text-lg font-semibold text-gray-900 font-benzin mb-2">Onboarding Workflows</h2>
+              <p class="text-sm text-gray-600 font-raleway-light">Assign checklists for new hires, fleet assignments, and PPE issue logs.</p>
+            </div>
+
+            <div class="border border-gray-200 rounded-xl p-6 bg-gray-50">
+              <h2 class="text-lg font-semibold text-gray-900 font-benzin mb-2">Documents & Policies</h2>
+              <p class="text-sm text-gray-600 font-raleway-light">Store handbooks, field safety bulletins, and acknowledgement forms for quick reference.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="hrUnauthorized" class="hidden">
+        <div class="bg-white border border-red-200 text-red-700 p-8 rounded-2xl max-w-xl mx-auto text-center">
+          <h2 class="text-2xl font-bold font-horizon mb-3">Access Restricted</h2>
+          <p class="text-sm font-raleway-light">You need the Admin badge to view HR resources. If you believe this is an error, contact an administrator.</p>
+          <a href="index.html" class="inline-block mt-6 px-6 py-2 rounded-full border border-red-400 text-red-600 hover:bg-red-50 transition-colors font-benzin text-sm">Return Home</a>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script>
+    requireAuth(async (result) => {
+      const isAdmin = typeof userHasAdminBadge === 'function' && userHasAdminBadge(result.profile, result.role);
+      if (isAdmin) {
+        document.getElementById('hrContent')?.classList.remove('hidden');
+      } else {
+        document.getElementById('hrUnauthorized')?.classList.remove('hidden');
+      }
+    });
+  </script>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    lucide.createIcons();
+  </script>
+</body>
+</html>

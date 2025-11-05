@@ -211,6 +211,7 @@ async function loadUserData() {
   const loginSection = document.getElementById('sidebarLoginSection');
   const userRoleEl = document.getElementById('sidebarUserRole');
   const profileImageEl = document.getElementById('sidebarAvatar');
+  const hrSection = document.getElementById('sidebarHrSection');
 
   try {
     const result = await getCurrentUser();
@@ -227,6 +228,14 @@ async function loadUserData() {
       // Update role display
       if (userRoleEl && result.role) {
         userRoleEl.textContent = result.role.charAt(0).toUpperCase() + result.role.slice(1);
+      }
+
+      if (hrSection) {
+        if (typeof userHasAdminBadge === 'function' && userHasAdminBadge(result.profile, result.role)) {
+          hrSection.classList.remove('hidden');
+        } else {
+          hrSection.classList.add('hidden');
+        }
       }
       
       // Get user initials for profile image placeholder
@@ -261,6 +270,9 @@ async function loadUserData() {
       if (loginSection) {
         loginSection.classList.remove('hidden');
       }
+      if (hrSection) {
+        hrSection.classList.add('hidden');
+      }
     }
   } catch (error) {
     console.error('Failed to load user data:', error);
@@ -270,6 +282,9 @@ async function loadUserData() {
     }
     if (loginSection) {
       loginSection.classList.remove('hidden');
+    }
+    if (hrSection) {
+      hrSection.classList.add('hidden');
     }
   }
 }

@@ -252,3 +252,24 @@ function setupAuthStateListener(callback) {
   });
 }
 
+function userHasAdminBadge(profile, role) {
+  const normalizedRole = (role || profile?.role || localStorage.getItem('userRole') || '').toString().toLowerCase();
+  if (normalizedRole === 'admin') {
+    return true;
+  }
+
+  const badges = profile?.badges;
+  if (Array.isArray(badges)) {
+    return badges.some(badge => typeof badge === 'string' && badge.toLowerCase() === 'admin');
+  }
+
+  if (typeof badges === 'string') {
+    return badges
+      .split(',')
+      .map(part => part.trim().toLowerCase())
+      .includes('admin');
+  }
+
+  return false;
+}
+
