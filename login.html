@@ -228,7 +228,9 @@
           : (mode === 'login' ? 'SIGN IN' : 'CREATE ACCOUNT');
       };
 
-      const setMode = (nextMode) => {
+      const setMode = (nextMode, options = {}) => {
+        const { preserveMessage = false } = options;
+
         mode = nextMode;
         const isLogin = mode === 'login';
 
@@ -246,8 +248,10 @@
         submitBtn.textContent = isLogin ? 'SIGN IN' : 'CREATE ACCOUNT';
         toggleModeBtn.textContent = isLogin ? 'Create an account' : 'Back to sign in';
 
-        messageDiv.classList.add('hidden');
-        messageDiv.textContent = '';
+        if (!preserveMessage) {
+          messageDiv.classList.add('hidden');
+          messageDiv.textContent = '';
+        }
 
         confirmEmailInput.value = '';
         confirmPinInput.value = '';
@@ -334,14 +338,40 @@
               }
             }, 300);
           } else {
-            showMessage(result.error || 'Failed to sign in. Please try again.', 'error');
+            const errorText = result.error || 'Failed to sign in. Please try again.';
+            const lowerError = errorText.toLowerCase();
+
+            if (lowerError.includes('invalid login credentials')) {
+              showMessage('Invalid email or PIN. If you just created an account, make sure you have confirmed your email.', 'error');
+            } else {
+              showMessage(errorText, 'error');
+            }
             setSubmitting(false);
           }
         } else {
           const signupResult = await registerWithPin(email, pin);
 
           if (!signupResult.success) {
-            showMessage(signupResult.error || 'Failed to create account. Please try again.', 'error');
+            const errorText = signupResult.error || 'Failed to create account. Please try again.';
+            const lowerError = errorText.toLowerCase();
+
+            if (lowerError.includes('already registered')) {
+              setMode('login', { preserveMessage: true });
+              showMessage('This email already has an account. Please sign in with your PIN.', 'error');
+            } else {
+              showMessage(errorText, 'error');
+            }
+
+            setSubmitting(false);
+            return;
+          }
+
+          const signupData = signupResult.data || {};
+          const requiresEmailConfirmation = !signupData.session && signupData.user && !signupData.user.email_confirmed_at;
+
+          if (requiresEmailConfirmation) {
+            setMode('login', { preserveMessage: true });
+            showMessage('Account created! Check your email for the confirmation link, then sign in with your PIN.', 'success');
             setSubmitting(false);
             return;
           }
@@ -370,7 +400,7 @@
             setSubmitting(false);
 
             if (requiresConfirmation) {
-              setMode('login');
+              setMode('login', { preserveMessage: true });
             }
           }
         }
