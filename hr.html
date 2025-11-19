@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>HR | AMP Calibration</title>
+  <title>HR Dashboard | AMP Calibration</title>
   <link rel="icon" type="image/svg+xml" href="img/icon/icon01.svg">
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="styles.css">
@@ -12,7 +12,7 @@
   <script src="auth.js" defer></script>
   <script src="sidebar.js" defer></script>
 </head>
-<body class="bg-gray-100">
+<body class="bg-gray-50">
   <!-- Include Global Sidebar -->
   <div id="sidebarContainer"></div>
   <script>
@@ -76,165 +76,277 @@
     </div>
   </header>
 
-  <main class="min-h-screen bg-gray-100 py-16">
-    <div class="container mx-auto px-4">
+  <main class="min-h-screen py-12">
+    <div class="container mx-auto px-4 max-w-7xl">
+      
+      <!-- Authorized Content -->
       <section id="hrContent" class="hidden">
-        <!-- Header -->
-        <div class="text-center mb-16">
-          <div class="inline-flex items-center justify-center w-20 h-20 bg-green rounded-2xl mb-6 shadow-lg">
-            <i data-lucide="briefcase" class="w-10 h-10 text-white"></i>
+        <!-- Page Header -->
+        <div class="mb-12">
+          <div class="flex items-center gap-4 mb-4">
+            <div class="w-16 h-16 bg-green rounded-2xl flex items-center justify-center shadow-lg">
+              <i data-lucide="briefcase" class="w-8 h-8 text-white"></i>
+            </div>
+            <div>
+              <h1 class="text-4xl font-bold text-gray-900 font-horizon tracking-wide">HR DASHBOARD</h1>
+              <p class="text-gray-500 font-raleway-light mt-1">Human Resources Management System</p>
+            </div>
           </div>
-          <h1 class="text-6xl font-bold text-green mb-6 font-horizon tracking-wide">HUMAN RESOURCES</h1>
-          <p class="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed font-raleway-light">
-            Manage AMP Calibration team members, onboarding, certifications, and compliance from one secure workspace.
-          </p>
         </div>
 
-        <!-- Cards Grid -->
-        <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          <!-- People Card -->
-          <div class="bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl transition-shadow duration-300 border border-gray-100">
-            <div class="flex items-center gap-3 mb-4">
-              <div class="w-12 h-12 rounded-xl bg-green flex items-center justify-center">
+        <!-- Quick Stats -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
+          <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-sm text-gray-500 font-raleway-light mb-1">Total Employees</p>
+                <p class="text-3xl font-bold text-gray-900 font-benzin">24</p>
+              </div>
+              <div class="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center">
+                <i data-lucide="users" class="w-6 h-6 text-blue-600"></i>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-sm text-gray-500 font-raleway-light mb-1">Active Users</p>
+                <p class="text-3xl font-bold text-gray-900 font-benzin">18</p>
+              </div>
+              <div class="w-12 h-12 bg-green-50 rounded-xl flex items-center justify-center">
+                <i data-lucide="user-check" class="w-6 h-6 text-green-600"></i>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-sm text-gray-500 font-raleway-light mb-1">Expiring Certs</p>
+                <p class="text-3xl font-bold text-gray-900 font-benzin">3</p>
+              </div>
+              <div class="w-12 h-12 bg-amber-50 rounded-xl flex items-center justify-center">
+                <i data-lucide="alert-circle" class="w-6 h-6 text-amber-600"></i>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-sm text-gray-500 font-raleway-light mb-1">Pending Items</p>
+                <p class="text-3xl font-bold text-gray-900 font-benzin">7</p>
+              </div>
+              <div class="w-12 h-12 bg-purple-50 rounded-xl flex items-center justify-center">
+                <i data-lucide="clock" class="w-6 h-6 text-purple-600"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Main Sections -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+          
+          <!-- Employee Management Section -->
+          <div class="bg-white rounded-3xl p-8 shadow-md border border-gray-100">
+            <div class="flex items-center gap-3 mb-6">
+              <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center shadow-md">
                 <i data-lucide="users" class="w-6 h-6 text-white"></i>
               </div>
-              <h2 class="text-xl font-bold text-gray-800 font-benzin">PEOPLE</h2>
-            </div>
-            <p class="text-gray-600 mb-4 font-raleway-light">Manage employee records, profiles, and personal information.</p>
-            <ul class="space-y-2">
-              <li class="flex items-start gap-2 text-sm text-gray-600">
-                <span class="text-green mt-1 font-bold">•</span>
-                <span>Access and manage all employee information in one centralized location</span>
-              </li>
-              <li class="flex items-start gap-2 text-sm text-gray-600">
-                <span class="text-green mt-1 font-bold">•</span>
-                <span>Updated daily</span>
-              </li>
-            </ul>
-          </div>
-
-          <!-- Users Card -->
-          <div class="bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl transition-shadow duration-300 border border-gray-100">
-            <div class="flex items-center gap-3 mb-4">
-              <div class="w-12 h-12 rounded-xl bg-green flex items-center justify-center">
-                <i data-lucide="shield-check" class="w-6 h-6 text-white"></i>
+              <div>
+                <h2 class="text-2xl font-bold text-gray-900 font-benzin">EMPLOYEE MANAGEMENT</h2>
+                <p class="text-sm text-gray-500 font-raleway-light">Personnel & User Administration</p>
               </div>
-              <h2 class="text-xl font-bold text-gray-800 font-benzin">USERS</h2>
             </div>
-            <p class="text-gray-600 mb-4 font-raleway-light">Handle user accounts, permissions, and system access.</p>
-            <ul class="space-y-2">
-              <li class="flex items-start gap-2 text-sm text-gray-600">
-                <span class="text-green mt-1 font-bold">•</span>
-                <span>Control user roles, permissions, and access levels across all systems</span>
-              </li>
-              <li class="flex items-start gap-2 text-sm text-gray-600">
-                <span class="text-green mt-1 font-bold">•</span>
-                <span>Role-based access</span>
-              </li>
-            </ul>
+            
+            <div class="space-y-3">
+              <a href="#" class="group block p-4 rounded-xl hover:bg-gray-50 transition-all duration-200 border border-transparent hover:border-gray-200">
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center group-hover:bg-blue-100 transition-colors">
+                      <i data-lucide="user-circle" class="w-5 h-5 text-blue-600"></i>
+                    </div>
+                    <div>
+                      <p class="font-semibold text-gray-900 font-raleway">People Directory</p>
+                      <p class="text-xs text-gray-500 font-raleway-light">Manage employee profiles and records</p>
+                    </div>
+                  </div>
+                  <i data-lucide="chevron-right" class="w-5 h-5 text-gray-400 group-hover:text-gray-600 group-hover:translate-x-1 transition-all"></i>
+                </div>
+              </a>
+
+              <a href="#" class="group block p-4 rounded-xl hover:bg-gray-50 transition-all duration-200 border border-transparent hover:border-gray-200">
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-green-50 rounded-lg flex items-center justify-center group-hover:bg-green-100 transition-colors">
+                      <i data-lucide="shield-check" class="w-5 h-5 text-green-600"></i>
+                    </div>
+                    <div>
+                      <p class="font-semibold text-gray-900 font-raleway">User Access Control</p>
+                      <p class="text-xs text-gray-500 font-raleway-light">Manage permissions and roles</p>
+                    </div>
+                  </div>
+                  <i data-lucide="chevron-right" class="w-5 h-5 text-gray-400 group-hover:text-gray-600 group-hover:translate-x-1 transition-all"></i>
+                </div>
+              </a>
+
+              <a href="#" class="group block p-4 rounded-xl hover:bg-gray-50 transition-all duration-200 border border-transparent hover:border-gray-200">
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-purple-50 rounded-lg flex items-center justify-center group-hover:bg-purple-100 transition-colors">
+                      <i data-lucide="user-plus" class="w-5 h-5 text-purple-600"></i>
+                    </div>
+                    <div>
+                      <p class="font-semibold text-gray-900 font-raleway">Onboarding</p>
+                      <p class="text-xs text-gray-500 font-raleway-light">New hire setup and orientation</p>
+                    </div>
+                  </div>
+                  <i data-lucide="chevron-right" class="w-5 h-5 text-gray-400 group-hover:text-gray-600 group-hover:translate-x-1 transition-all"></i>
+                </div>
+              </a>
+            </div>
           </div>
 
-          <!-- Badges Card -->
-          <div class="bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl transition-shadow duration-300 border border-gray-100">
-            <div class="flex items-center gap-3 mb-4">
-              <div class="w-12 h-12 rounded-xl bg-green flex items-center justify-center">
-                <i data-lucide="badge-check" class="w-6 h-6 text-white"></i>
-              </div>
-              <h2 class="text-xl font-bold text-gray-800 font-benzin">BADGES</h2>
-            </div>
-            <p class="text-gray-600 mb-4 font-raleway-light">Assign and track certifications, clearances, and access badges.</p>
-            <ul class="space-y-2">
-              <li class="flex items-start gap-2 text-sm text-gray-600">
-                <span class="text-green mt-1 font-bold">•</span>
-                <span>Monitor certification expiry dates and compliance requirements</span>
-              </li>
-              <li class="flex items-start gap-2 text-sm text-gray-600">
-                <span class="text-green mt-1 font-bold">•</span>
-                <span>Auto-renewal alerts</span>
-              </li>
-            </ul>
-          </div>
-
-          <!-- Training Card -->
-          <div class="bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl transition-shadow duration-300 border border-gray-100">
-            <div class="flex items-center gap-3 mb-4">
-              <div class="w-12 h-12 rounded-xl bg-green flex items-center justify-center">
+          <!-- Compliance & Training Section -->
+          <div class="bg-white rounded-3xl p-8 shadow-md border border-gray-100">
+            <div class="flex items-center gap-3 mb-6">
+              <div class="w-12 h-12 bg-gradient-to-br from-amber-500 to-amber-600 rounded-xl flex items-center justify-center shadow-md">
                 <i data-lucide="graduation-cap" class="w-6 h-6 text-white"></i>
               </div>
-              <h2 class="text-xl font-bold text-gray-800 font-benzin">TRAINING</h2>
+              <div>
+                <h2 class="text-2xl font-bold text-gray-900 font-benzin">COMPLIANCE & TRAINING</h2>
+                <p class="text-sm text-gray-500 font-raleway-light">Certifications & Safety Records</p>
+              </div>
             </div>
-            <p class="text-gray-600 mb-4 font-raleway-light">Track certifications, safety training, and compliance records.</p>
-            <ul class="space-y-2">
-              <li class="flex items-start gap-2 text-sm text-gray-600">
-                <span class="text-green mt-1 font-bold">•</span>
-                <span>Maintain OSHA, dielectric safety, and manufacturer training records</span>
-              </li>
-              <li class="flex items-start gap-2 text-sm text-gray-600">
-                <span class="text-green mt-1 font-bold">•</span>
-                <span>Compliance tracking</span>
-              </li>
-            </ul>
+            
+            <div class="space-y-3">
+              <a href="#" class="group block p-4 rounded-xl hover:bg-gray-50 transition-all duration-200 border border-transparent hover:border-gray-200">
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-amber-50 rounded-lg flex items-center justify-center group-hover:bg-amber-100 transition-colors">
+                      <i data-lucide="award" class="w-5 h-5 text-amber-600"></i>
+                    </div>
+                    <div>
+                      <p class="font-semibold text-gray-900 font-raleway">Badges & Certifications</p>
+                      <p class="text-xs text-gray-500 font-raleway-light">Track credentials and clearances</p>
+                    </div>
+                  </div>
+                  <i data-lucide="chevron-right" class="w-5 h-5 text-gray-400 group-hover:text-gray-600 group-hover:translate-x-1 transition-all"></i>
+                </div>
+              </a>
+
+              <a href="#" class="group block p-4 rounded-xl hover:bg-gray-50 transition-all duration-200 border border-transparent hover:border-gray-200">
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-green-50 rounded-lg flex items-center justify-center group-hover:bg-green-100 transition-colors">
+                      <i data-lucide="clipboard-check" class="w-5 h-5 text-green-600"></i>
+                    </div>
+                    <div>
+                      <p class="font-semibold text-gray-900 font-raleway">Training Records</p>
+                      <p class="text-xs text-gray-500 font-raleway-light">OSHA and safety compliance</p>
+                    </div>
+                  </div>
+                  <i data-lucide="chevron-right" class="w-5 h-5 text-gray-400 group-hover:text-gray-600 group-hover:translate-x-1 transition-all"></i>
+                </div>
+              </a>
+
+              <a href="#" class="group block p-4 rounded-xl hover:bg-gray-50 transition-all duration-200 border border-transparent hover:border-gray-200">
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-red-50 rounded-lg flex items-center justify-center group-hover:bg-red-100 transition-colors">
+                      <i data-lucide="alert-triangle" class="w-5 h-5 text-red-600"></i>
+                    </div>
+                    <div>
+                      <p class="font-semibold text-gray-900 font-raleway">Expiring Certifications</p>
+                      <p class="text-xs text-gray-500 font-raleway-light">Renewal alerts and tracking</p>
+                    </div>
+                  </div>
+                  <span class="px-2 py-1 bg-red-100 text-red-700 text-xs font-bold rounded-lg">3</span>
+                </div>
+              </a>
+            </div>
           </div>
 
-          <!-- Documents Card -->
-          <div class="bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl transition-shadow duration-300 border border-gray-100">
-            <div class="flex items-center gap-3 mb-4">
-              <div class="w-12 h-12 rounded-xl bg-green flex items-center justify-center">
-                <i data-lucide="file-text" class="w-6 h-6 text-white"></i>
-              </div>
-              <h2 class="text-xl font-bold text-gray-800 font-benzin">DOCUMENTS</h2>
-            </div>
-            <p class="text-gray-600 mb-4 font-raleway-light">Store policies, handbooks, and company documents.</p>
-            <ul class="space-y-2">
-              <li class="flex items-start gap-2 text-sm text-gray-600">
-                <span class="text-green mt-1 font-bold">•</span>
-                <span>Secure storage for all HR policies, procedures, and documentation</span>
-              </li>
-              <li class="flex items-start gap-2 text-sm text-gray-600">
-                <span class="text-green mt-1 font-bold">•</span>
-                <span>Version controlled</span>
-              </li>
-            </ul>
-          </div>
-
-          <!-- Reports Card -->
-          <div class="bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl transition-shadow duration-300 border border-gray-100">
-            <div class="flex items-center gap-3 mb-4">
-              <div class="w-12 h-12 rounded-xl bg-green flex items-center justify-center">
-                <i data-lucide="bar-chart-3" class="w-6 h-6 text-white"></i>
-              </div>
-              <h2 class="text-xl font-bold text-gray-800 font-benzin">REPORTS</h2>
-            </div>
-            <p class="text-gray-600 mb-4 font-raleway-light">Generate HR reports and analytics for compliance and insights.</p>
-            <ul class="space-y-2">
-              <li class="flex items-start gap-2 text-sm text-gray-600">
-                <span class="text-green mt-1 font-bold">•</span>
-                <span>Create custom reports for headcount, compliance, and performance metrics</span>
-              </li>
-              <li class="flex items-start gap-2 text-sm text-gray-600">
-                <span class="text-green mt-1 font-bold">•</span>
-                <span>Export to PDF/Excel</span>
-              </li>
-            </ul>
-          </div>
         </div>
+
+        <!-- Secondary Sections -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          
+          <!-- Documents -->
+          <div class="bg-gradient-to-br from-gray-900 to-gray-800 rounded-3xl p-8 shadow-xl text-white">
+            <div class="w-14 h-14 bg-white/10 backdrop-blur-sm rounded-2xl flex items-center justify-center mb-6">
+              <i data-lucide="folder" class="w-7 h-7 text-white"></i>
+            </div>
+            <h3 class="text-xl font-bold mb-2 font-benzin">DOCUMENTS</h3>
+            <p class="text-gray-300 text-sm mb-6 font-raleway-light leading-relaxed">
+              Store and manage HR policies, handbooks, and company documentation with version control.
+            </p>
+            <a href="#" class="inline-flex items-center gap-2 text-white hover:gap-3 transition-all font-raleway font-semibold">
+              <span>Access Files</span>
+              <i data-lucide="arrow-right" class="w-4 h-4"></i>
+            </a>
+          </div>
+
+          <!-- Reports -->
+          <div class="bg-gradient-to-br from-green to-green/90 rounded-3xl p-8 shadow-xl text-white">
+            <div class="w-14 h-14 bg-white/10 backdrop-blur-sm rounded-2xl flex items-center justify-center mb-6">
+              <i data-lucide="bar-chart-3" class="w-7 h-7 text-white"></i>
+            </div>
+            <h3 class="text-xl font-bold mb-2 font-benzin">REPORTS</h3>
+            <p class="text-green-50 text-sm mb-6 font-raleway-light leading-relaxed">
+              Generate comprehensive HR analytics, compliance reports, and export data to PDF or Excel.
+            </p>
+            <a href="#" class="inline-flex items-center gap-2 text-white hover:gap-3 transition-all font-raleway font-semibold">
+              <span>View Reports</span>
+              <i data-lucide="arrow-right" class="w-4 h-4"></i>
+            </a>
+          </div>
+
+          <!-- Settings -->
+          <div class="bg-gradient-to-br from-purple-600 to-purple-700 rounded-3xl p-8 shadow-xl text-white">
+            <div class="w-14 h-14 bg-white/10 backdrop-blur-sm rounded-2xl flex items-center justify-center mb-6">
+              <i data-lucide="settings" class="w-7 h-7 text-white"></i>
+            </div>
+            <h3 class="text-xl font-bold mb-2 font-benzin">SETTINGS</h3>
+            <p class="text-purple-50 text-sm mb-6 font-raleway-light leading-relaxed">
+              Configure HR system preferences, notification rules, and manage department structures.
+            </p>
+            <a href="#" class="inline-flex items-center gap-2 text-white hover:gap-3 transition-all font-raleway font-semibold">
+              <span>Configure</span>
+              <i data-lucide="arrow-right" class="w-4 h-4"></i>
+            </a>
+          </div>
+
+        </div>
+
       </section>
 
+      <!-- Unauthorized Section -->
       <section id="hrUnauthorized" class="hidden">
-        <div class="bg-white border-2 border-red-200 text-red-700 p-12 rounded-3xl max-w-2xl mx-auto text-center shadow-xl">
-          <div class="inline-flex items-center justify-center w-16 h-16 bg-red-100 rounded-2xl mb-6">
-            <i data-lucide="shield-alert" class="w-8 h-8 text-red-600"></i>
+        <div class="max-w-2xl mx-auto text-center py-20">
+          <div class="bg-white rounded-3xl p-12 shadow-2xl border border-gray-100">
+            <div class="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-red-500 to-red-600 rounded-3xl mb-8 shadow-lg">
+              <i data-lucide="shield-alert" class="w-10 h-10 text-white"></i>
+            </div>
+            <h2 class="text-4xl font-bold font-horizon mb-4 tracking-wide text-gray-900">ACCESS DENIED</h2>
+            <p class="text-lg font-raleway-light text-gray-600 mb-8 leading-relaxed max-w-md mx-auto">
+              You need administrator privileges to access the HR Dashboard. Please contact your system administrator if you believe this is an error.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+              <a href="index.html" class="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-green text-white hover:bg-opacity-90 transition-all font-benzin text-sm shadow-md hover:shadow-lg">
+                <i data-lucide="home" class="w-5 h-5"></i>
+                RETURN HOME
+              </a>
+              <a href="contact.html" class="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-white text-gray-700 border-2 border-gray-200 hover:border-gray-300 transition-all font-benzin text-sm">
+                <i data-lucide="mail" class="w-5 h-5"></i>
+                CONTACT ADMIN
+              </a>
+            </div>
           </div>
-          <h2 class="text-3xl font-bold font-horizon mb-4 tracking-wide">ACCESS RESTRICTED</h2>
-          <p class="text-lg font-raleway-light text-gray-700 mb-8 leading-relaxed">
-            You need the Admin badge to view HR resources. If you believe this is an error, contact an administrator.
-          </p>
-          <a href="index.html" class="inline-flex items-center gap-2 px-8 py-3 rounded-xl bg-green text-white hover:bg-opacity-90 transition-all font-benzin text-sm shadow-md hover:shadow-lg">
-            <i data-lucide="home" class="w-4 h-4"></i>
-            RETURN HOME
-          </a>
         </div>
       </section>
+
     </div>
   </main>
 
