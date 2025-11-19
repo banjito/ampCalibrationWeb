@@ -79,6 +79,17 @@
   <main class="min-h-screen py-12">
     <div class="container mx-auto px-4 max-w-7xl">
       
+      <!-- Loading State -->
+      <section id="hrLoading" class="flex items-center justify-center py-20">
+        <div class="text-center">
+          <div class="inline-flex items-center justify-center w-16 h-16 bg-green rounded-2xl mb-6 animate-pulse">
+            <i data-lucide="loader-2" class="w-8 h-8 text-white animate-spin"></i>
+          </div>
+          <h2 class="text-2xl font-bold text-gray-900 font-horizon mb-2">CHECKING PERMISSIONS</h2>
+          <p class="text-gray-500 font-raleway-light">Please wait while we verify your access...</p>
+        </div>
+      </section>
+      
       <!-- Authorized Content -->
       <section id="hrContent" class="hidden">
         <!-- Page Header -->
@@ -355,7 +366,15 @@
   
   <script>
     requireAuth(async (result) => {
+      // Hide loading state
+      const loadingSection = document.getElementById('hrLoading');
+      if (loadingSection) {
+        loadingSection.classList.add('hidden');
+      }
+      
+      // Check admin status
       const isAdmin = typeof userHasAdminBadge === 'function' && userHasAdminBadge(result.profile, result.role);
+      
       if (isAdmin) {
         document.getElementById('hrContent')?.classList.remove('hidden');
       } else {
