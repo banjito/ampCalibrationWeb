@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>You Found Me!</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #000;
+            overflow: hidden;
+            font-family: 'Courier New', monospace;
+        }
+
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            text-align: center;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.9);
+            border-bottom: 3px solid #FFD700;
+            z-index: 1000;
+        }
+
+        h1 {
+            color: #FFD700;
+            font-size: 2em;
+            margin: 0;
+            text-shadow: 3px 3px 0px #FF00FF, 6px 6px 0px #00FFFF;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from {
+                text-shadow: 3px 3px 0px #FF00FF, 6px 6px 0px #00FFFF;
+            }
+            to {
+                text-shadow: 3px 3px 10px #FF00FF, 6px 6px 20px #00FFFF;
+            }
+        }
+
+        .subtitle {
+            color: #00FF00;
+            font-size: 1em;
+            margin-top: 5px;
+        }
+
+        #gameFrame {
+            position: absolute;
+            top: 80px;
+            left: 0;
+            width: 100%;
+            height: calc(100vh - 80px);
+            border: none;
+        }
+
+        .loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #FFD700;
+            font-size: 1.5em;
+            text-align: center;
+        }
+
+        .spinner {
+            border: 4px solid #333;
+            border-top: 4px solid #FFD700;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="loading" id="loading">
+        <div class="spinner"></div>
+        <p>Loading Pac-Man...</p>
+    </div>
+
+    <iframe 
+        id="gameFrame" 
+        src="https://masonicgit.github.io/pacman/"
+        onload="document.getElementById('loading').style.display='none'"
+        allow="autoplay; fullscreen"
+    ></iframe>
+</body>
+</html>
