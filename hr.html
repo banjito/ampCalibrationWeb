@@ -82,9 +82,12 @@
     <div class="container mx-auto px-4">
       <section id="hrContent" class="hidden">
         <!-- Header -->
-        <div class="text-center mb-12">
-          <h1 class="text-5xl font-bold text-green mb-4 font-horizon tracking-wide">HUMAN RESOURCES</h1>
-          <p class="text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed font-raleway-light">
+        <div class="text-center mb-16">
+          <div class="inline-flex items-center justify-center w-20 h-20 bg-green rounded-2xl mb-6 shadow-lg">
+            <i data-lucide="briefcase" class="w-10 h-10 text-white"></i>
+          </div>
+          <h1 class="text-6xl font-bold text-green mb-6 font-horizon tracking-wide">HUMAN RESOURCES</h1>
+          <p class="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed font-raleway-light">
             Manage AMP Calibration team members, onboarding, certifications, and compliance from one secure workspace.
           </p>
         </div>
@@ -92,162 +95,146 @@
         <!-- Cards Grid -->
         <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           <!-- People Card -->
-          <div class="card">
-            <header>
-              <div class="flex items-center gap-3 mb-2">
-                <div class="p-2 rounded-lg bg-green-100 text-xl flex items-center justify-center">
-                  👥
-                </div>
-                <h2>People</h2>
+          <div class="bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl transition-shadow duration-300 border border-gray-100">
+            <div class="flex items-center gap-3 mb-4">
+              <div class="w-12 h-12 rounded-xl bg-green flex items-center justify-center">
+                <i data-lucide="users" class="w-6 h-6 text-white"></i>
               </div>
-              <p>Manage employee records, profiles, and personal information.</p>
-            </header>
-            <section>
-              <ul class="list-none p-0 m-0">
-                <li class="flex items-start gap-2 mb-2 text-sm text-gray-600">
-                  <span class="text-green mt-1">•</span>
-                  <span>Access and manage all employee information in one centralized location</span>
-                </li>
-                <li class="flex items-start gap-2 mb-2 text-sm text-gray-600">
-                  <span class="text-green mt-1">•</span>
-                  <span>Updated daily</span>
-                </li>
-              </ul>
-            </section>
+              <h2 class="text-xl font-bold text-gray-800 font-benzin">PEOPLE</h2>
+            </div>
+            <p class="text-gray-600 mb-4 font-raleway-light">Manage employee records, profiles, and personal information.</p>
+            <ul class="space-y-2">
+              <li class="flex items-start gap-2 text-sm text-gray-600">
+                <span class="text-green mt-1 font-bold">•</span>
+                <span>Access and manage all employee information in one centralized location</span>
+              </li>
+              <li class="flex items-start gap-2 text-sm text-gray-600">
+                <span class="text-green mt-1 font-bold">•</span>
+                <span>Updated daily</span>
+              </li>
+            </ul>
           </div>
 
           <!-- Users Card -->
-          <div class="card">
-            <header>
-              <div class="flex items-center gap-3 mb-2">
-                <div class="p-2 rounded-lg bg-green-100 text-xl flex items-center justify-center">
-                  🛡️
-                </div>
-                <h2>Users</h2>
+          <div class="bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl transition-shadow duration-300 border border-gray-100">
+            <div class="flex items-center gap-3 mb-4">
+              <div class="w-12 h-12 rounded-xl bg-green flex items-center justify-center">
+                <i data-lucide="shield-check" class="w-6 h-6 text-white"></i>
               </div>
-              <p>Handle user accounts, permissions, and system access.</p>
-            </header>
-            <section>
-              <ul class="list-none p-0 m-0">
-                <li class="flex items-start gap-2 mb-2 text-sm text-gray-600">
-                  <span class="text-green mt-1">•</span>
-                  <span>Control user roles, permissions, and access levels across all systems</span>
-                </li>
-                <li class="flex items-start gap-2 mb-2 text-sm text-gray-600">
-                  <span class="text-green mt-1">•</span>
-                  <span>Role-based access</span>
-                </li>
-              </ul>
-            </section>
+              <h2 class="text-xl font-bold text-gray-800 font-benzin">USERS</h2>
+            </div>
+            <p class="text-gray-600 mb-4 font-raleway-light">Handle user accounts, permissions, and system access.</p>
+            <ul class="space-y-2">
+              <li class="flex items-start gap-2 text-sm text-gray-600">
+                <span class="text-green mt-1 font-bold">•</span>
+                <span>Control user roles, permissions, and access levels across all systems</span>
+              </li>
+              <li class="flex items-start gap-2 text-sm text-gray-600">
+                <span class="text-green mt-1 font-bold">•</span>
+                <span>Role-based access</span>
+              </li>
+            </ul>
           </div>
 
           <!-- Badges Card -->
-          <div class="card">
-            <header>
-              <div class="flex items-center gap-3 mb-2">
-                <div class="p-2 rounded-lg bg-green-100 text-xl flex items-center justify-center">
-                  🏆
-                </div>
-                <h2>Badges</h2>
+          <div class="bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl transition-shadow duration-300 border border-gray-100">
+            <div class="flex items-center gap-3 mb-4">
+              <div class="w-12 h-12 rounded-xl bg-green flex items-center justify-center">
+                <i data-lucide="badge-check" class="w-6 h-6 text-white"></i>
               </div>
-              <p>Assign and track certifications, clearances, and access badges.</p>
-            </header>
-            <section>
-              <ul class="list-none p-0 m-0">
-                <li class="flex items-start gap-2 mb-2 text-sm text-gray-600">
-                  <span class="text-green mt-1">•</span>
-                  <span>Monitor certification expiry dates and compliance requirements</span>
-                </li>
-                <li class="flex items-start gap-2 mb-2 text-sm text-gray-600">
-                  <span class="text-green mt-1">•</span>
-                  <span>Auto-renewal alerts</span>
-                </li>
-              </ul>
-            </section>
+              <h2 class="text-xl font-bold text-gray-800 font-benzin">BADGES</h2>
+            </div>
+            <p class="text-gray-600 mb-4 font-raleway-light">Assign and track certifications, clearances, and access badges.</p>
+            <ul class="space-y-2">
+              <li class="flex items-start gap-2 text-sm text-gray-600">
+                <span class="text-green mt-1 font-bold">•</span>
+                <span>Monitor certification expiry dates and compliance requirements</span>
+              </li>
+              <li class="flex items-start gap-2 text-sm text-gray-600">
+                <span class="text-green mt-1 font-bold">•</span>
+                <span>Auto-renewal alerts</span>
+              </li>
+            </ul>
           </div>
 
           <!-- Training Card -->
-          <div class="card">
-            <header>
-              <div class="flex items-center gap-3 mb-2">
-                <div class="p-2 rounded-lg bg-green-100 text-xl flex items-center justify-center">
-                  🎓
-                </div>
-                <h2>Training</h2>
+          <div class="bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl transition-shadow duration-300 border border-gray-100">
+            <div class="flex items-center gap-3 mb-4">
+              <div class="w-12 h-12 rounded-xl bg-green flex items-center justify-center">
+                <i data-lucide="graduation-cap" class="w-6 h-6 text-white"></i>
               </div>
-              <p>Track certifications, safety training, and compliance records.</p>
-            </header>
-            <section>
-              <ul class="list-none p-0 m-0">
-                <li class="flex items-start gap-2 mb-2 text-sm text-gray-600">
-                  <span class="text-green mt-1">•</span>
-                  <span>Maintain OSHA, dielectric safety, and manufacturer training records</span>
-                </li>
-                <li class="flex items-start gap-2 mb-2 text-sm text-gray-600">
-                  <span class="text-green mt-1">•</span>
-                  <span>Compliance tracking</span>
-                </li>
-              </ul>
-            </section>
+              <h2 class="text-xl font-bold text-gray-800 font-benzin">TRAINING</h2>
+            </div>
+            <p class="text-gray-600 mb-4 font-raleway-light">Track certifications, safety training, and compliance records.</p>
+            <ul class="space-y-2">
+              <li class="flex items-start gap-2 text-sm text-gray-600">
+                <span class="text-green mt-1 font-bold">•</span>
+                <span>Maintain OSHA, dielectric safety, and manufacturer training records</span>
+              </li>
+              <li class="flex items-start gap-2 text-sm text-gray-600">
+                <span class="text-green mt-1 font-bold">•</span>
+                <span>Compliance tracking</span>
+              </li>
+            </ul>
           </div>
 
           <!-- Documents Card -->
-          <div class="card">
-            <header>
-              <div class="flex items-center gap-3 mb-2">
-                <div class="p-2 rounded-lg bg-green-100 text-xl flex items-center justify-center">
-                  📄
-                </div>
-                <h2>Documents</h2>
+          <div class="bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl transition-shadow duration-300 border border-gray-100">
+            <div class="flex items-center gap-3 mb-4">
+              <div class="w-12 h-12 rounded-xl bg-green flex items-center justify-center">
+                <i data-lucide="file-text" class="w-6 h-6 text-white"></i>
               </div>
-              <p>Store policies, handbooks, and company documents.</p>
-            </header>
-            <section>
-              <ul class="list-none p-0 m-0">
-                <li class="flex items-start gap-2 mb-2 text-sm text-gray-600">
-                  <span class="text-green mt-1">•</span>
-                  <span>Secure storage for all HR policies, procedures, and documentation</span>
-                </li>
-                <li class="flex items-start gap-2 mb-2 text-sm text-gray-600">
-                  <span class="text-green mt-1">•</span>
-                  <span>Version controlled</span>
-                </li>
-              </ul>
-            </section>
+              <h2 class="text-xl font-bold text-gray-800 font-benzin">DOCUMENTS</h2>
+            </div>
+            <p class="text-gray-600 mb-4 font-raleway-light">Store policies, handbooks, and company documents.</p>
+            <ul class="space-y-2">
+              <li class="flex items-start gap-2 text-sm text-gray-600">
+                <span class="text-green mt-1 font-bold">•</span>
+                <span>Secure storage for all HR policies, procedures, and documentation</span>
+              </li>
+              <li class="flex items-start gap-2 text-sm text-gray-600">
+                <span class="text-green mt-1 font-bold">•</span>
+                <span>Version controlled</span>
+              </li>
+            </ul>
           </div>
 
           <!-- Reports Card -->
-          <div class="card">
-            <header>
-              <div class="flex items-center gap-3 mb-2">
-                <div class="p-2 rounded-lg bg-green-100 text-xl flex items-center justify-center">
-                  📊
-                </div>
-                <h2>Reports</h2>
+          <div class="bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl transition-shadow duration-300 border border-gray-100">
+            <div class="flex items-center gap-3 mb-4">
+              <div class="w-12 h-12 rounded-xl bg-green flex items-center justify-center">
+                <i data-lucide="bar-chart-3" class="w-6 h-6 text-white"></i>
               </div>
-              <p>Generate HR reports and analytics for compliance and insights.</p>
-            </header>
-            <section>
-              <ul class="list-none p-0 m-0">
-                <li class="flex items-start gap-2 mb-2 text-sm text-gray-600">
-                  <span class="text-green mt-1">•</span>
-                  <span>Create custom reports for headcount, compliance, and performance metrics</span>
-                </li>
-                <li class="flex items-start gap-2 mb-2 text-sm text-gray-600">
-                  <span class="text-green mt-1">•</span>
-                  <span>Export to PDF/Excel</span>
-                </li>
-              </ul>
-            </section>
+              <h2 class="text-xl font-bold text-gray-800 font-benzin">REPORTS</h2>
+            </div>
+            <p class="text-gray-600 mb-4 font-raleway-light">Generate HR reports and analytics for compliance and insights.</p>
+            <ul class="space-y-2">
+              <li class="flex items-start gap-2 text-sm text-gray-600">
+                <span class="text-green mt-1 font-bold">•</span>
+                <span>Create custom reports for headcount, compliance, and performance metrics</span>
+              </li>
+              <li class="flex items-start gap-2 text-sm text-gray-600">
+                <span class="text-green mt-1 font-bold">•</span>
+                <span>Export to PDF/Excel</span>
+              </li>
+            </ul>
           </div>
         </div>
       </section>
 
       <section id="hrUnauthorized" class="hidden">
-        <div class="bg-white border border-red-200 text-red-700 p-8 rounded-2xl max-w-xl mx-auto text-center">
-          <h2 class="text-2xl font-bold font-horizon mb-3">Access Restricted</h2>
-          <p class="text-sm font-raleway-light">You need the Admin badge to view HR resources. If you believe this is an error, contact an administrator.</p>
-          <a href="index.html" class="inline-block mt-6 px-6 py-2 rounded-full border border-red-400 text-red-600 hover:bg-red-50 transition-colors font-benzin text-sm">Return Home</a>
+        <div class="bg-white border-2 border-red-200 text-red-700 p-12 rounded-3xl max-w-2xl mx-auto text-center shadow-xl">
+          <div class="inline-flex items-center justify-center w-16 h-16 bg-red-100 rounded-2xl mb-6">
+            <i data-lucide="shield-alert" class="w-8 h-8 text-red-600"></i>
+          </div>
+          <h2 class="text-3xl font-bold font-horizon mb-4 tracking-wide">ACCESS RESTRICTED</h2>
+          <p class="text-lg font-raleway-light text-gray-700 mb-8 leading-relaxed">
+            You need the Admin badge to view HR resources. If you believe this is an error, contact an administrator.
+          </p>
+          <a href="index.html" class="inline-flex items-center gap-2 px-8 py-3 rounded-xl bg-green text-white hover:bg-opacity-90 transition-all font-benzin text-sm shadow-md hover:shadow-lg">
+            <i data-lucide="home" class="w-4 h-4"></i>
+            RETURN HOME
+          </a>
         </div>
       </section>
     </div>
