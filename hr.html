@@ -365,29 +365,88 @@
   <script src="https://unpkg.com/lucide@latest"></script>
   
   <script>
-    requireAuth(async (result) => {
-      // Hide loading state
+    // Function to show error state
+    function showError(message) {
       const loadingSection = document.getElementById('hrLoading');
       if (loadingSection) {
-        loadingSection.classList.add('hidden');
-      }
-      
-      // Check admin status
-      const isAdmin = typeof userHasAdminBadge === 'function' && userHasAdminBadge(result.profile, result.role);
-      
-      if (isAdmin) {
-        document.getElementById('hrContent')?.classList.remove('hidden');
-      } else {
-        document.getElementById('hrUnauthorized')?.classList.remove('hidden');
-      }
-      
-      // Initialize icons after content is shown
-      requestAnimationFrame(() => {
+        loadingSection.innerHTML = `
+          <div class="text-center">
+            <div class="inline-flex items-center justify-center w-16 h-16 bg-red-100 rounded-2xl mb-6">
+              <i data-lucide="alert-circle" class="w-8 h-8 text-red-600"></i>
+            </div>
+            <h2 class="text-2xl font-bold text-gray-900 font-horizon mb-2">ERROR</h2>
+            <p class="text-gray-500 font-raleway-light mb-4">${message}</p>
+            <a href="login.html" class="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-green text-white hover:bg-opacity-90 transition-all font-benzin text-sm">
+              GO TO LOGIN
+            </a>
+          </div>
+        `;
         if (typeof lucide !== 'undefined' && lucide.createIcons) {
           lucide.createIcons();
         }
-      });
-    });
+      }
+    }
+
+    // Wait for auth.js to be ready
+    function initHRPage() {
+      console.log('Initializing HR page...');
+      
+      // Check if requireAuth is available
+      if (typeof requireAuth !== 'function') {
+        console.error('requireAuth not available');
+        showError('Authentication system not loaded. Please refresh the page.');
+        return;
+      }
+
+      // Set timeout to catch hanging auth
+      const authTimeout = setTimeout(() => {
+        console.error('Auth check timed out');
+        showError('Authentication check timed out. Please try again.');
+      }, 10000); // 10 second timeout
+
+      // Run authentication check
+      try {
+        requireAuth(async (result) => {
+          clearTimeout(authTimeout); // Clear timeout on success
+          console.log('Auth check result:', result);
+          
+          // Hide loading state
+          const loadingSection = document.getElementById('hrLoading');
+          if (loadingSection) {
+            loadingSection.classList.add('hidden');
+          }
+          
+          // Check admin status
+          const isAdmin = typeof userHasAdminBadge === 'function' && userHasAdminBadge(result.profile, result.role);
+          console.log('Is admin:', isAdmin, 'Profile:', result.profile, 'Role:', result.role);
+          
+          if (isAdmin) {
+            document.getElementById('hrContent')?.classList.remove('hidden');
+          } else {
+            document.getElementById('hrUnauthorized')?.classList.remove('hidden');
+          }
+          
+          // Initialize icons after content is shown
+          requestAnimationFrame(() => {
+            if (typeof lucide !== 'undefined' && lucide.createIcons) {
+              lucide.createIcons();
+            }
+          });
+        });
+      } catch (error) {
+        clearTimeout(authTimeout);
+        console.error('Error during auth check:', error);
+        showError('Authentication error. Please try logging in again.');
+      }
+    }
+
+    // Try to initialize, with fallback delays
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initHRPage);
+    } else {
+      // DOM already loaded, wait a bit for deferred scripts
+      setTimeout(initHRPage, 100);
+    }
   </script>
 </body>
 </html>

@@ -216,7 +216,7 @@ async function requireAuth(callback) {
     // Only redirect if we're actually not authenticated
     // Don't redirect if we have a user but profile is missing
     if (!result.user) {
-      window.location.href = '/login';
+      window.location.href = 'login.html';
       return null;
     }
   }
@@ -249,13 +249,13 @@ function setupAuthStateListener(callback) {
       if (callback && typeof callback === 'function') {
         callback(session);
       } else {
-        window.location.href = '/';
+        window.location.href = 'index.html';
       }
     } else if (event === 'SIGNED_OUT') {
       // User signed out
       localStorage.removeItem('userRole');
-      if (window.location.pathname !== '/login') {
-        window.location.href = '/login';
+      if (window.location.pathname !== '/login.html' && !window.location.pathname.endsWith('login.html')) {
+        window.location.href = 'login.html';
       }
     }
   });
