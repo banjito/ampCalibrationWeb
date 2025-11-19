@@ -111,7 +111,7 @@
             <div class="flex items-center justify-between">
               <div>
                 <p class="text-sm text-gray-500 font-raleway-light mb-1">Total Employees</p>
-                <p class="text-3xl font-bold text-gray-900 font-benzin">24</p>
+                <p id="statTotalUsers" class="text-3xl font-bold text-gray-900 font-benzin">-</p>
               </div>
               <div class="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center">
                 <i data-lucide="users" class="w-6 h-6 text-blue-600"></i>
@@ -122,8 +122,8 @@
           <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
             <div class="flex items-center justify-between">
               <div>
-                <p class="text-sm text-gray-500 font-raleway-light mb-1">Active Users</p>
-                <p class="text-3xl font-bold text-gray-900 font-benzin">18</p>
+                <p class="text-sm text-gray-500 font-raleway-light mb-1">Employees</p>
+                <p id="statActiveUsers" class="text-3xl font-bold text-gray-900 font-benzin">-</p>
               </div>
               <div class="w-12 h-12 bg-green-50 rounded-xl flex items-center justify-center">
                 <i data-lucide="user-check" class="w-6 h-6 text-green-600"></i>
@@ -134,11 +134,11 @@
           <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
             <div class="flex items-center justify-between">
               <div>
-                <p class="text-sm text-gray-500 font-raleway-light mb-1">Expiring Certs</p>
-                <p class="text-3xl font-bold text-gray-900 font-benzin">3</p>
+                <p class="text-sm text-gray-500 font-raleway-light mb-1">Admins</p>
+                <p id="statAdmins" class="text-3xl font-bold text-gray-900 font-benzin">-</p>
               </div>
               <div class="w-12 h-12 bg-amber-50 rounded-xl flex items-center justify-center">
-                <i data-lucide="alert-circle" class="w-6 h-6 text-amber-600"></i>
+                <i data-lucide="shield" class="w-6 h-6 text-amber-600"></i>
               </div>
             </div>
           </div>
@@ -146,11 +146,11 @@
           <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
             <div class="flex items-center justify-between">
               <div>
-                <p class="text-sm text-gray-500 font-raleway-light mb-1">Pending Items</p>
-                <p class="text-3xl font-bold text-gray-900 font-benzin">7</p>
+                <p class="text-sm text-gray-500 font-raleway-light mb-1">Managers</p>
+                <p id="statRecentLogins" class="text-3xl font-bold text-gray-900 font-benzin">-</p>
               </div>
               <div class="w-12 h-12 bg-purple-50 rounded-xl flex items-center justify-center">
-                <i data-lucide="clock" class="w-6 h-6 text-purple-600"></i>
+                <i data-lucide="user-cog" class="w-6 h-6 text-purple-600"></i>
               </div>
             </div>
           </div>
@@ -387,6 +387,58 @@
       }
     }
 
+    // Function to load HR statistics
+    async function loadHRStats() {
+      const supabase = getSupabaseClient();
+      if (!supabase) return;
+
+      try {
+        // Get all users with their profiles - only select columns that exist
+        const { data: users, error } = await supabase
+          .from('user_profiles')
+          .select('id, role')
+          .order('created_at', { ascending: false });
+
+        if (error) {
+          console.error('Error fetching user profiles:', error);
+          throw error;
+        }
+
+        // Calculate stats
+        const totalUsers = users ? users.length : 0;
+        
+        // Count admins (users with admin role)
+        const admins = users ? users.filter(u => {
+          return u.role?.toLowerCase() === 'admin';
+        }).length : 0;
+
+        // Count managers
+        const managers = users ? users.filter(u => {
+          return u.role?.toLowerCase() === 'manager';
+        }).length : 0;
+
+        // Count employees (non-admin, non-manager)
+        const employees = users ? users.filter(u => {
+          const role = u.role?.toLowerCase();
+          return role !== 'admin' && role !== 'manager';
+        }).length : 0;
+
+        // Update the UI
+        document.getElementById('statTotalUsers').textContent = totalUsers;
+        document.getElementById('statActiveUsers').textContent = employees;
+        document.getElementById('statAdmins').textContent = admins;
+        document.getElementById('statRecentLogins').textContent = managers;
+
+      } catch (error) {
+        console.error('Error loading HR stats:', error);
+        // Keep showing '-' on error
+        document.getElementById('statTotalUsers').textContent = '0';
+        document.getElementById('statActiveUsers').textContent = '0';
+        document.getElementById('statAdmins').textContent = '0';
+        document.getElementById('statRecentLogins').textContent = '0';
+      }
+    }
+
     // Wait for auth.js to be ready
     function initHRPage() {
       console.log('Initializing HR page...');
@@ -422,6 +474,9 @@
           
           if (isAdmin) {
             document.getElementById('hrContent')?.classList.remove('hidden');
+            
+            // Load real data from database
+            loadHRStats();
           } else {
             document.getElementById('hrUnauthorized')?.classList.remove('hidden');
           }
