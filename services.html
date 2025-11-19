@@ -108,7 +108,7 @@
           </div>
           <div class="service-card-body">
             <h3 class="service-card-title">PPE<br>TESTING</h3>
-            <a href="#" class="service-more">MORE</a>
+            <a href="#" class="service-more" onclick="openModal('ppeModal'); return false;">MORE</a>
           </div>
         </article>
 
@@ -119,7 +119,7 @@
           </div>
           <div class="service-card-body">
             <h3 class="service-card-title">BUCKET<br>TRUCKS</h3>
-            <a href="#" class="service-more">MORE</a>
+            <a href="#" class="service-more" onclick="openModal('bucketModal'); return false;">MORE</a>
           </div>
         </article>
 
@@ -130,7 +130,7 @@
           </div>
           <div class="service-card-body">
             <h3 class="service-card-title">TEST<br>EQUIPMENT</h3>
-            <a href="#" class="service-more">MORE</a>
+            <a href="#" class="service-more" onclick="openModal('equipmentModal'); return false;">MORE</a>
           </div>
         </article>
 
@@ -141,7 +141,7 @@
           </div>
           <div class="service-card-body">
             <h3 class="service-card-title">LIVE-LINE<br>TOOLS</h3>
-            <a href="#" class="service-more">MORE</a>
+            <a href="#" class="service-more" onclick="openModal('livelineModal'); return false;">MORE</a>
           </div>
         </article>
 
@@ -161,10 +161,147 @@
     </div>
   </footer>
 
+  <!-- Modals -->
+  <!-- PPE Testing Modal -->
+  <div id="ppeModal" class="service-modal">
+    <div class="service-modal-content">
+      <button class="service-modal-close" onclick="closeModal('ppeModal')" aria-label="Close modal">
+        <i data-lucide="x" class="w-8 h-8"></i>
+      </button>
+      <div class="service-modal-body">
+        <h2 class="service-modal-title">Insulated PPE Testing</h2>
+        <p class="service-modal-subtitle">Gloves / Sleeves / Blankets / Line Hose / More</p>
+        <p class="service-modal-standards">ASTM D120 | ASTM D1051 | ASTM F496</p>
+        <div class="service-modal-icon">
+          <img src="img/icon/icon02.svg" alt="" class="service-modal-icon-img">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bucket Trucks Modal -->
+  <div id="bucketModal" class="service-modal">
+    <div class="service-modal-content">
+      <button class="service-modal-close" onclick="closeModal('bucketModal')" aria-label="Close modal">
+        <i data-lucide="x" class="w-8 h-8"></i>
+      </button>
+      <div class="service-modal-body">
+        <div class="service-modal-section">
+          <h2 class="service-modal-title">Dielectric Testing</h2>
+          <p class="service-modal-subtitle">Bucket Trucks / Diggers / Insulating Aerial Lifts</p>
+          <p class="service-modal-standards">ANSI A92.2</p>
+        </div>
+        <div class="service-modal-section">
+          <h2 class="service-modal-title">Boom Inspection</h2>
+          <p class="service-modal-subtitle">Bucket Trucks / Diggers / Insulating Aerial Lifts</p>
+          <p class="service-modal-standards">ANSI A92.2</p>
+        </div>
+        <div class="service-modal-section">
+          <h2 class="service-modal-title">DOT Inspection</h2>
+          <p class="service-modal-subtitle">Bucket Trucks / Diggers / Insulating Aerial Lifts / More</p>
+          <p class="service-modal-standards">DOT Annual Inspection</p>
+        </div>
+        <div class="service-modal-icon">
+          <img src="img/icon/icon03.svg" alt="" class="service-modal-icon-img">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Test Equipment Modal -->
+  <div id="equipmentModal" class="service-modal">
+    <div class="service-modal-content">
+      <button class="service-modal-close" onclick="closeModal('equipmentModal')" aria-label="Close modal">
+        <i data-lucide="x" class="w-8 h-8"></i>
+      </button>
+      <div class="service-modal-body">
+        <div class="service-modal-section">
+          <h2 class="service-modal-title">Test Equipment</h2>
+          <p class="service-modal-subtitle">Primary Injection Test Sets / Megohmmeters / Relay Sets</p>
+        </div>
+        <div class="service-modal-section">
+          <h2 class="service-modal-title">Meters</h2>
+          <p class="service-modal-subtitle">Multimeters / Power Quality Meters / Clamp Meters / More</p>
+        </div>
+        <div class="service-modal-section">
+          <h2 class="service-modal-title">Torque Devices</h2>
+          <p class="service-modal-subtitle">Torque Wrenches / Torque Screwdrivers / More</p>
+        </div>
+        <div class="service-modal-icon">
+          <img src="img/icon/icon05.svg" alt="" class="service-modal-icon-img">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Live-Line Tools Modal -->
+  <div id="livelineModal" class="service-modal">
+    <div class="service-modal-content">
+      <button class="service-modal-close" onclick="closeModal('livelineModal')" aria-label="Close modal">
+        <i data-lucide="x" class="w-8 h-8"></i>
+      </button>
+      <div class="service-modal-body">
+        <div class="service-modal-section">
+          <h2 class="service-modal-title">Live-Line Tool Testing</h2>
+          <p class="service-modal-subtitle">Telescoping Sticks / Shotgun Sticks / Handles / More</p>
+          <p class="service-modal-standards">ASTM F711 | OSHA 1910.269(j)</p>
+        </div>
+        <div class="service-modal-section">
+          <h2 class="service-modal-title">Ground Cable Testing</h2>
+          <p class="service-modal-subtitle">Single Grounds / Ground Cluster / Mack Cables / More</p>
+          <p class="service-modal-standards">ASTM F855-09 | ASTM F2249-03(2009)</p>
+        </div>
+        <div class="service-modal-icon">
+          <img src="img/icon/icon04.svg" alt="" class="service-modal-icon-img">
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
   <script>
     lucide.createIcons();
+  </script>
+
+  <!-- Modal Scripts -->
+  <script>
+    function openModal(modalId) {
+      const modal = document.getElementById(modalId);
+      if (modal) {
+        modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+        // Re-initialize Lucide icons for the modal content
+        setTimeout(() => lucide.createIcons(), 0);
+      }
+    }
+
+    function closeModal(modalId) {
+      const modal = document.getElementById(modalId);
+      if (modal) {
+        modal.style.display = 'none';
+        document.body.style.overflow = 'auto';
+      }
+    }
+
+    // Close modal when clicking outside the modal content
+    window.addEventListener('click', function(event) {
+      if (event.target.classList.contains('service-modal')) {
+        closeModal(event.target.id);
+      }
+    });
+
+    // Close modal with Escape key
+    document.addEventListener('keydown', function(event) {
+      if (event.key === 'Escape') {
+        const modals = document.querySelectorAll('.service-modal');
+        modals.forEach(modal => {
+          if (modal.style.display === 'flex') {
+            closeModal(modal.id);
+          }
+        });
+      }
+    });
   </script>
 </body>
 </html>
