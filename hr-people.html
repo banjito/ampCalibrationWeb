@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>People Directory | AMP Calibration HR</title>
+  <link rel="icon" type="image/svg+xml" href="img/icon/icon01.svg">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="config.js"></script>
+  <script src="auth.js" defer></script>
+  <script src="sidebar.js" defer></script>
+</head>
+<body class="bg-gray-50">
+  <!-- Include Global Sidebar -->
+  <div id="sidebarContainer"></div>
+  <script>
+    (function() {
+      fetch('sidebar.html')
+        .then(response => response.text())
+        .then(html => {
+          const container = document.getElementById('sidebarContainer');
+          if (container) {
+            container.innerHTML = html;
+            requestAnimationFrame(() => {
+              if (typeof initSidebar === 'function') {
+                initSidebar();
+              } else {
+                setTimeout(() => {
+                  if (typeof initSidebar === 'function') {
+                    initSidebar();
+                  }
+                }, 100);
+              }
+            });
+          }
+        })
+        .catch(error => {
+          console.error('Error loading sidebar:', error);
+        });
+    })();
+  </script>
+
+  <!-- Header -->
+  <header class="bg-green py-4">
+    <div class="container mx-auto px-4">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-4">
+          <button
+            type="button" onclick="document.dispatchEvent(new CustomEvent('basecoat:sidebar'))"
+            class="text-white hover:opacity-80 transition-opacity p-2"
+            aria-label="Toggle sidebar"
+          >
+            <i data-lucide="menu" class="w-6 h-6"></i>
+          </button>
+          <a href="index.html" class="header-logo-link">
+            <img src="img/logo/header.svg" alt="AMP Calibration" class="header-logo">
+          </a>
+        </div>
+        
+        <nav class="flex items-center gap-4">
+          <a href="index.html" class="text-white text-sm font-semibold header-nav-link">HOME</a>
+          <span class="text-white opacity-40">|</span>
+          <a href="jobs.html" class="text-white text-sm font-semibold header-nav-link">JOBS</a>
+          <span class="text-white opacity-40">|</span>
+          <a href="services.html" class="text-white text-sm font-semibold header-nav-link">SERVICES</a>
+          <span class="text-white opacity-40">|</span>
+          <a href="about.html" class="text-white text-sm font-semibold header-nav-link">ABOUT</a>
+          <span class="text-white opacity-40">|</span>
+          <a href="contact.html" class="text-white text-sm font-semibold border border-white rounded px-4 py-2 header-nav-button header-nav-home">CONTACT US</a>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <main class="min-h-screen py-12">
+    <div class="container mx-auto px-4 max-w-7xl">
+      
+      <!-- Page Header -->
+      <div class="mb-8">
+        <div class="flex items-center justify-between mb-4">
+          <div class="flex items-center gap-4">
+            <a href="hr.html" class="w-10 h-10 bg-white rounded-xl flex items-center justify-center hover:bg-gray-100 transition-colors shadow-sm">
+              <i data-lucide="arrow-left" class="w-5 h-5 text-gray-600"></i>
+            </a>
+            <div>
+              <h1 class="text-4xl font-bold text-gray-900 font-horizon tracking-wide">PEOPLE DIRECTORY</h1>
+              <p class="text-gray-500 font-raleway-light mt-1">Employee Profiles & Records</p>
+            </div>
+          </div>
+          <button class="px-6 py-3 bg-green text-white rounded-xl font-benzin text-sm hover:bg-opacity-90 transition-all shadow-md flex items-center gap-2">
+            <i data-lucide="user-plus" class="w-4 h-4"></i>
+            ADD EMPLOYEE
+          </button>
+        </div>
+      </div>
+
+      <!-- Search and Filter -->
+      <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 mb-6">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div class="md:col-span-2">
+            <div class="relative">
+              <i data-lucide="search" class="w-5 h-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2"></i>
+              <input type="text" placeholder="Search employees..." class="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-green focus:border-transparent font-raleway">
+            </div>
+          </div>
+          <select class="px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-green focus:border-transparent font-raleway">
+            <option>All Departments</option>
+            <option>Field Operations</option>
+            <option>Testing Lab</option>
+            <option>Administration</option>
+          </select>
+          <select class="px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-green focus:border-transparent font-raleway">
+            <option>All Status</option>
+            <option>Active</option>
+            <option>On Leave</option>
+            <option>Inactive</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Employee Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        
+        <!-- Employee Card 1 -->
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow">
+          <div class="h-24 bg-gradient-to-br from-green to-green/80"></div>
+          <div class="px-6 pb-6">
+            <div class="flex justify-between items-start -mt-12 mb-4">
+              <div class="w-20 h-20 bg-gray-300 rounded-2xl border-4 border-white shadow-md flex items-center justify-center text-2xl font-bold text-gray-600">
+                JD
+              </div>
+              <span class="px-3 py-1 bg-green-100 text-green-700 text-xs font-bold rounded-full mt-2">ACTIVE</span>
+            </div>
+            <h3 class="text-xl font-bold text-gray-900 font-raleway mb-1">John Doe</h3>
+            <p class="text-sm text-gray-500 font-raleway-light mb-4">Senior Field Technician</p>
+            
+            <div class="space-y-2 mb-4">
+              <div class="flex items-center gap-2 text-sm text-gray-600">
+                <i data-lucide="mail" class="w-4 h-4 text-gray-400"></i>
+                <span class="font-raleway-light">john.doe@ampcal.com</span>
+              </div>
+              <div class="flex items-center gap-2 text-sm text-gray-600">
+                <i data-lucide="phone" class="w-4 h-4 text-gray-400"></i>
+                <span class="font-raleway-light">(555) 123-4567</span>
+              </div>
+              <div class="flex items-center gap-2 text-sm text-gray-600">
+                <i data-lucide="briefcase" class="w-4 h-4 text-gray-400"></i>
+                <span class="font-raleway-light">Field Operations</span>
+              </div>
+            </div>
+
+            <div class="flex gap-2 pt-4 border-t border-gray-100">
+              <button class="flex-1 px-4 py-2 bg-gray-50 hover:bg-gray-100 text-gray-700 rounded-lg text-sm font-raleway font-semibold transition-colors">
+                View Profile
+              </button>
+              <button class="px-4 py-2 bg-gray-50 hover:bg-gray-100 text-gray-700 rounded-lg transition-colors">
+                <i data-lucide="more-horizontal" class="w-5 h-5"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Employee Card 2 -->
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow">
+          <div class="h-24 bg-gradient-to-br from-blue-500 to-blue-600"></div>
+          <div class="px-6 pb-6">
+            <div class="flex justify-between items-start -mt-12 mb-4">
+              <div class="w-20 h-20 bg-gray-300 rounded-2xl border-4 border-white shadow-md flex items-center justify-center text-2xl font-bold text-gray-600">
+                SM
+              </div>
+              <span class="px-3 py-1 bg-green-100 text-green-700 text-xs font-bold rounded-full mt-2">ACTIVE</span>
+            </div>
+            <h3 class="text-xl font-bold text-gray-900 font-raleway mb-1">Sarah Martinez</h3>
+            <p class="text-sm text-gray-500 font-raleway-light mb-4">Testing Lab Supervisor</p>
+            
+            <div class="space-y-2 mb-4">
+              <div class="flex items-center gap-2 text-sm text-gray-600">
+                <i data-lucide="mail" class="w-4 h-4 text-gray-400"></i>
+                <span class="font-raleway-light">s.martinez@ampcal.com</span>
+              </div>
+              <div class="flex items-center gap-2 text-sm text-gray-600">
+                <i data-lucide="phone" class="w-4 h-4 text-gray-400"></i>
+                <span class="font-raleway-light">(555) 234-5678</span>
+              </div>
+              <div class="flex items-center gap-2 text-sm text-gray-600">
+                <i data-lucide="briefcase" class="w-4 h-4 text-gray-400"></i>
+                <span class="font-raleway-light">Testing Lab</span>
+              </div>
+            </div>
+
+            <div class="flex gap-2 pt-4 border-t border-gray-100">
+              <button class="flex-1 px-4 py-2 bg-gray-50 hover:bg-gray-100 text-gray-700 rounded-lg text-sm font-raleway font-semibold transition-colors">
+                View Profile
+              </button>
+              <button class="px-4 py-2 bg-gray-50 hover:bg-gray-100 text-gray-700 rounded-lg transition-colors">
+                <i data-lucide="more-horizontal" class="w-5 h-5"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Employee Card 3 -->
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow">
+          <div class="h-24 bg-gradient-to-br from-purple-500 to-purple-600"></div>
+          <div class="px-6 pb-6">
+            <div class="flex justify-between items-start -mt-12 mb-4">
+              <div class="w-20 h-20 bg-gray-300 rounded-2xl border-4 border-white shadow-md flex items-center justify-center text-2xl font-bold text-gray-600">
+                MC
+              </div>
+              <span class="px-3 py-1 bg-green-100 text-green-700 text-xs font-bold rounded-full mt-2">ACTIVE</span>
+            </div>
+            <h3 class="text-xl font-bold text-gray-900 font-raleway mb-1">Mike Chen</h3>
+            <p class="text-sm text-gray-500 font-raleway-light mb-4">Lead Calibration Technician</p>
+            
+            <div class="space-y-2 mb-4">
+              <div class="flex items-center gap-2 text-sm text-gray-600">
+                <i data-lucide="mail" class="w-4 h-4 text-gray-400"></i>
+                <span class="font-raleway-light">m.chen@ampcal.com</span>
+              </div>
+              <div class="flex items-center gap-2 text-sm text-gray-600">
+                <i data-lucide="phone" class="w-4 h-4 text-gray-400"></i>
+                <span class="font-raleway-light">(555) 345-6789</span>
+              </div>
+              <div class="flex items-center gap-2 text-sm text-gray-600">
+                <i data-lucide="briefcase" class="w-4 h-4 text-gray-400"></i>
+                <span class="font-raleway-light">Field Operations</span>
+              </div>
+            </div>
+
+            <div class="flex gap-2 pt-4 border-t border-gray-100">
+              <button class="flex-1 px-4 py-2 bg-gray-50 hover:bg-gray-100 text-gray-700 rounded-lg text-sm font-raleway font-semibold transition-colors">
+                View Profile
+              </button>
+              <button class="px-4 py-2 bg-gray-50 hover:bg-gray-100 text-gray-700 rounded-lg transition-colors">
+                <i data-lucide="more-horizontal" class="w-5 h-5"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Add more employee cards as needed -->
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow">
+          <div class="h-24 bg-gradient-to-br from-amber-500 to-amber-600"></div>
+          <div class="px-6 pb-6">
+            <div class="flex justify-between items-start -mt-12 mb-4">
+              <div class="w-20 h-20 bg-gray-300 rounded-2xl border-4 border-white shadow-md flex items-center justify-center text-2xl font-bold text-gray-600">
+                EJ
+              </div>
+              <span class="px-3 py-1 bg-amber-100 text-amber-700 text-xs font-bold rounded-full mt-2">ON LEAVE</span>
+            </div>
+            <h3 class="text-xl font-bold text-gray-900 font-raleway mb-1">Emily Johnson</h3>
+            <p class="text-sm text-gray-500 font-raleway-light mb-4">HR Administrator</p>
+            
+            <div class="space-y-2 mb-4">
+              <div class="flex items-center gap-2 text-sm text-gray-600">
+                <i data-lucide="mail" class="w-4 h-4 text-gray-400"></i>
+                <span class="font-raleway-light">e.johnson@ampcal.com</span>
+              </div>
+              <div class="flex items-center gap-2 text-sm text-gray-600">
+                <i data-lucide="phone" class="w-4 h-4 text-gray-400"></i>
+                <span class="font-raleway-light">(555) 456-7890</span>
+              </div>
+              <div class="flex items-center gap-2 text-sm text-gray-600">
+                <i data-lucide="briefcase" class="w-4 h-4 text-gray-400"></i>
+                <span class="font-raleway-light">Administration</span>
+              </div>
+            </div>
+
+            <div class="flex gap-2 pt-4 border-t border-gray-100">
+              <button class="flex-1 px-4 py-2 bg-gray-50 hover:bg-gray-100 text-gray-700 rounded-lg text-sm font-raleway font-semibold transition-colors">
+                View Profile
+              </button>
+              <button class="px-4 py-2 bg-gray-50 hover:bg-gray-100 text-gray-700 rounded-lg transition-colors">
+                <i data-lucide="more-horizontal" class="w-5 h-5"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', () => {
+        if (typeof lucide !== 'undefined') lucide.createIcons();
+      });
+    } else {
+      if (typeof lucide !== 'undefined') lucide.createIcons();
+    }
+  </script>
+</body>
+</html>
+

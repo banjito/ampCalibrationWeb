@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Access Control | AMP Calibration HR</title>
+  <link rel="icon" type="image/svg+xml" href="img/icon/icon01.svg">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="config.js"></script>
+  <script src="auth.js" defer></script>
+  <script src="sidebar.js" defer></script>
+</head>
+<body class="bg-gray-50">
+  <!-- Include Global Sidebar -->
+  <div id="sidebarContainer"></div>
+  <script>
+    (function() {
+      fetch('sidebar.html')
+        .then(response => response.text())
+        .then(html => {
+          const container = document.getElementById('sidebarContainer');
+          if (container) {
+            container.innerHTML = html;
+            requestAnimationFrame(() => {
+              if (typeof initSidebar === 'function') {
+                initSidebar();
+              } else {
+                setTimeout(() => {
+                  if (typeof initSidebar === 'function') {
+                    initSidebar();
+                  }
+                }, 100);
+              }
+            });
+          }
+        })
+        .catch(error => {
+          console.error('Error loading sidebar:', error);
+        });
+    })();
+  </script>
+
+  <!-- Header -->
+  <header class="bg-green py-4">
+    <div class="container mx-auto px-4">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-4">
+          <button
+            type="button" onclick="document.dispatchEvent(new CustomEvent('basecoat:sidebar'))"
+            class="text-white hover:opacity-80 transition-opacity p-2"
+            aria-label="Toggle sidebar"
+          >
+            <i data-lucide="menu" class="w-6 h-6"></i>
+          </button>
+          <a href="index.html" class="header-logo-link">
+            <img src="img/logo/header.svg" alt="AMP Calibration" class="header-logo">
+          </a>
+        </div>
+        
+        <nav class="flex items-center gap-4">
+          <a href="index.html" class="text-white text-sm font-semibold header-nav-link">HOME</a>
+          <span class="text-white opacity-40">|</span>
+          <a href="jobs.html" class="text-white text-sm font-semibold header-nav-link">JOBS</a>
+          <span class="text-white opacity-40">|</span>
+          <a href="services.html" class="text-white text-sm font-semibold header-nav-link">SERVICES</a>
+          <span class="text-white opacity-40">|</span>
+          <a href="about.html" class="text-white text-sm font-semibold header-nav-link">ABOUT</a>
+          <span class="text-white opacity-40">|</span>
+          <a href="contact.html" class="text-white text-sm font-semibold border border-white rounded px-4 py-2 header-nav-button header-nav-home">CONTACT US</a>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <main class="min-h-screen py-12">
+    <div class="container mx-auto px-4 max-w-7xl">
+      
+      <!-- Page Header -->
+      <div class="mb-8">
+        <div class="flex items-center justify-between mb-4">
+          <div class="flex items-center gap-4">
+            <a href="hr.html" class="w-10 h-10 bg-white rounded-xl flex items-center justify-center hover:bg-gray-100 transition-colors shadow-sm">
+              <i data-lucide="arrow-left" class="w-5 h-5 text-gray-600"></i>
+            </a>
+            <div>
+              <h1 class="text-4xl font-bold text-gray-900 font-horizon tracking-wide">USER ACCESS CONTROL</h1>
+              <p class="text-gray-500 font-raleway-light mt-1">Manage Permissions & System Roles</p>
+            </div>
+          </div>
+          <button class="px-6 py-3 bg-green text-white rounded-xl font-benzin text-sm hover:bg-opacity-90 transition-all shadow-md flex items-center gap-2">
+            <i data-lucide="user-plus" class="w-4 h-4"></i>
+            CREATE USER
+          </button>
+        </div>
+      </div>
+
+      <!-- Stats Row -->
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+        <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-sm text-gray-500 font-raleway-light">Total Users</span>
+            <div class="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center">
+              <i data-lucide="users" class="w-5 h-5 text-blue-600"></i>
+            </div>
+          </div>
+          <p class="text-3xl font-bold text-gray-900 font-benzin">18</p>
+        </div>
+
+        <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-sm text-gray-500 font-raleway-light">Admins</span>
+            <div class="w-10 h-10 bg-red-50 rounded-lg flex items-center justify-center">
+              <i data-lucide="shield" class="w-5 h-5 text-red-600"></i>
+            </div>
+          </div>
+          <p class="text-3xl font-bold text-gray-900 font-benzin">3</p>
+        </div>
+
+        <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-sm text-gray-500 font-raleway-light">Managers</span>
+            <div class="w-10 h-10 bg-purple-50 rounded-lg flex items-center justify-center">
+              <i data-lucide="user-cog" class="w-5 h-5 text-purple-600"></i>
+            </div>
+          </div>
+          <p class="text-3xl font-bold text-gray-900 font-benzin">5</p>
+        </div>
+
+        <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-sm text-gray-500 font-raleway-light">Employees</span>
+            <div class="w-10 h-10 bg-green-50 rounded-lg flex items-center justify-center">
+              <i data-lucide="user" class="w-5 h-5 text-green-600"></i>
+            </div>
+          </div>
+          <p class="text-3xl font-bold text-gray-900 font-benzin">10</p>
+        </div>
+      </div>
+
+      <!-- Main Content -->
+      <div class="bg-white rounded-2xl shadow-sm border border-gray-100">
+        
+        <!-- Search Bar -->
+        <div class="p-6 border-b border-gray-100">
+          <div class="flex gap-4">
+            <div class="flex-1 relative">
+              <i data-lucide="search" class="w-5 h-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2"></i>
+              <input type="text" placeholder="Search users by name or email..." class="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-green focus:border-transparent font-raleway">
+            </div>
+            <select class="px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-green focus:border-transparent font-raleway">
+              <option>All Roles</option>
+              <option>Admin</option>
+              <option>Manager</option>
+              <option>Employee</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- User List -->
+        <div class="divide-y divide-gray-100">
+          
+          <!-- User Row 1 -->
+          <div class="p-6 hover:bg-gray-50 transition-colors">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-4">
+                <div class="w-12 h-12 bg-gradient-to-br from-red-500 to-red-600 rounded-xl flex items-center justify-center text-white font-bold shadow-md">
+                  JL
+                </div>
+                <div>
+                  <h3 class="font-bold text-gray-900 font-raleway">Jack Lyons</h3>
+                  <p class="text-sm text-gray-500 font-raleway-light">jack.lyons@ampcal.com</p>
+                </div>
+              </div>
+              <div class="flex items-center gap-4">
+                <span class="px-4 py-2 bg-red-100 text-red-700 rounded-lg font-benzin text-xs">ADMIN</span>
+                <div class="flex gap-2">
+                  <button class="w-10 h-10 bg-gray-100 hover:bg-gray-200 rounded-lg flex items-center justify-center transition-colors">
+                    <i data-lucide="edit-3" class="w-4 h-4 text-gray-600"></i>
+                  </button>
+                  <button class="w-10 h-10 bg-gray-100 hover:bg-gray-200 rounded-lg flex items-center justify-center transition-colors">
+                    <i data-lucide="more-vertical" class="w-4 h-4 text-gray-600"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="mt-4 flex gap-2 flex-wrap">
+              <span class="px-3 py-1 bg-blue-50 text-blue-700 text-xs rounded-full font-raleway">Full Access</span>
+              <span class="px-3 py-1 bg-green-50 text-green-700 text-xs rounded-full font-raleway">HR Management</span>
+              <span class="px-3 py-1 bg-purple-50 text-purple-700 text-xs rounded-full font-raleway">User Management</span>
+            </div>
+          </div>
+
+          <!-- User Row 2 -->
+          <div class="p-6 hover:bg-gray-50 transition-colors">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-4">
+                <div class="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center text-white font-bold shadow-md">
+                  SM
+                </div>
+                <div>
+                  <h3 class="font-bold text-gray-900 font-raleway">Sarah Martinez</h3>
+                  <p class="text-sm text-gray-500 font-raleway-light">s.martinez@ampcal.com</p>
+                </div>
+              </div>
+              <div class="flex items-center gap-4">
+                <span class="px-4 py-2 bg-purple-100 text-purple-700 rounded-lg font-benzin text-xs">MANAGER</span>
+                <div class="flex gap-2">
+                  <button class="w-10 h-10 bg-gray-100 hover:bg-gray-200 rounded-lg flex items-center justify-center transition-colors">
+                    <i data-lucide="edit-3" class="w-4 h-4 text-gray-600"></i>
+                  </button>
+                  <button class="w-10 h-10 bg-gray-100 hover:bg-gray-200 rounded-lg flex items-center justify-center transition-colors">
+                    <i data-lucide="more-vertical" class="w-4 h-4 text-gray-600"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="mt-4 flex gap-2 flex-wrap">
+              <span class="px-3 py-1 bg-blue-50 text-blue-700 text-xs rounded-full font-raleway">View Reports</span>
+              <span class="px-3 py-1 bg-green-50 text-green-700 text-xs rounded-full font-raleway">Manage Team</span>
+            </div>
+          </div>
+
+          <!-- User Row 3 -->
+          <div class="p-6 hover:bg-gray-50 transition-colors">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-4">
+                <div class="w-12 h-12 bg-gradient-to-br from-green to-green/80 rounded-xl flex items-center justify-center text-white font-bold shadow-md">
+                  JD
+                </div>
+                <div>
+                  <h3 class="font-bold text-gray-900 font-raleway">John Doe</h3>
+                  <p class="text-sm text-gray-500 font-raleway-light">john.doe@ampcal.com</p>
+                </div>
+              </div>
+              <div class="flex items-center gap-4">
+                <span class="px-4 py-2 bg-green-100 text-green-700 rounded-lg font-benzin text-xs">EMPLOYEE</span>
+                <div class="flex gap-2">
+                  <button class="w-10 h-10 bg-gray-100 hover:bg-gray-200 rounded-lg flex items-center justify-center transition-colors">
+                    <i data-lucide="edit-3" class="w-4 h-4 text-gray-600"></i>
+                  </button>
+                  <button class="w-10 h-10 bg-gray-100 hover:bg-gray-200 rounded-lg flex items-center justify-center transition-colors">
+                    <i data-lucide="more-vertical" class="w-4 h-4 text-gray-600"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="mt-4 flex gap-2 flex-wrap">
+              <span class="px-3 py-1 bg-blue-50 text-blue-700 text-xs rounded-full font-raleway">Basic Access</span>
+            </div>
+          </div>
+
+          <!-- User Row 4 -->
+          <div class="p-6 hover:bg-gray-50 transition-colors">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-4">
+                <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center text-white font-bold shadow-md">
+                  MC
+                </div>
+                <div>
+                  <h3 class="font-bold text-gray-900 font-raleway">Mike Chen</h3>
+                  <p class="text-sm text-gray-500 font-raleway-light">m.chen@ampcal.com</p>
+                </div>
+              </div>
+              <div class="flex items-center gap-4">
+                <span class="px-4 py-2 bg-green-100 text-green-700 rounded-lg font-benzin text-xs">EMPLOYEE</span>
+                <div class="flex gap-2">
+                  <button class="w-10 h-10 bg-gray-100 hover:bg-gray-200 rounded-lg flex items-center justify-center transition-colors">
+                    <i data-lucide="edit-3" class="w-4 h-4 text-gray-600"></i>
+                  </button>
+                  <button class="w-10 h-10 bg-gray-100 hover:bg-gray-200 rounded-lg flex items-center justify-center transition-colors">
+                    <i data-lucide="more-vertical" class="w-4 h-4 text-gray-600"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="mt-4 flex gap-2 flex-wrap">
+              <span class="px-3 py-1 bg-blue-50 text-blue-700 text-xs rounded-full font-raleway">Basic Access</span>
+              <span class="px-3 py-1 bg-amber-50 text-amber-700 text-xs rounded-full font-raleway">Field Operations</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', () => {
+        if (typeof lucide !== 'undefined') lucide.createIcons();
+      });
+    } else {
+      if (typeof lucide !== 'undefined') lucide.createIcons();
+    }
+  </script>
+</body>
+</html>
+

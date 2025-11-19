@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reports & Analytics | AMP Calibration HR</title>
+  <link rel="icon" type="image/svg+xml" href="img/icon/icon01.svg">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="config.js"></script>
+  <script src="auth.js" defer></script>
+  <script src="sidebar.js" defer></script>
+</head>
+<body class="bg-gray-50">
+  <!-- Include Global Sidebar -->
+  <div id="sidebarContainer"></div>
+  <script>
+    (function() {
+      fetch('sidebar.html')
+        .then(response => response.text())
+        .then(html => {
+          const container = document.getElementById('sidebarContainer');
+          if (container) {
+            container.innerHTML = html;
+            requestAnimationFrame(() => {
+              if (typeof initSidebar === 'function') {
+                initSidebar();
+              } else {
+                setTimeout(() => {
+                  if (typeof initSidebar === 'function') {
+                    initSidebar();
+                  }
+                }, 100);
+              }
+            });
+          }
+        })
+        .catch(error => {
+          console.error('Error loading sidebar:', error);
+        });
+    })();
+  </script>
+
+  <!-- Header -->
+  <header class="bg-green py-4">
+    <div class="container mx-auto px-4">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-4">
+          <button
+            type="button" onclick="document.dispatchEvent(new CustomEvent('basecoat:sidebar'))"
+            class="text-white hover:opacity-80 transition-opacity p-2"
+            aria-label="Toggle sidebar"
+          >
+            <i data-lucide="menu" class="w-6 h-6"></i>
+          </button>
+          <a href="index.html" class="header-logo-link">
+            <img src="img/logo/header.svg" alt="AMP Calibration" class="header-logo">
+          </a>
+        </div>
+        
+        <nav class="flex items-center gap-4">
+          <a href="index.html" class="text-white text-sm font-semibold header-nav-link">HOME</a>
+          <span class="text-white opacity-40">|</span>
+          <a href="jobs.html" class="text-white text-sm font-semibold header-nav-link">JOBS</a>
+          <span class="text-white opacity-40">|</span>
+          <a href="services.html" class="text-white text-sm font-semibold header-nav-link">SERVICES</a>
+          <span class="text-white opacity-40">|</span>
+          <a href="about.html" class="text-white text-sm font-semibold header-nav-link">ABOUT</a>
+          <span class="text-white opacity-40">|</span>
+          <a href="contact.html" class="text-white text-sm font-semibold border border-white rounded px-4 py-2 header-nav-button header-nav-home">CONTACT US</a>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <main class="min-h-screen py-12">
+    <div class="container mx-auto px-4 max-w-7xl">
+      
+      <!-- Page Header -->
+      <div class="mb-8">
+        <div class="flex items-center justify-between mb-4">
+          <div class="flex items-center gap-4">
+            <a href="hr.html" class="w-10 h-10 bg-white rounded-xl flex items-center justify-center hover:bg-gray-100 transition-colors shadow-sm">
+              <i data-lucide="arrow-left" class="w-5 h-5 text-gray-600"></i>
+            </a>
+            <div>
+              <h1 class="text-4xl font-bold text-gray-900 font-horizon tracking-wide">REPORTS & ANALYTICS</h1>
+              <p class="text-gray-500 font-raleway-light mt-1">HR Metrics, Compliance & Performance Data</p>
+            </div>
+          </div>
+          <button class="px-6 py-3 bg-green text-white rounded-xl font-benzin text-sm hover:bg-opacity-90 transition-all shadow-md flex items-center gap-2">
+            <i data-lucide="plus" class="w-4 h-4"></i>
+            CREATE REPORT
+          </button>
+        </div>
+      </div>
+
+      <!-- Quick Reports -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <button class="bg-gradient-to-br from-blue-500 to-blue-600 rounded-3xl p-8 text-left hover:shadow-lg transition-all group">
+          <div class="flex items-start justify-between mb-6">
+            <div class="w-14 h-14 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center">
+              <i data-lucide="users" class="w-7 h-7 text-white"></i>
+            </div>
+            <i data-lucide="arrow-up-right" class="w-5 h-5 text-white/60 group-hover:text-white transition-colors"></i>
+          </div>
+          <h3 class="text-2xl font-bold text-white font-benzin mb-2">HEADCOUNT REPORT</h3>
+          <p class="text-blue-100 text-sm font-raleway-light">Employee demographics, departments, and staffing levels</p>
+        </button>
+
+        <button class="bg-gradient-to-br from-amber-500 to-amber-600 rounded-3xl p-8 text-left hover:shadow-lg transition-all group">
+          <div class="flex items-start justify-between mb-6">
+            <div class="w-14 h-14 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center">
+              <i data-lucide="shield-check" class="w-7 h-7 text-white"></i>
+            </div>
+            <i data-lucide="arrow-up-right" class="w-5 h-5 text-white/60 group-hover:text-white transition-colors"></i>
+          </div>
+          <h3 class="text-2xl font-bold text-white font-benzin mb-2">COMPLIANCE STATUS</h3>
+          <p class="text-amber-100 text-sm font-raleway-light">Training completion, certifications, and safety records</p>
+        </button>
+
+        <button class="bg-gradient-to-br from-purple-500 to-purple-600 rounded-3xl p-8 text-left hover:shadow-lg transition-all group">
+          <div class="flex items-start justify-between mb-6">
+            <div class="w-14 h-14 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center">
+              <i data-lucide="trending-up" class="w-7 h-7 text-white"></i>
+            </div>
+            <i data-lucide="arrow-up-right" class="w-5 h-5 text-white/60 group-hover:text-white transition-colors"></i>
+          </div>
+          <h3 class="text-2xl font-bold text-white font-benzin mb-2">PERFORMANCE METRICS</h3>
+          <p class="text-purple-100 text-sm font-raleway-light">Productivity, goals, and team performance analysis</p>
+        </button>
+      </div>
+
+      <!-- Recent Reports -->
+      <div class="bg-white rounded-3xl shadow-sm border border-gray-100 mb-8">
+        <div class="p-6 border-b border-gray-100">
+          <div class="flex items-center justify-between">
+            <h2 class="text-2xl font-bold text-gray-900 font-benzin">RECENT REPORTS</h2>
+            <div class="flex gap-2">
+              <button class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg font-raleway font-semibold text-sm transition-colors">
+                Filter
+              </button>
+              <button class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg font-raleway font-semibold text-sm transition-colors">
+                Sort
+              </button>
+            </div>
+          </div>
+        </div>
+        
+        <div class="divide-y divide-gray-100">
+          <!-- Report 1 -->
+          <div class="p-6 hover:bg-gray-50 transition-colors">
+            <div class="flex items-start justify-between">
+              <div class="flex gap-4">
+                <div class="w-14 h-14 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center shadow-md">
+                  <i data-lucide="bar-chart-3" class="w-7 h-7 text-white"></i>
+                </div>
+                <div class="flex-1">
+                  <h3 class="font-bold text-gray-900 font-raleway text-lg mb-1">Q4 2025 Workforce Analysis</h3>
+                  <p class="text-sm text-gray-600 font-raleway-light mb-3">Comprehensive overview of staffing, turnover, and hiring trends</p>
+                  <div class="flex items-center gap-4 text-sm text-gray-500">
+                    <span class="flex items-center gap-1">
+                      <i data-lucide="calendar" class="w-4 h-4"></i>
+                      Generated Nov 18, 2025
+                    </span>
+                    <span class="flex items-center gap-1">
+                      <i data-lucide="user" class="w-4 h-4"></i>
+                      Emily Johnson
+                    </span>
+                    <span class="flex items-center gap-1">
+                      <i data-lucide="file-text" class="w-4 h-4"></i>
+                      PDF • 1.2 MB
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div class="flex gap-2">
+                <button class="px-4 py-2 bg-green text-white rounded-lg font-benzin text-xs hover:bg-opacity-90 transition-colors">
+                  VIEW
+                </button>
+                <button class="w-10 h-10 bg-gray-100 hover:bg-gray-200 rounded-lg flex items-center justify-center transition-colors">
+                  <i data-lucide="download" class="w-4 h-4 text-gray-600"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Report 2 -->
+          <div class="p-6 hover:bg-gray-50 transition-colors">
+            <div class="flex items-start justify-between">
+              <div class="flex gap-4">
+                <div class="w-14 h-14 bg-gradient-to-br from-amber-500 to-amber-600 rounded-2xl flex items-center justify-center shadow-md">
+                  <i data-lucide="shield-check" class="w-7 h-7 text-white"></i>
+                </div>
+                <div class="flex-1">
+                  <h3 class="font-bold text-gray-900 font-raleway text-lg mb-1">Safety Compliance Dashboard</h3>
+                  <p class="text-sm text-gray-600 font-raleway-light mb-3">OSHA training completion and certification status</p>
+                  <div class="flex items-center gap-4 text-sm text-gray-500">
+                    <span class="flex items-center gap-1">
+                      <i data-lucide="calendar" class="w-4 h-4"></i>
+                      Generated Nov 15, 2025
+                    </span>
+                    <span class="flex items-center gap-1">
+                      <i data-lucide="user" class="w-4 h-4"></i>
+                      Sarah Martinez
+                    </span>
+                    <span class="flex items-center gap-1">
+                      <i data-lucide="file-spreadsheet" class="w-4 h-4"></i>
+                      XLSX • 248 KB
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div class="flex gap-2">
+                <button class="px-4 py-2 bg-green text-white rounded-lg font-benzin text-xs hover:bg-opacity-90 transition-colors">
+                  VIEW
+                </button>
+                <button class="w-10 h-10 bg-gray-100 hover:bg-gray-200 rounded-lg flex items-center justify-center transition-colors">
+                  <i data-lucide="download" class="w-4 h-4 text-gray-600"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Report 3 -->
+          <div class="p-6 hover:bg-gray-50 transition-colors">
+            <div class="flex items-start justify-between">
+              <div class="flex gap-4">
+                <div class="w-14 h-14 bg-gradient-to-br from-green to-green/80 rounded-2xl flex items-center justify-center shadow-md">
+                  <i data-lucide="clock" class="w-7 h-7 text-white"></i>
+                </div>
+                <div class="flex-1">
+                  <h3 class="font-bold text-gray-900 font-raleway text-lg mb-1">Time & Attendance Summary</h3>
+                  <p class="text-sm text-gray-600 font-raleway-light mb-3">October 2025 hours worked, PTO, and overtime analysis</p>
+                  <div class="flex items-center gap-4 text-sm text-gray-500">
+                    <span class="flex items-center gap-1">
+                      <i data-lucide="calendar" class="w-4 h-4"></i>
+                      Generated Nov 1, 2025
+                    </span>
+                    <span class="flex items-center gap-1">
+                      <i data-lucide="user" class="w-4 h-4"></i>
+                      Mike Chen
+                    </span>
+                    <span class="flex items-center gap-1">
+                      <i data-lucide="file-text" class="w-4 h-4"></i>
+                      PDF • 856 KB
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div class="flex gap-2">
+                <button class="px-4 py-2 bg-green text-white rounded-lg font-benzin text-xs hover:bg-opacity-90 transition-colors">
+                  VIEW
+                </button>
+                <button class="w-10 h-10 bg-gray-100 hover:bg-gray-200 rounded-lg flex items-center justify-center transition-colors">
+                  <i data-lucide="download" class="w-4 h-4 text-gray-600"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Custom Report Builder -->
+      <div class="bg-gradient-to-br from-gray-900 to-gray-800 rounded-3xl p-12 text-white">
+        <div class="max-w-3xl">
+          <div class="flex items-center gap-4 mb-6">
+            <div class="w-16 h-16 bg-white/10 backdrop-blur-sm rounded-2xl flex items-center justify-center">
+              <i data-lucide="wand-2" class="w-8 h-8 text-white"></i>
+            </div>
+            <div>
+              <h2 class="text-3xl font-bold font-benzin mb-2">CUSTOM REPORT BUILDER</h2>
+              <p class="text-gray-300 font-raleway-light">Create tailored reports with specific metrics and date ranges</p>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+            <div>
+              <label class="block text-sm font-semibold mb-2 font-raleway">Report Type</label>
+              <select class="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-white/40">
+                <option>Headcount & Demographics</option>
+                <option>Training & Compliance</option>
+                <option>Performance Reviews</option>
+                <option>Time & Attendance</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-sm font-semibold mb-2 font-raleway">Date Range</label>
+              <select class="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-white/40">
+                <option>Last 30 Days</option>
+                <option>Last Quarter</option>
+                <option>Last 6 Months</option>
+                <option>Last Year</option>
+                <option>Custom Range</option>
+              </select>
+            </div>
+          </div>
+
+          <button class="px-8 py-4 bg-white text-gray-900 rounded-xl font-benzin text-sm hover:bg-gray-100 transition-all shadow-lg flex items-center gap-2">
+            <i data-lucide="sparkles" class="w-5 h-5"></i>
+            GENERATE REPORT
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', () => {
+        if (typeof lucide !== 'undefined') lucide.createIcons();
+      });
+    } else {
+      if (typeof lucide !== 'undefined') lucide.createIcons();
+    }
+  </script>
+</body>
+</html>
+
