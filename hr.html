@@ -7,12 +7,10 @@
   <link rel="icon" type="image/svg+xml" href="img/icon/icon01.svg">
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="styles.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/basecoat-css@0.3.6/dist/basecoat.cdn.min.css">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
   <script src="config.js"></script>
   <script src="auth.js" defer></script>
   <script src="sidebar.js" defer></script>
-  <script src="https://cdn.jsdelivr.net/npm/basecoat-css@0.3.6/dist/js/all.min.js" defer></script>
 </head>
 <body class="bg-gray-100">
   <!-- Include Global Sidebar -->
@@ -240,6 +238,9 @@
     </div>
   </main>
 
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  
   <script>
     requireAuth(async (result) => {
       const isAdmin = typeof userHasAdminBadge === 'function' && userHasAdminBadge(result.profile, result.role);
@@ -248,13 +249,14 @@
       } else {
         document.getElementById('hrUnauthorized')?.classList.remove('hidden');
       }
+      
+      // Initialize icons after content is shown
+      requestAnimationFrame(() => {
+        if (typeof lucide !== 'undefined' && lucide.createIcons) {
+          lucide.createIcons();
+        }
+      });
     });
-  </script>
-
-  <!-- Lucide Icons -->
-  <script src="https://unpkg.com/lucide@latest"></script>
-  <script>
-    lucide.createIcons();
   </script>
 </body>
 </html>
