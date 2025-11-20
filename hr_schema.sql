@@ -3,6 +3,7 @@
 -- ============================================
 -- This schema supports the complete HR dashboard system
 -- Drop into Supabase SQL Editor to create all tables
+-- NO SAMPLE DATA - Clean schema only
 
 -- ============================================
 -- 1. DEPARTMENTS TABLE
@@ -448,89 +449,6 @@ DROP VIEW IF EXISTS public.vw_expiring_badges;
 DROP VIEW IF EXISTS public.vw_training_stats;
 
 -- ============================================
--- SAMPLE DATA
--- ============================================
-
--- Insert sample departments
-INSERT INTO public.departments (name, abbreviation, description) VALUES
-  ('Field Operations', 'FO', 'Field technicians and mobile testing teams'),
-  ('Testing Lab', 'TL', 'In-house testing and calibration facility'),
-  ('Administration', 'AD', 'HR, Finance, and Office Management')
-ON CONFLICT DO NOTHING;
-
--- Insert sample document categories
-INSERT INTO public.document_categories (name, description) VALUES
-  ('Policies & Procedures', 'Company policies and standard procedures'),
-  ('Forms & Templates', 'Employee forms and document templates'),
-  ('Training Materials', 'Safety and technical training resources'),
-  ('Compliance Documents', 'OSHA and regulatory compliance documentation')
-ON CONFLICT DO NOTHING;
-
--- Insert sample training courses
-INSERT INTO public.training_courses (name, description, category, duration_hours, required) VALUES
-  ('OSHA 10-Hour General Industry', 'Basic OSHA safety training for all employees', 'safety', 10, true),
-  ('OSHA 30-Hour Safety', 'Advanced OSHA safety training for supervisors', 'safety', 30, true),
-  ('Fall Protection Training', 'Training for working at heights and fall prevention', 'safety', 4, true),
-  ('Lockout/Tagout Procedures', 'Energy isolation and LOTO compliance', 'safety', 2, true),
-  ('Dielectric Testing Methods', 'Testing procedures for electrical equipment', 'technical', 8, true),
-  ('Megger Test Equipment', 'Operation of megger testing devices', 'technical', 4, false),
-  ('Bucket Truck Operations', 'Safe operation of aerial lifts', 'technical', 6, true),
-  ('First Aid & CPR', 'Emergency response and medical assistance', 'safety', 4, true),
-  ('Arc Flash Awareness', 'NFPA 70E compliance and arc flash safety', 'safety', 4, true),
-  ('PPE Inspection & Maintenance', 'Proper care of personal protective equipment', 'safety', 2, true)
-ON CONFLICT DO NOTHING;
-
--- Insert sample onboarding template
-INSERT INTO public.onboarding_templates (name, position_type, duration_weeks, steps) VALUES
-  (
-    'Field Technician Onboarding',
-    'Field Technician',
-    3,
-    '[
-      {"step": 1, "title": "Personal Information Collected", "description": "Complete all employee forms and documentation"},
-      {"step": 2, "title": "Equipment Ordered", "description": "PPE, tools, and vehicle assignment"},
-      {"step": 3, "title": "Safety Training Scheduled", "description": "Complete required OSHA training"},
-      {"step": 4, "title": "System Access Setup", "description": "Email, software, and system credentials"},
-      {"step": 5, "title": "First Day Orientation", "description": "Company overview and facility tour"}
-    ]'::jsonb
-  ),
-  (
-    'Lab Technician Onboarding',
-    'Lab Technician',
-    4,
-    '[
-      {"step": 1, "title": "Offer Letter Sent", "description": "Employment offer and acceptance"},
-      {"step": 2, "title": "Background Check", "description": "Complete background verification"},
-      {"step": 3, "title": "Equipment Setup", "description": "Lab equipment and workstation preparation"},
-      {"step": 4, "title": "Technical Training", "description": "Lab procedures and calibration methods"},
-      {"step": 5, "title": "Safety Certification", "description": "Lab safety and OSHA compliance"}
-    ]'::jsonb
-  ),
-  (
-    'Office Staff Onboarding',
-    'Office Staff',
-    2,
-    '[
-      {"step": 1, "title": "Documentation Complete", "description": "Employee paperwork and tax forms"},
-      {"step": 2, "title": "Workspace Setup", "description": "Desk, computer, and office supplies"},
-      {"step": 3, "title": "System Training", "description": "Software and internal systems"},
-      {"step": 4, "title": "Team Introduction", "description": "Meet colleagues and department heads"}
-    ]'::jsonb
-  )
-ON CONFLICT DO NOTHING;
-
--- Insert default HR settings
-INSERT INTO public.hr_settings (setting_key, setting_value, description) VALUES
-  ('company_name', '"AMP Calibration"'::jsonb, 'Company name'),
-  ('fiscal_year_start', '"January"'::jsonb, 'Fiscal year start month'),
-  ('time_zone', '"Pacific Time (PT)"'::jsonb, 'Company timezone'),
-  ('cert_expiry_alert_days', '30'::jsonb, 'Days before expiry to send alerts'),
-  ('training_deadline_alerts', 'true'::jsonb, 'Enable training deadline notifications'),
-  ('onboarding_notifications', 'true'::jsonb, 'Enable onboarding workflow notifications'),
-  ('weekly_summaries', 'false'::jsonb, 'Send weekly HR summary emails')
-ON CONFLICT (setting_key) DO NOTHING;
-
--- ============================================
 -- USEFUL VIEWS
 -- ============================================
 
@@ -558,7 +476,7 @@ CREATE OR REPLACE VIEW public.vw_expiring_badges AS
 SELECT 
   b.*,
   up.full_name,
-  up.email
+  au.email
 FROM public.badges b
 JOIN auth.users au ON b.user_id = au.id
 LEFT JOIN public.user_profiles up ON au.id = up.id
@@ -570,14 +488,15 @@ ORDER BY b.expiry_date;
 CREATE OR REPLACE VIEW public.vw_training_stats AS
 SELECT 
   up.full_name,
-  up.email,
+  au.email,
   COUNT(*) FILTER (WHERE tr.status = 'completed') as completed_courses,
   COUNT(*) FILTER (WHERE tr.status = 'in_progress') as in_progress_courses,
   COUNT(*) FILTER (WHERE tr.status = 'overdue') as overdue_courses,
   COUNT(*) as total_assigned_courses
 FROM public.user_profiles up
+JOIN auth.users au ON up.id = au.id
 LEFT JOIN public.training_records tr ON up.id = tr.user_id
-GROUP BY up.id, up.full_name, up.email;
+GROUP BY up.id, up.full_name, au.email;
 
 -- ============================================
 -- GRANT PERMISSIONS
@@ -602,9 +521,9 @@ GRANT SELECT ON public.vw_training_stats TO authenticated;
 DO $$ 
 BEGIN 
   RAISE NOTICE '✅ HR System Schema Created Successfully!';
-  RAISE NOTICE '📊 Tables: departments, user_profiles, badges, training_courses, training_records, onboarding_templates, onboarding_workflows, documents, hr_reports, hr_settings, audit_log';
+  RAISE NOTICE '📊 Tables: departments, user_profiles (enhanced), badges, training_courses, training_records, onboarding_templates, onboarding_workflows, documents, hr_reports, hr_settings, audit_log';
   RAISE NOTICE '🔒 RLS Policies: Enabled on all tables';
   RAISE NOTICE '📈 Views: vw_users_full, vw_expiring_badges, vw_training_stats';
-  RAISE NOTICE '✨ Sample Data: Departments, training courses, onboarding templates';
+  RAISE NOTICE '🎯 Schema ready - No sample data included';
 END $$;
 
