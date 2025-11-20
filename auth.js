@@ -147,28 +147,32 @@ async function getCurrentUser() {
       return { error: 'Not authenticated' };
     }
 
-    // Get user profile with role
-    const { data: profile, error: profileError } = await supabase
-      .from('user_profiles')
-      .select('*')
-      .eq('id', session.user.id)
-      .single();
+    // Try to get user profile with role (but don't fail if table doesn't exist)
+    let profile = null;
+    let role = null;
+    
+    try {
+      const { data, error: profileError } = await supabase
+        .from('user_profiles')
+        .select('*')
+        .eq('user_id', session.user.id)
+        .maybeSingle();
 
-    if (profileError) {
-      console.error('Profile error:', profileError);
-      // User exists but profile might not be created yet - still return user
-      return {
-        user: session.user,
-        profile: null,
-        role: null,
-        error: 'Profile not found'
-      };
+      if (profileError) {
+        console.warn('Profile query failed (table may not exist yet):', profileError.message);
+      } else if (data) {
+        profile = data;
+        role = data.role;
+      }
+    } catch (err) {
+      console.warn('Failed to fetch profile:', err.message);
+      // Continue without profile - user can still be authenticated
     }
 
     return {
       user: session.user,
       profile: profile,
-      role: profile.role
+      role: role || 'customer' // Default to 'customer' if no profile exists
     };
   } catch (error) {
     console.error('Get user error:', error);
@@ -211,20 +215,20 @@ async function logout() {
 async function requireAuth(callback) {
   const result = await getCurrentUser();
   
-  // Check if we have a user (even if profile is missing, that's okay)
-  if (!result.user || (result.error && result.error !== 'Profile not found')) {
-    // Only redirect if we're actually not authenticated
-    // Don't redirect if we have a user but profile is missing
-    if (!result.user) {
-      window.location.href = 'login.html';
-      return null;
-    }
+  // Only redirect if we don't have a user at all
+  // Having a user without a profile is okay
+  if (!result.user) {
+    console.log('No user found, redirecting to login');
+    window.location.href = 'login.html';
+    return null;
   }
 
-  // Authenticated, store role in localStorage for quick access
+  // Authenticated! Store role in localStorage for quick access
   if (result.role) {
     localStorage.setItem('userRole', result.role);
   }
+
+  console.log('User authenticated:', result.user.email, 'Role:', result.role);
 
   // Run callback if provided
   if (callback && typeof callback === 'function') {
