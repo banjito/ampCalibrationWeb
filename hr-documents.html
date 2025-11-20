@@ -105,17 +105,17 @@
               <i data-lucide="file-text" class="w-5 h-5 text-blue-600"></i>
             </div>
           </div>
-          <p class="text-3xl font-bold text-gray-900 font-benzin">147</p>
+          <p id="statTotalDocs" class="text-3xl font-bold text-gray-900 font-benzin">0</p>
         </div>
 
         <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
           <div class="flex items-center justify-between mb-2">
-            <span class="text-sm text-gray-500 font-raleway-light">Storage Used</span>
+            <span class="text-sm text-gray-500 font-raleway-light">Categories</span>
             <div class="w-10 h-10 bg-purple-50 rounded-lg flex items-center justify-center">
-              <i data-lucide="hard-drive" class="w-5 h-5 text-purple-600"></i>
+              <i data-lucide="folder" class="w-5 h-5 text-purple-600"></i>
             </div>
           </div>
-          <p class="text-3xl font-bold text-gray-900 font-benzin">2.4GB</p>
+          <p id="statCategories" class="text-3xl font-bold text-gray-900 font-benzin">0</p>
         </div>
 
         <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
@@ -125,7 +125,7 @@
               <i data-lucide="clock" class="w-5 h-5 text-green-600"></i>
             </div>
           </div>
-          <p class="text-3xl font-bold text-gray-900 font-benzin">8</p>
+          <p id="statRecentUpdates" class="text-3xl font-bold text-gray-900 font-benzin">0</p>
         </div>
 
         <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
@@ -135,213 +135,24 @@
               <i data-lucide="eye" class="w-5 h-5 text-amber-600"></i>
             </div>
           </div>
-          <p class="text-3xl font-bold text-gray-900 font-benzin">5</p>
+          <p id="statPendingReview" class="text-3xl font-bold text-gray-900 font-benzin">0</p>
         </div>
       </div>
 
-      <!-- Document Categories -->
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-        
-        <!-- Policies & Procedures -->
-        <div class="bg-white rounded-3xl p-8 shadow-sm border border-gray-100">
-          <div class="flex items-center justify-between mb-6">
-            <div class="flex items-center gap-3">
-              <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center shadow-md">
-                <i data-lucide="shield" class="w-6 h-6 text-white"></i>
-              </div>
-              <div>
-                <h2 class="text-xl font-bold text-gray-900 font-benzin">POLICIES & PROCEDURES</h2>
-                <p class="text-sm text-gray-500 font-raleway-light">24 documents</p>
-              </div>
-            </div>
-            <button class="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors">
-              <i data-lucide="folder-open" class="w-5 h-5 text-gray-600"></i>
-            </button>
+      <!-- Empty State -->
+      <div class="bg-white rounded-3xl shadow-sm border border-gray-100 p-16 text-center">
+        <div class="max-w-md mx-auto">
+          <div class="w-20 h-20 bg-gray-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
+            <i data-lucide="folder-open" class="w-10 h-10 text-gray-400"></i>
           </div>
-          
-          <div class="space-y-3">
-            <div class="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg transition-colors cursor-pointer">
-              <div class="flex items-center gap-3">
-                <i data-lucide="file-text" class="w-5 h-5 text-blue-600"></i>
-                <div>
-                  <p class="font-semibold text-gray-900 font-raleway text-sm">Employee Handbook 2025</p>
-                  <p class="text-xs text-gray-500">Updated 2 days ago</p>
-                </div>
-              </div>
-              <span class="text-xs text-gray-500">v4.2</span>
-            </div>
-
-            <div class="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg transition-colors cursor-pointer">
-              <div class="flex items-center gap-3">
-                <i data-lucide="file-text" class="w-5 h-5 text-blue-600"></i>
-                <div>
-                  <p class="font-semibold text-gray-900 font-raleway text-sm">Safety Protocols Manual</p>
-                  <p class="text-xs text-gray-500">Updated 1 week ago</p>
-                </div>
-              </div>
-              <span class="text-xs text-gray-500">v2.8</span>
-            </div>
-
-            <div class="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg transition-colors cursor-pointer">
-              <div class="flex items-center gap-3">
-                <i data-lucide="file-text" class="w-5 h-5 text-blue-600"></i>
-                <div>
-                  <p class="font-semibold text-gray-900 font-raleway text-sm">Code of Conduct</p>
-                  <p class="text-xs text-gray-500">Updated 3 weeks ago</p>
-                </div>
-              </div>
-              <span class="text-xs text-gray-500">v1.5</span>
-            </div>
-          </div>
-
-          <button class="w-full mt-4 px-4 py-3 bg-blue-50 text-blue-700 rounded-xl font-benzin text-sm hover:bg-blue-100 transition-colors">
-            VIEW ALL POLICIES
+          <h3 class="text-2xl font-bold text-gray-900 font-benzin mb-3">NO DOCUMENTS YET</h3>
+          <p class="text-gray-500 font-raleway-light mb-8">
+            Start building your document library by uploading policies, forms, and HR documentation.
+          </p>
+          <button class="px-8 py-4 bg-green text-white rounded-xl font-benzin text-sm hover:bg-opacity-90 transition-all shadow-md flex items-center gap-2 mx-auto">
+            <i data-lucide="upload" class="w-5 h-5"></i>
+            UPLOAD FIRST DOCUMENT
           </button>
-        </div>
-
-        <!-- Forms & Templates -->
-        <div class="bg-white rounded-3xl p-8 shadow-sm border border-gray-100">
-          <div class="flex items-center justify-between mb-6">
-            <div class="flex items-center gap-3">
-              <div class="w-12 h-12 bg-gradient-to-br from-green to-green/80 rounded-xl flex items-center justify-center shadow-md">
-                <i data-lucide="file-check" class="w-6 h-6 text-white"></i>
-              </div>
-              <div>
-                <h2 class="text-xl font-bold text-gray-900 font-benzin">FORMS & TEMPLATES</h2>
-                <p class="text-sm text-gray-500 font-raleway-light">18 documents</p>
-              </div>
-            </div>
-            <button class="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors">
-              <i data-lucide="folder-open" class="w-5 h-5 text-gray-600"></i>
-            </button>
-          </div>
-          
-          <div class="space-y-3">
-            <div class="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg transition-colors cursor-pointer">
-              <div class="flex items-center gap-3">
-                <i data-lucide="file" class="w-5 h-5 text-green-600"></i>
-                <div>
-                  <p class="font-semibold text-gray-900 font-raleway text-sm">Time Off Request Form</p>
-                  <p class="text-xs text-gray-500">Last used yesterday</p>
-                </div>
-              </div>
-              <i data-lucide="download" class="w-4 h-4 text-gray-400"></i>
-            </div>
-
-            <div class="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg transition-colors cursor-pointer">
-              <div class="flex items-center gap-3">
-                <i data-lucide="file" class="w-5 h-5 text-green-600"></i>
-                <div>
-                  <p class="font-semibold text-gray-900 font-raleway text-sm">Incident Report Template</p>
-                  <p class="text-xs text-gray-500">Last used 3 days ago</p>
-                </div>
-              </div>
-              <i data-lucide="download" class="w-4 h-4 text-gray-400"></i>
-            </div>
-
-            <div class="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg transition-colors cursor-pointer">
-              <div class="flex items-center gap-3">
-                <i data-lucide="file" class="w-5 h-5 text-green-600"></i>
-                <div>
-                  <p class="font-semibold text-gray-900 font-raleway text-sm">Performance Review Form</p>
-                  <p class="text-xs text-gray-500">Last used 1 week ago</p>
-                </div>
-              </div>
-              <i data-lucide="download" class="w-4 h-4 text-gray-400"></i>
-            </div>
-          </div>
-
-          <button class="w-full mt-4 px-4 py-3 bg-green-50 text-green-700 rounded-xl font-benzin text-sm hover:bg-green-100 transition-colors">
-            VIEW ALL FORMS
-          </button>
-        </div>
-
-      </div>
-
-      <!-- Recent Documents -->
-      <div class="bg-white rounded-3xl shadow-sm border border-gray-100">
-        <div class="p-6 border-b border-gray-100">
-          <h2 class="text-2xl font-bold text-gray-900 font-benzin">RECENT DOCUMENTS</h2>
-        </div>
-        
-        <div class="divide-y divide-gray-100">
-          <!-- Document 1 -->
-          <div class="p-6 hover:bg-gray-50 transition-colors">
-            <div class="flex items-center justify-between">
-              <div class="flex items-center gap-4">
-                <div class="w-12 h-12 bg-red-50 rounded-xl flex items-center justify-center">
-                  <i data-lucide="file-text" class="w-6 h-6 text-red-600"></i>
-                </div>
-                <div>
-                  <h3 class="font-bold text-gray-900 font-raleway">Q4 Safety Compliance Report</h3>
-                  <p class="text-sm text-gray-500 font-raleway-light">PDF • 2.4 MB • Uploaded by Sarah Martinez</p>
-                </div>
-              </div>
-              <div class="flex items-center gap-3">
-                <span class="text-xs text-gray-500">2 hours ago</span>
-                <div class="flex gap-2">
-                  <button class="w-10 h-10 bg-gray-100 hover:bg-gray-200 rounded-lg flex items-center justify-center transition-colors">
-                    <i data-lucide="eye" class="w-4 h-4 text-gray-600"></i>
-                  </button>
-                  <button class="w-10 h-10 bg-gray-100 hover:bg-gray-200 rounded-lg flex items-center justify-center transition-colors">
-                    <i data-lucide="download" class="w-4 h-4 text-gray-600"></i>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Document 2 -->
-          <div class="p-6 hover:bg-gray-50 transition-colors">
-            <div class="flex items-center justify-between">
-              <div class="flex items-center gap-4">
-                <div class="w-12 h-12 bg-green-50 rounded-xl flex items-center justify-center">
-                  <i data-lucide="file-text" class="w-6 h-6 text-green-600"></i>
-                </div>
-                <div>
-                  <h3 class="font-bold text-gray-900 font-raleway">Updated PTO Policy 2025</h3>
-                  <p class="text-sm text-gray-500 font-raleway-light">PDF • 856 KB • Uploaded by Emily Johnson</p>
-                </div>
-              </div>
-              <div class="flex items-center gap-3">
-                <span class="text-xs text-gray-500">Yesterday</span>
-                <div class="flex gap-2">
-                  <button class="w-10 h-10 bg-gray-100 hover:bg-gray-200 rounded-lg flex items-center justify-center transition-colors">
-                    <i data-lucide="eye" class="w-4 h-4 text-gray-600"></i>
-                  </button>
-                  <button class="w-10 h-10 bg-gray-100 hover:bg-gray-200 rounded-lg flex items-center justify-center transition-colors">
-                    <i data-lucide="download" class="w-4 h-4 text-gray-600"></i>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Document 3 -->
-          <div class="p-6 hover:bg-gray-50 transition-colors">
-            <div class="flex items-center justify-between">
-              <div class="flex items-center gap-4">
-                <div class="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center">
-                  <i data-lucide="file-spreadsheet" class="w-6 h-6 text-blue-600"></i>
-                </div>
-                <div>
-                  <h3 class="font-bold text-gray-900 font-raleway">Training Completion Matrix</h3>
-                  <p class="text-sm text-gray-500 font-raleway-light">XLSX • 124 KB • Uploaded by Mike Chen</p>
-                </div>
-              </div>
-              <div class="flex items-center gap-3">
-                <span class="text-xs text-gray-500">3 days ago</span>
-                <div class="flex gap-2">
-                  <button class="w-10 h-10 bg-gray-100 hover:bg-gray-200 rounded-lg flex items-center justify-center transition-colors">
-                    <i data-lucide="eye" class="w-4 h-4 text-gray-600"></i>
-                  </button>
-                  <button class="w-10 h-10 bg-gray-100 hover:bg-gray-200 rounded-lg flex items-center justify-center transition-colors">
-                    <i data-lucide="download" class="w-4 h-4 text-gray-600"></i>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
 
