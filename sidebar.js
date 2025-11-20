@@ -124,12 +124,44 @@ function initSidebar() {
     });
   }
 
-  // Load user data into sidebar
-  loadUserData();
+  // Load user data into sidebar (wait for Supabase to be ready)
+  waitForSupabase().then(() => {
+    loadUserData();
+  }).catch((error) => {
+    console.error('Failed to initialize Supabase, showing login button:', error);
+    // Show login button if Supabase fails to initialize
+    const profileSection = document.getElementById('sidebarProfileSection');
+    const loginSection = document.getElementById('sidebarLoginSection');
+    if (profileSection) profileSection.classList.add('hidden');
+    if (loginSection) loginSection.classList.remove('hidden');
+  });
 
   // Dispatch initialized event
   sidebar.dispatchEvent(new CustomEvent('basecoat:initialized'));
   console.log('Sidebar initialized (Basecoat UI)');
+}
+
+/**
+ * Wait for Supabase client to be initialized
+ */
+function waitForSupabase(maxRetries = 20, delay = 100) {
+  return new Promise((resolve, reject) => {
+    let retries = 0;
+    
+    const checkSupabase = () => {
+      if (window.supabaseClient) {
+        console.log('✅ Supabase client ready for sidebar');
+        resolve();
+      } else if (retries < maxRetries) {
+        retries++;
+        setTimeout(checkSupabase, delay);
+      } else {
+        reject(new Error('Supabase client initialization timeout'));
+      }
+    };
+    
+    checkSupabase();
+  });
 }
 
 /**

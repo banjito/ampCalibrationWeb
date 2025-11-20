@@ -64,9 +64,21 @@ function initSupabase() {
 
 // Initialize after scripts have loaded
 // Since config.js loads after Supabase script, it should be available
+function tryInitSupabase(retries = 5, delay = 100) {
+  const supabaseLib = window.supabase || (typeof supabase !== 'undefined' ? supabase : null);
+  
+  if (supabaseLib && typeof supabaseLib.createClient === 'function') {
+    initSupabase();
+  } else if (retries > 0) {
+    console.log(`Waiting for Supabase library... (${retries} retries left)`);
+    setTimeout(() => tryInitSupabase(retries - 1, delay), delay);
+  } else {
+    console.error('❌ Supabase library failed to load after multiple retries');
+  }
+}
+
 if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', initSupabase);
+  document.addEventListener('DOMContentLoaded', () => tryInitSupabase());
 } else {
-  // Small delay to ensure Supabase script has executed
-  setTimeout(initSupabase, 50);
+  tryInitSupabase();
 }
