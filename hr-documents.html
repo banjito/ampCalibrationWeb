@@ -89,7 +89,7 @@
               <p class="text-gray-500 font-raleway-light mt-1">HR Policies, Handbooks & Company Documentation</p>
             </div>
           </div>
-          <button class="px-6 py-3 bg-green text-white rounded-xl font-benzin text-sm hover:bg-opacity-90 transition-all shadow-md flex items-center gap-2">
+          <button id="uploadDocBtn" class="px-6 py-3 bg-green text-white rounded-xl font-benzin text-sm hover:bg-opacity-90 transition-all shadow-md flex items-center gap-2">
             <i data-lucide="upload" class="w-4 h-4"></i>
             UPLOAD DOCUMENT
           </button>
@@ -149,7 +149,7 @@
           <p class="text-gray-500 font-raleway-light mb-8">
             Start building your document library by uploading policies, forms, and HR documentation.
           </p>
-          <button class="px-8 py-4 bg-green text-white rounded-xl font-benzin text-sm hover:bg-opacity-90 transition-all shadow-md flex items-center gap-2 mx-auto">
+          <button id="uploadFirstDocBtn" class="px-8 py-4 bg-green text-white rounded-xl font-benzin text-sm hover:bg-opacity-90 transition-all shadow-md flex items-center gap-2 mx-auto">
             <i data-lucide="upload" class="w-5 h-5"></i>
             UPLOAD FIRST DOCUMENT
           </button>
@@ -159,8 +159,73 @@
     </div>
   </main>
 
+  <!-- Upload Document Modal -->
+  <div id="documentModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+    <div class="bg-white rounded-3xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+      <div class="sticky top-0 bg-white border-b border-gray-200 p-6 rounded-t-3xl z-10">
+        <div class="flex items-center justify-between">
+          <div>
+            <h2 class="text-3xl font-bold text-gray-900 font-benzin">UPLOAD DOCUMENT</h2>
+            <p class="text-gray-500 font-raleway-light mt-1">Add HR documentation</p>
+          </div>
+          <button id="closeModalBtn" class="w-10 h-10 bg-gray-100 hover:bg-gray-200 rounded-xl flex items-center justify-center transition-colors">
+            <i data-lucide="x" class="w-5 h-5 text-gray-600"></i>
+          </button>
+        </div>
+      </div>
+
+      <form id="documentForm" class="p-6 space-y-6">
+        <div class="space-y-4">
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-2 font-raleway">Document Name *</label>
+            <input type="text" id="documentName" required placeholder="e.g., Employee Handbook 2025" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-green focus:border-transparent font-raleway">
+          </div>
+
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-2 font-raleway">Category *</label>
+            <select id="category" required class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-green focus:border-transparent font-raleway">
+              <option value="">Select Category</option>
+              <option value="policies">Company Policies</option>
+              <option value="handbooks">Employee Handbooks</option>
+              <option value="forms">HR Forms</option>
+              <option value="training">Training Materials</option>
+              <option value="legal">Legal Documents</option>
+              <option value="benefits">Benefits Information</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-2 font-raleway">File Upload *</label>
+            <div class="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center hover:border-green transition-colors cursor-pointer">
+              <input type="file" id="fileUpload" required class="hidden" accept=".pdf,.doc,.docx,.xls,.xlsx">
+              <label for="fileUpload" class="cursor-pointer">
+                <div class="w-12 h-12 bg-gray-100 rounded-xl flex items-center justify-center mx-auto mb-3">
+                  <i data-lucide="upload-cloud" class="w-6 h-6 text-gray-400"></i>
+                </div>
+                <p class="text-sm font-semibold text-gray-700 mb-1">Click to upload or drag and drop</p>
+                <p class="text-xs text-gray-500">PDF, DOC, DOCX, XLS, XLSX (MAX. 10MB)</p>
+              </label>
+              <div id="fileName" class="mt-3 text-sm text-green font-semibold hidden"></div>
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-2 font-raleway">Description</label>
+            <textarea id="description" rows="3" placeholder="Brief description of the document..." class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-green focus:border-transparent font-raleway resize-none"></textarea>
+          </div>
+        </div>
+
+        <div class="flex gap-3 pt-4">
+          <button type="button" id="cancelBtn" class="flex-1 px-6 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl font-benzin text-sm transition-colors">CANCEL</button>
+          <button type="submit" class="flex-1 px-6 py-3 bg-green text-white rounded-xl font-benzin text-sm hover:bg-opacity-90 transition-all shadow-md">UPLOAD DOCUMENT</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="auth.js"></script>
   <script>
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', () => {
@@ -169,6 +234,84 @@
     } else {
       if (typeof lucide !== 'undefined') lucide.createIcons();
     }
+
+    // Document Management
+    const modal = document.getElementById('documentModal');
+    const form = document.getElementById('documentForm');
+    const uploadDocBtn = document.getElementById('uploadDocBtn');
+    const uploadFirstDocBtn = document.getElementById('uploadFirstDocBtn');
+    const closeModalBtn = document.getElementById('closeModalBtn');
+    const cancelBtn = document.getElementById('cancelBtn');
+    const fileUpload = document.getElementById('fileUpload');
+    const fileName = document.getElementById('fileName');
+
+    // Show selected file name
+    fileUpload.addEventListener('change', (e) => {
+      if (e.target.files[0]) {
+        fileName.textContent = `Selected: ${e.target.files[0].name}`;
+        fileName.classList.remove('hidden');
+      }
+    });
+
+    function openModal() {
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+      document.body.style.overflow = 'hidden';
+      if (typeof lucide !== 'undefined') lucide.createIcons();
+    }
+
+    function closeModal() {
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+      document.body.style.overflow = '';
+      form.reset();
+      fileName.classList.add('hidden');
+    }
+
+    if (uploadDocBtn) uploadDocBtn.addEventListener('click', openModal);
+    if (uploadFirstDocBtn) uploadFirstDocBtn.addEventListener('click', openModal);
+    closeModalBtn.addEventListener('click', closeModal);
+    cancelBtn.addEventListener('click', closeModal);
+    modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !modal.classList.contains('hidden')) closeModal(); });
+
+    // Form submission - connects to 'documents' table
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const supabase = getSupabaseClient();
+      if (!supabase) { alert('Database connection error.'); return; }
+
+      const file = document.getElementById('fileUpload').files[0];
+      if (!file) { alert('Please select a file'); return; }
+
+      // TODO: Upload file to Supabase Storage first
+      // const filePath = `hr-docs/${Date.now()}-${file.name}`;
+      // const { data: uploadData, error: uploadError } = await supabase.storage
+      //   .from('documents')
+      //   .upload(filePath, file);
+
+      const formData = {
+        document_name: document.getElementById('documentName').value,
+        category: document.getElementById('category').value,
+        description: document.getElementById('description').value || null,
+        file_name: file.name,
+        file_size: file.size,
+        // file_url: uploadData?.path || null,
+        uploaded_by: 'current_user', // TODO: Get from auth
+        status: 'active'
+      };
+
+      try {
+        const { data, error } = await supabase.from('documents').insert([formData]).select();
+        if (error) throw error;
+        alert(`Document uploaded successfully!`);
+        closeModal();
+        window.location.reload();
+      } catch (error) {
+        console.error('Error uploading document:', error);
+        alert(`Error: ${error.message}`);
+      }
+    });
   </script>
 </body>
 </html>

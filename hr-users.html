@@ -89,7 +89,7 @@
               <p class="text-gray-500 font-raleway-light mt-1">Manage Permissions & System Roles</p>
             </div>
           </div>
-          <button class="px-6 py-3 bg-green text-white rounded-xl font-benzin text-sm hover:bg-opacity-90 transition-all shadow-md flex items-center gap-2">
+          <button id="createUserBtn" class="px-6 py-3 bg-green text-white rounded-xl font-benzin text-sm hover:bg-opacity-90 transition-all shadow-md flex items-center gap-2">
             <i data-lucide="user-plus" class="w-4 h-4"></i>
             CREATE USER
           </button>
@@ -173,7 +173,7 @@
             <p class="text-gray-500 font-raleway-light mb-8">
               Start by creating user accounts and assigning roles.
             </p>
-            <button class="px-8 py-4 bg-green text-white rounded-xl font-benzin text-sm hover:bg-opacity-90 transition-all shadow-md flex items-center gap-2 mx-auto">
+            <button id="createFirstUserBtn" class="px-8 py-4 bg-green text-white rounded-xl font-benzin text-sm hover:bg-opacity-90 transition-all shadow-md flex items-center gap-2 mx-auto">
               <i data-lucide="user-plus" class="w-5 h-5"></i>
               CREATE FIRST USER
             </button>
@@ -309,8 +309,97 @@
     </div>
   </main>
 
+  <!-- Create User Modal -->
+  <div id="userModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+    <div class="bg-white rounded-3xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+      <div class="sticky top-0 bg-white border-b border-gray-200 p-6 rounded-t-3xl z-10">
+        <div class="flex items-center justify-between">
+          <div>
+            <h2 class="text-3xl font-bold text-gray-900 font-benzin">CREATE USER</h2>
+            <p class="text-gray-500 font-raleway-light mt-1">Set up user account and permissions</p>
+          </div>
+          <button id="closeModalBtn" class="w-10 h-10 bg-gray-100 hover:bg-gray-200 rounded-xl flex items-center justify-center transition-colors">
+            <i data-lucide="x" class="w-5 h-5 text-gray-600"></i>
+          </button>
+        </div>
+      </div>
+
+      <form id="userForm" class="p-6 space-y-6">
+        <!-- User Information -->
+        <div class="space-y-4">
+          <h3 class="text-lg font-bold text-gray-900 font-benzin">USER INFORMATION</h3>
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 mb-2 font-raleway">Full Name *</label>
+              <input type="text" id="fullName" required class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-green focus:border-transparent font-raleway">
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 mb-2 font-raleway">Email Address *</label>
+              <input type="email" id="email" required class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-green focus:border-transparent font-raleway">
+            </div>
+          </div>
+        </div>
+
+        <!-- Role & Permissions -->
+        <div class="space-y-4">
+          <h3 class="text-lg font-bold text-gray-900 font-benzin">ROLE & PERMISSIONS</h3>
+          
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-3 font-raleway">User Role *</label>
+            <div class="space-y-2">
+              <label class="flex items-center p-4 border-2 border-gray-200 rounded-xl hover:border-red-300 cursor-pointer transition-colors">
+                <input type="radio" name="role" value="admin" required class="w-5 h-5 text-green focus:ring-green">
+                <div class="ml-3 flex-1">
+                  <div class="flex items-center gap-2">
+                    <i data-lucide="shield" class="w-4 h-4 text-red-600"></i>
+                    <span class="font-bold text-gray-900 font-raleway">Admin</span>
+                  </div>
+                  <p class="text-xs text-gray-500 font-raleway-light mt-1">Full system access</p>
+                </div>
+              </label>
+
+              <label class="flex items-center p-4 border-2 border-gray-200 rounded-xl hover:border-purple-300 cursor-pointer transition-colors">
+                <input type="radio" name="role" value="manager" class="w-5 h-5 text-green focus:ring-green">
+                <div class="ml-3 flex-1">
+                  <div class="flex items-center gap-2">
+                    <i data-lucide="user-cog" class="w-4 h-4 text-purple-600"></i>
+                    <span class="font-bold text-gray-900 font-raleway">Manager</span>
+                  </div>
+                  <p class="text-xs text-gray-500 font-raleway-light mt-1">Manage team & reports</p>
+                </div>
+              </label>
+
+              <label class="flex items-center p-4 border-2 border-gray-200 rounded-xl hover:border-green-300 cursor-pointer transition-colors">
+                <input type="radio" name="role" value="employee" class="w-5 h-5 text-green focus:ring-green">
+                <div class="ml-3 flex-1">
+                  <div class="flex items-center gap-2">
+                    <i data-lucide="user" class="w-4 h-4 text-green-600"></i>
+                    <span class="font-bold text-gray-900 font-raleway">Employee</span>
+                  </div>
+                  <p class="text-xs text-gray-500 font-raleway-light mt-1">Basic access</p>
+                </div>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex gap-3 pt-4">
+          <button type="button" id="cancelBtn" class="flex-1 px-6 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl font-benzin text-sm transition-colors">
+            CANCEL
+          </button>
+          <button type="submit" class="flex-1 px-6 py-3 bg-green text-white rounded-xl font-benzin text-sm hover:bg-opacity-90 transition-all shadow-md">
+            CREATE USER
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="auth.js"></script>
   <script>
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', () => {
@@ -319,6 +408,77 @@
     } else {
       if (typeof lucide !== 'undefined') lucide.createIcons();
     }
+  </script>
+
+  <!-- User Management -->
+  <script>
+    const modal = document.getElementById('userModal');
+    const form = document.getElementById('userForm');
+    const createUserBtn = document.getElementById('createUserBtn');
+    const createFirstUserBtn = document.getElementById('createFirstUserBtn');
+    const closeModalBtn = document.getElementById('closeModalBtn');
+    const cancelBtn = document.getElementById('cancelBtn');
+
+    function openModal() {
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+      document.body.style.overflow = 'hidden';
+      if (typeof lucide !== 'undefined') lucide.createIcons();
+    }
+
+    function closeModal() {
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+      document.body.style.overflow = '';
+      form.reset();
+    }
+
+    if (createUserBtn) createUserBtn.addEventListener('click', openModal);
+    if (createFirstUserBtn) createFirstUserBtn.addEventListener('click', openModal);
+    closeModalBtn.addEventListener('click', closeModal);
+    cancelBtn.addEventListener('click', closeModal);
+    
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) closeModal();
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !modal.classList.contains('hidden')) closeModal();
+    });
+
+    // Form submission - connects to 'user_profiles' table in Supabase
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const supabase = getSupabaseClient();
+      if (!supabase) {
+        alert('Database connection error. Please refresh the page.');
+        return;
+      }
+
+      const formData = {
+        full_name: document.getElementById('fullName').value,
+        email: document.getElementById('email').value,
+        role: document.querySelector('input[name="role"]:checked').value
+      };
+
+      try {
+        // First, create auth user (if needed) or just create profile
+        const { data, error } = await supabase
+          .from('user_profiles')
+          .insert([formData])
+          .select();
+
+        if (error) throw error;
+
+        alert(`User ${formData.full_name} created successfully!`);
+        closeModal();
+        window.location.reload();
+      } catch (error) {
+        console.error('Error creating user:', error);
+        alert(`Error: ${error.message}`);
+      }
+    });
   </script>
 </body>
 </html>

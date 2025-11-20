@@ -89,7 +89,7 @@
               <p class="text-gray-500 font-raleway-light mt-1">New Employee Setup & Orientation</p>
             </div>
           </div>
-          <button class="px-6 py-3 bg-green text-white rounded-xl font-benzin text-sm hover:bg-opacity-90 transition-all shadow-md flex items-center gap-2">
+          <button id="startNewHireHeaderBtn" class="px-6 py-3 bg-green text-white rounded-xl font-benzin text-sm hover:bg-opacity-90 transition-all shadow-md flex items-center gap-2">
             <i data-lucide="plus" class="w-4 h-4"></i>
             START NEW HIRE
           </button>
@@ -114,7 +114,7 @@
             <p class="text-gray-500 font-raleway-light mb-8">
               Start onboarding new hires by creating workflow processes.
             </p>
-            <button class="px-8 py-4 bg-green text-white rounded-xl font-benzin text-sm hover:bg-opacity-90 transition-all shadow-md flex items-center gap-2 mx-auto">
+            <button id="startNewHireBtn" class="px-8 py-4 bg-green text-white rounded-xl font-benzin text-sm hover:bg-opacity-90 transition-all shadow-md flex items-center gap-2 mx-auto">
               <i data-lucide="plus" class="w-5 h-5"></i>
               START NEW HIRE
             </button>
@@ -275,7 +275,7 @@
             </div>
             <h3 class="text-lg font-bold text-gray-900 font-benzin mb-2">FIELD TECHNICIAN</h3>
             <p class="text-sm text-gray-600 font-raleway-light mb-4">8 steps • 2-3 weeks timeline</p>
-            <button class="w-full px-4 py-2 bg-gray-50 hover:bg-gray-100 text-gray-700 rounded-lg font-raleway font-semibold text-sm transition-colors">
+            <button class="template-btn w-full px-4 py-2 bg-gray-50 hover:bg-gray-100 text-gray-700 rounded-lg font-raleway font-semibold text-sm transition-colors" data-template="field_technician">
               Use Template
             </button>
           </div>
@@ -286,7 +286,7 @@
             </div>
             <h3 class="text-lg font-bold text-gray-900 font-benzin mb-2">LAB TECHNICIAN</h3>
             <p class="text-sm text-gray-600 font-raleway-light mb-4">10 steps • 3-4 weeks timeline</p>
-            <button class="w-full px-4 py-2 bg-gray-50 hover:bg-gray-100 text-gray-700 rounded-lg font-raleway font-semibold text-sm transition-colors">
+            <button class="template-btn w-full px-4 py-2 bg-gray-50 hover:bg-gray-100 text-gray-700 rounded-lg font-raleway font-semibold text-sm transition-colors" data-template="lab_technician">
               Use Template
             </button>
           </div>
@@ -297,7 +297,7 @@
             </div>
             <h3 class="text-lg font-bold text-gray-900 font-benzin mb-2">OFFICE STAFF</h3>
             <p class="text-sm text-gray-600 font-raleway-light mb-4">6 steps • 1-2 weeks timeline</p>
-            <button class="w-full px-4 py-2 bg-gray-50 hover:bg-gray-100 text-gray-700 rounded-lg font-raleway font-semibold text-sm transition-colors">
+            <button class="template-btn w-full px-4 py-2 bg-gray-50 hover:bg-gray-100 text-gray-700 rounded-lg font-raleway font-semibold text-sm transition-colors" data-template="office_staff">
               Use Template
             </button>
           </div>
@@ -306,6 +306,118 @@
 
     </div>
   </main>
+
+  <!-- New Hire Modal -->
+  <div id="newHireModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+    <div class="bg-white rounded-3xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+      <div class="sticky top-0 bg-white border-b border-gray-200 p-6 rounded-t-3xl z-10">
+        <div class="flex items-center justify-between">
+          <div>
+            <h2 class="text-3xl font-bold text-gray-900 font-benzin">START NEW HIRE</h2>
+            <p class="text-gray-500 font-raleway-light mt-1">Create onboarding workflow</p>
+          </div>
+          <button id="closeModalBtn" class="w-10 h-10 bg-gray-100 hover:bg-gray-200 rounded-xl flex items-center justify-center transition-colors">
+            <i data-lucide="x" class="w-5 h-5 text-gray-600"></i>
+          </button>
+        </div>
+      </div>
+
+      <form id="newHireForm" class="p-6 space-y-6">
+        <!-- Employee Information -->
+        <div class="space-y-4">
+          <h3 class="text-lg font-bold text-gray-900 font-benzin">EMPLOYEE INFORMATION</h3>
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 mb-2 font-raleway">First Name *</label>
+              <input type="text" id="firstName" required class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-green focus:border-transparent font-raleway">
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 mb-2 font-raleway">Last Name *</label>
+              <input type="text" id="lastName" required class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-green focus:border-transparent font-raleway">
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-2 font-raleway">Email Address *</label>
+            <input type="email" id="email" required class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-green focus:border-transparent font-raleway">
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 mb-2 font-raleway">Position *</label>
+              <input type="text" id="position" required class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-green focus:border-transparent font-raleway">
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 mb-2 font-raleway">Start Date *</label>
+              <input type="date" id="startDate" required class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-green focus:border-transparent font-raleway">
+            </div>
+          </div>
+        </div>
+
+        <!-- Template Selection -->
+        <div class="space-y-4">
+          <h3 class="text-lg font-bold text-gray-900 font-benzin">ONBOARDING TEMPLATE</h3>
+          
+          <div class="space-y-2">
+            <label class="flex items-center p-4 border-2 border-gray-200 rounded-xl hover:border-blue-300 cursor-pointer transition-colors">
+              <input type="radio" name="template" value="field_technician" class="w-5 h-5 text-green focus:ring-green">
+              <div class="ml-3 flex-1">
+                <div class="flex items-center gap-2">
+                  <i data-lucide="hard-hat" class="w-4 h-4 text-blue-600"></i>
+                  <span class="font-bold text-gray-900 font-raleway">Field Technician</span>
+                </div>
+                <p class="text-xs text-gray-500 font-raleway-light mt-1">8 steps • 2-3 weeks timeline</p>
+              </div>
+            </label>
+
+            <label class="flex items-center p-4 border-2 border-gray-200 rounded-xl hover:border-purple-300 cursor-pointer transition-colors">
+              <input type="radio" name="template" value="lab_technician" class="w-5 h-5 text-green focus:ring-green">
+              <div class="ml-3 flex-1">
+                <div class="flex items-center gap-2">
+                  <i data-lucide="flask-conical" class="w-4 h-4 text-purple-600"></i>
+                  <span class="font-bold text-gray-900 font-raleway">Lab Technician</span>
+                </div>
+                <p class="text-xs text-gray-500 font-raleway-light mt-1">10 steps • 3-4 weeks timeline</p>
+              </div>
+            </label>
+
+            <label class="flex items-center p-4 border-2 border-gray-200 rounded-xl hover:border-green-300 cursor-pointer transition-colors">
+              <input type="radio" name="template" value="office_staff" class="w-5 h-5 text-green focus:ring-green">
+              <div class="ml-3 flex-1">
+                <div class="flex items-center gap-2">
+                  <i data-lucide="briefcase" class="w-4 h-4 text-green-600"></i>
+                  <span class="font-bold text-gray-900 font-raleway">Office Staff</span>
+                </div>
+                <p class="text-xs text-gray-500 font-raleway-light mt-1">6 steps • 1-2 weeks timeline</p>
+              </div>
+            </label>
+
+            <label class="flex items-center p-4 border-2 border-gray-200 rounded-xl hover:border-gray-300 cursor-pointer transition-colors">
+              <input type="radio" name="template" value="custom" class="w-5 h-5 text-green focus:ring-green">
+              <div class="ml-3 flex-1">
+                <div class="flex items-center gap-2">
+                  <i data-lucide="settings" class="w-4 h-4 text-gray-600"></i>
+                  <span class="font-bold text-gray-900 font-raleway">Custom Workflow</span>
+                </div>
+                <p class="text-xs text-gray-500 font-raleway-light mt-1">Build your own checklist</p>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex gap-3 pt-4">
+          <button type="button" id="cancelBtn" class="flex-1 px-6 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl font-benzin text-sm transition-colors">
+            CANCEL
+          </button>
+          <button type="submit" class="flex-1 px-6 py-3 bg-green text-white rounded-xl font-benzin text-sm hover:bg-opacity-90 transition-all shadow-md">
+            CREATE ONBOARDING
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
 
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
@@ -317,6 +429,113 @@
     } else {
       if (typeof lucide !== 'undefined') lucide.createIcons();
     }
+  </script>
+
+  <!-- Onboarding Functionality -->
+  <script>
+    const modal = document.getElementById('newHireModal');
+    const form = document.getElementById('newHireForm');
+    const startNewHireBtn = document.getElementById('startNewHireBtn');
+    const startNewHireHeaderBtn = document.getElementById('startNewHireHeaderBtn');
+    const closeModalBtn = document.getElementById('closeModalBtn');
+    const cancelBtn = document.getElementById('cancelBtn');
+    const templateBtns = document.querySelectorAll('.template-btn');
+
+    // Open modal function
+    function openModal(selectedTemplate = null) {
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+      document.body.style.overflow = 'hidden';
+      
+      // Pre-select template if provided
+      if (selectedTemplate) {
+        const templateRadio = document.querySelector(`input[name="template"][value="${selectedTemplate}"]`);
+        if (templateRadio) {
+          templateRadio.checked = true;
+        }
+      }
+      
+      // Reinitialize icons for modal
+      if (typeof lucide !== 'undefined') lucide.createIcons();
+    }
+
+    // Close modal function
+    function closeModal() {
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+      document.body.style.overflow = '';
+      form.reset();
+    }
+
+    // Event listeners for opening modal
+    if (startNewHireBtn) {
+      startNewHireBtn.addEventListener('click', () => openModal());
+    }
+    if (startNewHireHeaderBtn) {
+      startNewHireHeaderBtn.addEventListener('click', () => openModal());
+    }
+
+    // Template buttons - open modal with pre-selected template
+    templateBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const template = btn.getAttribute('data-template');
+        openModal(template);
+      });
+    });
+
+    // Event listeners for closing modal
+    closeModalBtn.addEventListener('click', closeModal);
+    cancelBtn.addEventListener('click', closeModal);
+    
+    // Close on outside click
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        closeModal();
+      }
+    });
+
+    // Close on Escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
+        closeModal();
+      }
+    });
+
+    // Form submission
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const formData = {
+        firstName: document.getElementById('firstName').value,
+        lastName: document.getElementById('lastName').value,
+        email: document.getElementById('email').value,
+        position: document.getElementById('position').value,
+        startDate: document.getElementById('startDate').value,
+        template: document.querySelector('input[name="template"]:checked')?.value || 'custom'
+      };
+
+      console.log('Creating onboarding workflow:', formData);
+
+      // TODO: Save to Supabase
+      // const supabase = getSupabaseClient();
+      // const { data, error } = await supabase
+      //   .from('onboarding_workflows')
+      //   .insert([{
+      //     employee_name: `${formData.firstName} ${formData.lastName}`,
+      //     employee_email: formData.email,
+      //     position: formData.position,
+      //     start_date: formData.startDate,
+      //     template_type: formData.template,
+      //     status: 'pending'
+      //   }]);
+
+      // Show success message
+      alert(`Onboarding started for ${formData.firstName} ${formData.lastName}!`);
+      closeModal();
+      
+      // Reload the page to show new workflow
+      // window.location.reload();
+    });
   </script>
 </body>
 </html>
