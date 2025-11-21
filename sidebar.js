@@ -401,23 +401,24 @@ if (document.readyState === 'loading') {
  */
 async function getProfilePhotoUrl(userId) {
   try {
-    // List files for this user
+    // List all files in the root directory
     const { data: files, error } = await window.supabaseClient.storage
       .from('profile-photo')
-      .list('', {
-        search: userId
-      });
+      .list('');
 
     if (error) throw error;
 
-    // If file exists, return public URL
+    // Find file that starts with userId (format: userId.extension)
     if (files && files.length > 0) {
-      const fileName = files[0].name;
-      const { data: { publicUrl } } = window.supabaseClient.storage
-        .from('profile-photo')
-        .getPublicUrl(fileName);
+      const userFile = files.find(file => file.name.startsWith(`${userId}.`));
       
-      return `${publicUrl}?t=${Date.now()}`; // Cache busting
+      if (userFile) {
+        const { data: { publicUrl } } = window.supabaseClient.storage
+          .from('profile-photo')
+          .getPublicUrl(userFile.name);
+        
+        return `${publicUrl}?t=${Date.now()}`; // Cache busting
+      }
     }
 
     return null;
@@ -539,23 +540,25 @@ async function removeProfilePhoto() {
 
     const userId = result.user.id;
 
-    // List all files for this user
+    // List all files in the root directory
     const { data: files, error: listError } = await window.supabaseClient.storage
       .from('profile-photo')
-      .list('', {
-        search: userId
-      });
+      .list('');
 
     if (listError) throw listError;
 
-    // Delete all matching files
+    // Find and delete all files that start with userId (format: userId.extension)
     if (files && files.length > 0) {
-      const filePaths = files.map(f => f.name);
-      const { error: deleteError } = await window.supabaseClient.storage
-        .from('profile-photo')
-        .remove(filePaths);
+      const userFiles = files.filter(file => file.name.startsWith(`${userId}.`));
+      
+      if (userFiles.length > 0) {
+        const filePaths = userFiles.map(f => f.name);
+        const { error: deleteError } = await window.supabaseClient.storage
+          .from('profile-photo')
+          .remove(filePaths);
 
-      if (deleteError) throw deleteError;
+        if (deleteError) throw deleteError;
+      }
     }
 
     // Restore initials display
