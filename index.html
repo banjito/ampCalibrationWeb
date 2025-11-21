@@ -82,6 +82,7 @@
   
   <!-- Hero Section -->
   <section class="hero-bg flex flex-col items-center justify-center text-white relative">
+    <div class="hero-bg-image"></div>
     <div class="hero-content z-10">
       <!-- Logo -->
       <img src="img/logo/cyberLogo.svg" alt="AMP Calibration" class="h-32 w-auto cyber-logo">
@@ -114,7 +115,7 @@
   </section>
 
   <!-- Services Section -->
-  <section class="bg-green py-16">
+  <section class="bg-green py-12 -mt-10">
     <div class="container mx-auto px-4">
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-white text-center">
         <!-- PPE Testing -->
@@ -218,6 +219,42 @@
   <script src="https://unpkg.com/lucide@latest"></script>
   <script>
     lucide.createIcons();
+  </script>
+
+  <!-- Parallax Scroll Effect -->
+  <script>
+    (function() {
+      const heroBgImage = document.querySelector('.hero-bg-image');
+      if (!heroBgImage) return;
+
+      let ticking = false;
+
+      function updateParallax() {
+        const scrolled = window.pageYOffset;
+        const heroSection = heroBgImage.parentElement;
+        const heroTop = heroSection.getBoundingClientRect().top + window.pageYOffset;
+        const heroHeight = heroSection.offsetHeight;
+        
+        // Only apply parallax when hero section is in view
+        if (scrolled + window.innerHeight >= heroTop && scrolled <= heroTop + heroHeight) {
+          // Calculate parallax offset (background moves slower than scroll)
+          const parallaxOffset = (scrolled - heroTop) * 0.5; // 0.5 = 50% speed (adjust for more/less effect)
+          heroBgImage.style.transform = `translateY(${parallaxOffset}px) translateZ(0)`;
+        }
+        
+        ticking = false;
+      }
+
+      function requestTick() {
+        if (!ticking) {
+          window.requestAnimationFrame(updateParallax);
+          ticking = true;
+        }
+      }
+
+      window.addEventListener('scroll', requestTick, { passive: true });
+      updateParallax(); // Initial call
+    })();
   </script>
 </body>
 </html>
