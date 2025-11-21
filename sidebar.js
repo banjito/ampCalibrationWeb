@@ -401,23 +401,56 @@ if (document.readyState === 'loading') {
  */
 async function getProfilePhotoUrl(userId) {
   try {
-    // List all files in the root directory
+    if (!userId) {
+      console.warn('getProfilePhotoUrl: No userId provided');
+      return null;
+    }
+
+    // First, try to get file extension from localStorage (stored during upload)
+    const storedExt = localStorage.getItem(`profilePhotoExt_${userId}`);
+    console.log(`getProfilePhotoUrl: userId=${userId}, storedExt=${storedExt}`);
+    
+    if (storedExt) {
+      // Use stored extension to directly construct URL
+      const fileName = `${userId}.${storedExt}`;
+      const { data: { publicUrl } } = window.supabaseClient.storage
+        .from('profile-photo')
+        .getPublicUrl(fileName);
+      
+      console.log(`getProfilePhotoUrl: Using stored extension, URL=${publicUrl}`);
+      return `${publicUrl}?t=${Date.now()}`;
+    }
+    
+    // Fallback: List all files in the root directory to find the file
+    console.log('getProfilePhotoUrl: No stored extension, listing files...');
     const { data: files, error } = await window.supabaseClient.storage
       .from('profile-photo')
       .list('');
 
-    if (error) throw error;
+    if (error) {
+      console.error('Error listing files:', error);
+      return null;
+    }
+
+    console.log(`getProfilePhotoUrl: Found ${files?.length || 0} files`);
 
     // Find file that starts with userId (format: userId.extension)
     if (files && files.length > 0) {
       const userFile = files.find(file => file.name.startsWith(`${userId}.`));
       
       if (userFile) {
+        // Store the extension for future use
+        const fileExt = userFile.name.split('.').pop();
+        localStorage.setItem(`profilePhotoExt_${userId}`, fileExt);
+        console.log(`getProfilePhotoUrl: Found file ${userFile.name}, stored extension ${fileExt}`);
+        
         const { data: { publicUrl } } = window.supabaseClient.storage
           .from('profile-photo')
           .getPublicUrl(userFile.name);
         
         return `${publicUrl}?t=${Date.now()}`; // Cache busting
+      } else {
+        console.log(`getProfilePhotoUrl: No file found starting with ${userId}.`);
       }
     }
 
@@ -475,10 +508,16 @@ async function uploadProfilePhoto(file) {
 
     if (error) throw error;
 
+    // Store file extension in localStorage for easy retrieval
+    localStorage.setItem(`profilePhotoExt_${userId}`, fileExt);
+    console.log(`uploadProfilePhoto: Stored extension ${fileExt} for userId ${userId}`);
+
     // Get public URL
     const { data: { publicUrl } } = window.supabaseClient.storage
       .from('profile-photo')
       .getPublicUrl(filePath);
+    
+    console.log(`uploadProfilePhoto: Upload successful, publicUrl=${publicUrl}`);
 
     // Update profile photo display
     if (modalPhoto) {
@@ -540,25 +579,39 @@ async function removeProfilePhoto() {
 
     const userId = result.user.id;
 
-    // List all files in the root directory
+    // Try to get file extension from localStorage first
+    const storedExt = localStorage.getItem(`profilePhotoExt_${userId}`);
+    let filePaths = [];
+
+    if (storedExt) {
+      // Try direct deletion with stored extension
+      filePaths.push(`${userId}.${storedExt}`);
+    }
+
+    // Also list files as fallback to catch any files we might have missed
     const { data: files, error: listError } = await window.supabaseClient.storage
       .from('profile-photo')
       .list('');
 
-    if (listError) throw listError;
-
-    // Find and delete all files that start with userId (format: userId.extension)
-    if (files && files.length > 0) {
+    if (!listError && files && files.length > 0) {
       const userFiles = files.filter(file => file.name.startsWith(`${userId}.`));
-      
-      if (userFiles.length > 0) {
-        const filePaths = userFiles.map(f => f.name);
-        const { error: deleteError } = await window.supabaseClient.storage
-          .from('profile-photo')
-          .remove(filePaths);
+      userFiles.forEach(f => {
+        if (!filePaths.includes(f.name)) {
+          filePaths.push(f.name);
+        }
+      });
+    }
 
-        if (deleteError) throw deleteError;
-      }
+    // Delete all matching files
+    if (filePaths.length > 0) {
+      const { error: deleteError } = await window.supabaseClient.storage
+        .from('profile-photo')
+        .remove(filePaths);
+
+      if (deleteError) throw deleteError;
+      
+      // Remove from localStorage
+      localStorage.removeItem(`profilePhotoExt_${userId}`);
     }
 
     // Restore initials display
