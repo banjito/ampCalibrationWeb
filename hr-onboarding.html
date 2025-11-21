@@ -516,25 +516,37 @@
 
       console.log('Creating onboarding workflow:', formData);
 
-      // TODO: Save to Supabase
-      // const supabase = getSupabaseClient();
-      // const { data, error } = await supabase
-      //   .from('onboarding_workflows')
-      //   .insert([{
-      //     employee_name: `${formData.firstName} ${formData.lastName}`,
-      //     employee_email: formData.email,
-      //     position: formData.position,
-      //     start_date: formData.startDate,
-      //     template_type: formData.template,
-      //     status: 'pending'
-      //   }]);
+      const supabase = getSupabaseClient();
+      if (!supabase) {
+        alert('Database connection error. Please try again.');
+        return;
+      }
 
-      // Show success message
-      alert(`Onboarding started for ${formData.firstName} ${formData.lastName}!`);
-      closeModal();
-      
-      // Reload the page to show new workflow
-      // window.location.reload();
+      try {
+        const { data, error } = await supabase
+          .from('onboarding_workflows')
+          .insert([{
+            employee_name: `${formData.firstName} ${formData.lastName}`,
+            employee_email: formData.email,
+            position: formData.position,
+            start_date: formData.startDate,
+            template_type: formData.template,
+            status: 'pending'
+          }])
+          .select();
+
+        if (error) throw error;
+
+        // Show success message
+        alert(`Onboarding started for ${formData.firstName} ${formData.lastName}!`);
+        closeModal();
+        
+        // Reload the page to show new workflow
+        window.location.reload();
+      } catch (error) {
+        console.error('Error creating onboarding workflow:', error);
+        alert(`Error: ${error.message || 'Failed to create onboarding workflow'}`);
+      }
     });
   </script>
 </body>
