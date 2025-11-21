@@ -259,7 +259,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .social-icon-link {
-  transition: filter 0.3s;
+  transition: all 0.3s;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -267,10 +267,11 @@ h1, h2, h3, h4, h5, h6 {
 
 .social-icon-link .social-icon {
   filter: brightness(0) invert(1);
+  transition: opacity 0.3s;
 }
 
 .social-icon-link:hover .social-icon {
-  filter: brightness(0) saturate(100%) invert(48%) sepia(79%) saturate(1946%) hue-rotate(113deg) brightness(96%) contrast(88%);
+  opacity: 0.5;
 }
 
 .turnaround-logo {
