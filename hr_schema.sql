@@ -4,6 +4,7 @@
 -- ============================================
 -- DROP EXISTING TABLES (CLEAN SLATE)
 -- ============================================
+DROP TABLE IF EXISTS public.contact_submissions CASCADE;
 DROP TABLE IF EXISTS public.documents CASCADE;
 DROP TABLE IF EXISTS public.training_records CASCADE;
 DROP TABLE IF EXISTS public.badges CASCADE;
@@ -107,6 +108,18 @@ CREATE TABLE public.documents (
 );
 
 -- ============================================
+-- 7. CONTACT SUBMISSIONS TABLE
+-- ============================================
+CREATE TABLE public.contact_submissions (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  first_name TEXT NOT NULL,
+  last_name TEXT,
+  email TEXT NOT NULL,
+  message TEXT,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- ============================================
 -- ENABLE ROW LEVEL SECURITY (RLS)
 -- ============================================
 ALTER TABLE public.employees ENABLE ROW LEVEL SECURITY;
@@ -115,6 +128,7 @@ ALTER TABLE public.onboarding_workflows ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.badges ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.training_records ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.documents ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.contact_submissions ENABLE ROW LEVEL SECURITY;
 
 -- ============================================
 -- RLS POLICIES (Allow authenticated users to access)
@@ -165,6 +179,13 @@ CREATE POLICY "Allow authenticated users to view documents" ON public.documents 
 DROP POLICY IF EXISTS "Allow authenticated users to insert documents" ON public.documents;
 CREATE POLICY "Allow authenticated users to insert documents" ON public.documents FOR INSERT TO authenticated WITH CHECK (true);
 
+-- Contact Submissions policies (allow anonymous/public inserts for contact form)
+DROP POLICY IF EXISTS "Allow anyone to insert contact submissions" ON public.contact_submissions;
+CREATE POLICY "Allow anyone to insert contact submissions" ON public.contact_submissions FOR INSERT TO anon WITH CHECK (true);
+
+DROP POLICY IF EXISTS "Allow authenticated users to view contact submissions" ON public.contact_submissions;
+CREATE POLICY "Allow authenticated users to view contact submissions" ON public.contact_submissions FOR SELECT TO authenticated USING (true);
+
 -- ============================================
 -- INDEXES FOR PERFORMANCE
 -- ============================================
@@ -193,6 +214,10 @@ GRANT ALL ON public.onboarding_workflows TO authenticated;
 GRANT ALL ON public.badges TO authenticated;
 GRANT ALL ON public.training_records TO authenticated;
 GRANT ALL ON public.documents TO authenticated;
+GRANT INSERT ON public.contact_submissions TO anon;
+GRANT SELECT ON public.contact_submissions TO authenticated;
+GRANT INSERT ON public.contact_submissions TO anon;
+GRANT SELECT ON public.contact_submissions TO authenticated;
 
 -- Success message
 DO $$

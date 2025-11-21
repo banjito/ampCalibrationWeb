@@ -1,9 +1,24 @@
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
   const form = document.getElementById('contactForm');
   const submitButton = document.getElementById('submitButton');
   const formMessage = document.getElementById('formMessage');
 
   if (!form) return;
+
+  // Wait for Supabase to be initialized
+  let supabaseReady = false;
+  let retries = 0;
+  while (!supabaseReady && retries < 20) {
+    if (typeof getSupabaseClient === 'function') {
+      const supabase = getSupabaseClient();
+      if (supabase) {
+        supabaseReady = true;
+        break;
+      }
+    }
+    await new Promise(resolve => setTimeout(resolve, 100));
+    retries++;
+  }
 
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
